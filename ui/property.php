@@ -16,7 +16,7 @@
         <aside class="property-sidebar">
 
             <div class="property-sidebar-widget">
-                <h3 class="property-widget-title">THE ZEITH ASSETS</h3>
+                <h3 class="property-widget-title">THE <span class="zeith-span">ZEITH</span> ASSETS</h3>
                 <ul class="property-category-list">
                     <li><a href="#">Hublot </a></li>
                     <li><a href="#">G-SHock</a></li>
@@ -51,14 +51,14 @@
 
                 <div class="property-hero-text">
                     <span class="property-hero-subtitle">OUR CLASSIC</span>
-                    <h2 class="property-hero-title">Zeith Collections</h2>
+                    <h2 class="property-hero-title">ZEITH Collections</h2>
                     <p class="property-hero-desc">Explore Luxury Wrist Watches</p>
                 </div>
 
-                <div class="property-hero-images">
+                <!-- <div class="property-hero-images">
                     <img src="./image/pngwing.com (11).png" alt="Featured Watch 1" class="property-hero-img">
                     <img src="./image/pngwing.com (10).png" alt="Featured Watch 2" class="property-hero-img">
-                </div>
+                </div> -->
             </div>
 
             <div class="property-toolbar">

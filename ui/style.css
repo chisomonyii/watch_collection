@@ -174,7 +174,7 @@
 .register-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem; 
+  gap: 3rem;
 }
 
 .register-label {
@@ -270,12 +270,19 @@
 .property-widget-title {
   font-size: 0.9rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  color: #0f172a;
+  /* letter-spacing: 0.05em; */
+  color: #fc8b1e;
   margin-bottom: 1.25rem;
   border-bottom: 2px solid var(--primary, #e11d48);
   padding-bottom: 0.5rem;
   display: inline-block;
+}
+
+.zeith-span {
+  letter-spacing: -2px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f172a;
 }
 
 .property-category-list {
@@ -286,6 +293,10 @@
   flex-direction: column;
   gap: 0.85rem;
 }
+
+.property-price-range{
+  accent-color: #fc8b1e;
+}   
 
 .property-category-list li a {
   color: #64748b;
@@ -302,15 +313,16 @@
 }
 
 .property-count {
-  color: #e11d48;
+  color: #fc8b1e;
   font-weight: 600;
 }
 
 /* Filter Controls */
 .property-range-slider {
   width: 100%;
-  accent-color: #e11d48;
+  accent-color: #fc8b1e;
   margin-bottom: 1rem;
+  background-color: #ffffff;
 }
 
 .property-price-controls {
@@ -326,7 +338,7 @@
 }
 
 .property-filter-btn {
-  background-color: #e11d48;
+  background-color: #fc8b1e;
   color: #ffffff;
   border: none;
   padding: 0.5rem 1rem;
@@ -354,7 +366,9 @@
   margin-bottom: 2rem;
   overflow: hidden;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
-  perspective: 1000px; 
+  perspective: 1000px;
+  height: 320px;
+  
 }
 
 .hero-3d-bg {
@@ -376,11 +390,11 @@
 .hero-3d-bg img {
   width: 160%;
   height: 160%;
-  object-fit: cover; 
+  object-fit: cover;
   position: absolute;
   top: -30%;
   left: -30%;
-  opacity: 0.14; 
+  opacity: 1.14;
   transform-style: preserve-3d;
   animation: heroFullCover3D 20s ease-in-out infinite alternate;
 }
@@ -415,8 +429,8 @@
 }
 
 .property-hero-subtitle {
-  color: #e11d48;
-  font-size: 0.85rem;
+  color: #fc8b1e;
+  font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.1em;
 }
@@ -424,8 +438,10 @@
 .property-hero-title {
   font-size: 2.2rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #e9eaee;
   margin: 0.2rem 0;
+  letter-spacing: -2px;
+ text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .property-hero-desc {
@@ -456,10 +472,9 @@
 }
 
 .property-hero-img:nth-child(2) {
-  height: 260px; 
+  height: 260px;
   margin-left: -1rem;
 }
-
 
 .property-toolbar {
   display: flex;
@@ -490,7 +505,6 @@
   border-radius: 0.5rem;
   outline: none;
 }
-
 
 .property-grid {
   display: grid;
@@ -578,17 +592,14 @@
 }
 
 @media (max-width: 1024px) {
-
   .property-sidebar {
     display: none;
   }
-
 
   .property-container {
     grid-template-columns: 1fr;
     padding: 1rem;
   }
-
 
   .mobile-filter-dropdown-container {
     display: block;
@@ -600,9 +611,8 @@
   .property-toolbar-controls {
     display: block;
     width: 100%;
-    max-width: 280px; 
+    max-width: 280px;
   }
-
 
   .property-toolbar {
     display: flex;
@@ -611,7 +621,6 @@
     gap: 0.75rem;
     width: 100%;
   }
-
 
   .property-select,
   .mobile-category-select {
@@ -630,7 +639,6 @@
     color: #0f172a;
     background-color: #ffffff;
   }
-
 
   .property-card-info {
     text-align: left;
@@ -658,9 +666,8 @@
   }
 }
 
-
 .custom-dropdown-container {
-  display: none; 
+  display: none;
   width: 100%;
 }
 
@@ -688,7 +695,7 @@
     font-weight: 600;
     color: #1e293b;
     cursor: pointer;
-    list-style: none; 
+    list-style: none;
   }
 
   .dropdown-summary::-webkit-details-marker {
@@ -699,7 +706,6 @@
     font-size: 0.65rem;
     color: #64748b;
   }
-
 
   .dropdown-menu {
     position: absolute;
@@ -743,7 +749,6 @@
   }
 }
 
-
 .custom-dropdown-container {
   width: 100%;
 }
@@ -751,9 +756,8 @@
 .custom-dropdown {
   position: relative;
   width: 100%;
-  max-width: 280px; 
+  max-width: 280px;
 }
-
 
 .dropdown-summary {
   display: flex;
@@ -767,10 +771,8 @@
   font-weight: 600;
   color: #1e293b;
   cursor: pointer;
-  list-style: none; 
-
+  list-style: none;
 }
-
 
 .dropdown-summary::-webkit-details-marker {
   display: none;
@@ -780,7 +782,6 @@
   font-size: 0.65rem;
   color: #64748b;
 }
-
 
 .dropdown-menu {
   position: absolute;
@@ -813,7 +814,6 @@
   color: #2563eb;
 }
 
-
 @media (max-width: 1024px) {
   .mobile-filter-dropdown-container,
   .property-toolbar-controls {
@@ -821,5 +821,3 @@
     max-width: 280px;
   }
 }
-
-
