@@ -22,10 +22,10 @@
                     <li><a href="#">G-SHock</a></li>
                     <li><a href="#">Rolex</a></li>
                     <li><a href="#">Omega</a></li>
-                    <li><a href="#">Daniel Klein </a></li>
-                    <li><a href="#">Asorock</a></li>
-                    <li><a href="#">Bulova Watches</a></li>
-                    <li><a href="#">Patek Philippe & Cartier </a></li>
+                    <li><a href="#">calvin Klein </a></li>
+                    <li><a href="#">Cartier Watches</a></li>
+                    <li><a href="#">Apple Watches</a></li>
+                    <li><a href="#">Patek Philippe</a></li>
                 </ul>
             </div>
 
