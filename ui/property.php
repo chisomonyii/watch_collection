@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/69c405441a.js" crossorigin="anonymous"></script>
     <title>Zeith - Properties</title>
 </head>
 
@@ -110,7 +111,10 @@
                     <div class="property-card-info">
                         <span class="property-card-brand">G-STEEL</span>
                         <h4 class="property-card-name">Combines resin inner cases</h4>
+                        <p>★★★★★ (4.9)</p>
                         <p class="property-card-price">₦254,400.00 </p>
+                    
+                        <span><i class="fa-solid fa-cart-shopping icon"></i></span>
                     </div>
                 </div>
 
@@ -121,7 +125,10 @@
                     <div class="property-card-info">
                         <span class="property-card-brand">Spirit of Big Bang</span>
                         <h4 class="property-card-name">recognizable by its curved, barrel-shaped</h4>
+                        <p>★★★★☆ (4.6)</p>
                         <p class="property-card-price">₦12,800.00 </p>
+                        <span><i class="fa-solid fa-cart-shopping icon"></i></span>
+
                     </div>
                 </div>
 
@@ -132,8 +139,11 @@
                     <div class="property-card-info">
                         <span class="property-card-brand">Air-KingBulova</span>
                         <h4 class="property-card-name">distinctive minute-scale track</h4>
+                        <p>★★★★☆ (4.8)</p>
                         <p class="property-card-price">₦480,000.00 </p>
+
                     </div>
+                    <span><i class="fa-solid fa-cart-shopping icon"></i></span>
                 </div>
 
             </div>
