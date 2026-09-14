@@ -46,6 +46,12 @@
   margin-bottom: 2rem;
 }
 
+.error-message{
+  color: red;
+  font-size: 8px;
+  font-weight: 400;
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
