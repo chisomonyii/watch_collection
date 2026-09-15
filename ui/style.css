@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 
@@ -1072,5 +1073,419 @@ body {
   .promo-content h2 {
     font-size: 42px;
   }
+=======
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+  box-sizing: border-box;
+}
+:root {
+  --primary: #1f3a38;
+  --bg-alt: #f8fafc;
+  --text-muted: #4b5563;
+  --border: #e5e7eb;
+  --shadow-card:
+    0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 4rem;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: 100%;
+  -webkit-backdrop-filter: blur(20px);
+  max-width: 450px;
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.login-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.login-subtitle {
+  font-weight: 400;
+  text-align: center;
+  color: rgb(166, 165, 165);
+  margin-bottom: 2rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.login-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: white;
+}
+
+.login-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.login-input:focus {
+  border-color: var(--primary);
+}
+
+.login-password {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.login-forgot-password {
+  font-size: 0.875rem;
+  color: #f68b1e;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login-forgot-password:hover {
+  text-decoration: underline;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.875rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background-color:  #f68b1e;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.login-button:hover {
+  background-color: #a25911;
+}
+
+.login-no-account {
+  font-weight: 400;
+  text-align: center;
+  margin-top: 2rem;
+  color: rgb(166, 165, 165);
+}
+
+.login-register {
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-register:hover {
+  text-decoration: underline;
+}
+
+/* Full-screen video background styling */
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -2;
+}
+
+/* Dark overlay to balance overall contrast */
+.video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: -1;
+}
+
+/* Main Container */
+.register-container {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1.5rem;
+}
+
+/* Semi-Transparent Frosted Glass Card */
+.register-card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  max-width: 480px;
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+}
+
+/* Typography (Adjusted to light shades for readability over dark background) */
+.register-title {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.register-header {
+  font-size: 1.85rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.35rem;
+  color: #ffffff;
+}
+
+.register-subheader {
+  font-weight: 400;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.register-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem; /* Reduced slightly from 3rem for tighter card fit */
+}
+
+.register-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+/* Translucent Input Fields */
+.register-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.15);
+  outline: none;
+  font-size: 0.95rem;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.register-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.register-input:focus {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: #ffffff;
+}
+
+/* Button & Links */
+.register-button {
+  width: 100%;
+  padding: 0.9rem;
+  background-color:  #f68b1e;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.register-button:hover {
+  background-color: #a25911;
+}
+
+.register-have-account {
+  font-weight: 400;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.register-link {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+
+/* ==========================================
+   FORGOT PASSWORD PAGE STYLES
+   ========================================== */
+#forgot-bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -2;
+}
+
+.forgot-container {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1.5rem;
+}
+
+.forgot-card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  max-width: 450px;
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+}
+
+.forgot-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.35rem;
+  color: #ffffff;
+}
+
+.forgot-subtitle {
+  font-weight: 400;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+  line-height: 1.4;
+}
+
+.forgot-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.forgot-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+.forgot-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  outline: none;
+  font-size: 0.95rem;
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.forgot-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.forgot-input:focus {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  border-color: #ffffff;
+}
+
+/* Autofill translucent override */
+.forgot-input:-webkit-autofill,
+.forgot-input:-webkit-autofill:hover, 
+.forgot-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.15) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.forgot-button {
+  width: 100%;
+  padding: 0.9rem;
+  background-color: #f68b1e;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.forgot-button:hover {
+  background-color: var(--accent-orange-hover);
+}
+
+.forgot-back {
+  font-weight: 400;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.forgot-link {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+>>>>>>> ui/registration
 }
 
