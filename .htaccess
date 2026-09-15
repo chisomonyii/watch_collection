@@ -1,0 +1,14 @@
+RewriteEngine On
+
+# Ensure your project folder matches this path if you change its name
+
+RewriteBase /Watch_Collection/
+
+# Do not redirect actual physical files or directory paths
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Route everything else directly to index.php
+
+RewriteRule ^ index.php [QSA,L]
