@@ -545,7 +545,7 @@
         </div>
 
     </section>
-    <?php include '../footer.php'; ?>
+    <?php require '../footer.php'; ?>
 </body>
 
 </html>

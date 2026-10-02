@@ -11,6 +11,7 @@ $activePage = 'overview';
     <title>ZEITH - User Dashboard</title>
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../footer.css">
 
     <style>
         :root {
@@ -392,6 +393,30 @@ $activePage = 'overview';
             color: var(--primary-color);
         }
 
+         .view-more-container {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+
+        .view-more-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px dashed var(--primary-color);
+        }
+
+        .view-more-link:hover {
+            background-color: var(--hover-bg);
+            color: var(--primary-hover);
+        }
+
         /* RESPONSIVE MEDIA QUERIES FOR IPAD & PHONE */
         @media (max-width: 1024px) {
             .dashboard-grid {
@@ -559,10 +584,17 @@ $activePage = 'overview';
                     </button>
                 </div>
             </div>
+             <div class="view-more-container">
+                <a href="/catalog" class="view-more-link">
+                    View More Watches <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
 
         </section>
+        
 
     </main>
+    
 
     <!-- JavaScript Script Section -->
     <script>
