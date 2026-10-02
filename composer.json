@@ -15,6 +15,6 @@
     ],
     "require": {
         "robmorgan/phinx": "^0.16.12",
-        "bramus/router": "^1.6"
+        "bramus/router": "~1.6"
     }
 }
