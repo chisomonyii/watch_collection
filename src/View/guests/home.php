@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/69c405441a.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="../header.css">
-    <link rel="stylesheet" href="../footer.css">
+    <link rel="stylesheet" href="<?php assets("css/login.css");?>">
+    <link rel="stylesheet" href="<?php assets("css/header.css");?>">
+    <link rel="stylesheet" href="<?php assets("css/footer.css");?>">
     <title>Watch Collection</title>
 </head>
 
 <body>
-    <?php require '../header.php'; ?>
+    <?php require_once __DIR__ . '/../components/header.php'; ?>
 
     <section class="hero">
 
@@ -39,7 +39,7 @@
 
 
         <div class="hero-image">
-            <img src="./Images/watch.png" alt="Premium Watch">
+            <img src="<?php assets("Images/watch.png");?>" alt="Premium Watch">
         </div>
     </section>
 
@@ -48,7 +48,7 @@
 
         <div class="new">
             <div class="arrivals">
-                <img src="./Images/pngwing.com (3).png" alt="Rolex Submariner">
+                <img src="<?php assets("Images/picture3.png");?>" alt="Rolex Submariner">
 
                 <span class="watch-info">
                     <h2>Benken</h2>
@@ -59,7 +59,7 @@
                 </span>
             </div>
             <div class="arrivals">
-                <img src="./Images/pngwing.com (6).png" alt="Hublot Classic Fusion">
+                <img src="<?php assets("Images/picture6.png");?>" alt="Hublot Classic Fusion">
 
                 <span class="watch-info">
                     <h2>U-Boat</h2>
@@ -71,7 +71,7 @@
             </div>
 
             <div class="arrivals">
-                <img src="./Images/pngwing.com (11).png" alt="Cartier Santos">
+                <img src="<?php assets("Images/picture11.png");?>" alt="Cartier Santos">
 
                 <span class="watch-info">
                     <h2>Tissot</h2>
@@ -83,7 +83,7 @@
             </div>
 
             <div class="arrivals">
-                <img src="./Images/pngwing.com (9).png" alt="Casio G-Shock">
+                <img src="<?php assets("Images/picture9.png");?>" alt="Casio G-Shock">
 
                 <span class="watch-info">
                     <h2>Casio</h2>
@@ -115,7 +115,7 @@
 
             <div class="collection-card">
 
-                <img src="./Images/pngwing.com (11).png"
+                <img src="<?php assets("Images/picture11.png");?>"
                     alt="Classic Watch">
 
                 <div class="collection-content">
@@ -141,7 +141,7 @@
 
             <div class="collection-card">
 
-                <img src="./Images/pngwing.com (12).png"
+                <img src="<?php assets("Images/picture12.png");?>"
                     alt="Chronograph Watch">
 
                 <div class="collection-content">
@@ -167,7 +167,7 @@
 
             <div class="collection-card">
 
-                <img src="./Images/pngwing.com (13).png"
+                <img src="<?php assets("Images/picture13.png");?>"
                     alt="Executive Watch">
 
                 <div class="collection-content">
@@ -212,7 +212,7 @@
 
                 <div class="product-image">
 
-                    <img src="./Images/pngwing.com (6).png"
+                    <img src="<?php assets("Images/picture6.png");?>"
                         alt="Zeith Classic">
 
                 </div>
@@ -242,7 +242,7 @@
 
                 <div class="product-image">
 
-                    <img src="./Images/pngwing.com (11).png"
+                    <img src="<?php assets("Images/picture11.png");?>"
                         alt="Zeith Chrono">
 
                 </div>
@@ -272,7 +272,7 @@
 
                 <div class="product-image">
 
-                    <img src="./Images/pngwing.com (4).png"
+                    <img src="<?php assets("Images/picture4.png");?>"
                         alt="Zeith Executive">
 
                 </div>
@@ -304,7 +304,7 @@
 
         <div class="story-image">
 
-            <img src="./Images/pngwing.com (2).png"
+            <img src="<?php assets("Images/picture2.png");?>"
                 alt="Zeith Watch">
 
         </div>
@@ -504,7 +504,7 @@
         </div>
 
     </section>
-    <?php require '../footer.php'; ?>
+    <?php require_once __DIR__ . '/../components/footer.php'; ?>
 </body>
 
 </html>

@@ -4,14 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php assets("css/login.css");?>">
+    <link rel="stylesheet" href="<?php assets("css/login.css"); ?>">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <title>Register - Zeith</title>
 </head>
 
 <body>
     <!-- Background Video -->
     <video autoplay muted loop playsinline id="bg-video">
-                <source src="<?php assets("video/property-details-background-video.mp4");?>" type="video/mp4">
+        <source src="<?php assets("video/property-details-background-video.mp4"); ?>" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
@@ -24,7 +25,7 @@
             <h2 class="register-header">Create Account</h2>
             <p class="register-subheader">Join our community to get the finest watches</p>
 
-            <form action="" method="POST" class="register-form">
+            <form id="register-form" class="register-form">
                 <div class="register-grid">
                     <div>
                         <label class="register-label">First name</label>
@@ -36,6 +37,8 @@
                     </div>
                 </div>
 
+                <input type="hidden" name="csrf_token" value="<?= $csrf_token ?>">
+
                 <div>
                     <label class="register-label">Email address</label>
                     <input type="email" name="email" placeholder="youremail@gmail.com" class="register-input">
@@ -46,7 +49,9 @@
                     <input type="password" name="password" placeholder="your password" class="register-input">
                 </div>
 
-                <button type="submit" class="register-button">Create Account</button>
+                <button type="submit" class="register-button" id="register-button">
+                    Create Account
+                </button>
             </form>
 
             <p class="register-have-account">
@@ -54,6 +59,8 @@
             </p>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="<?php assets('js/register.js'); ?>"></script>
 </body>
 
 </html>

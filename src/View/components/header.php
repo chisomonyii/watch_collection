@@ -34,10 +34,10 @@
         <span>Orders</span>
     </a>
 
-    <a href="#" title="Account">
+    <!-- <a href="#" title="Account">
         <i class="fa-regular fa-circle-user"></i>
         <span>Account</span>
-    </a>
+    </a> -->
 
 </nav>
 
