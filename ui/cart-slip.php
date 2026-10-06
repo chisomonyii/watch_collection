@@ -549,7 +549,7 @@
 </head>
 
 <body>
-    <?php require '../header.php'; ?>
+
 
     <div class="cart-container">
 
@@ -649,7 +649,7 @@
 
     </div>
 
-    <?php include '../footer.php'; ?>
+    <?php require_once __DIR__ . '../../src/View/components/footer.php'; ?>
 
 </body>
 

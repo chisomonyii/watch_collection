@@ -16,9 +16,6 @@
         <a href="<?php echo "/Watch_Collection/user/orders";?>" class="nav-item <?= ($current_page === 'orders') ? 'active' : ''; ?>">
             <i class="fa-solid fa-bag-shopping"></i> <span>My Orders</span>
         </a>
-        <a href="<?php echo "/Watch_Collection/user/wishlist";?>" class="nav-item <?= ($current_page === 'wishlist') ? 'active' : ''; ?>">
-            <i class="fa-solid fa-heart"></i> <span>Wishlist</span>
-        </a>
         <a href="<?php echo "/Watch_Collection/user/settings"; ?>" class="nav-item <?= ($current_page === 'settings') ? 'active' : ''; ?>">
             <i class="fa-solid fa-user-gear"></i> <span>Settings</span>
         </a>

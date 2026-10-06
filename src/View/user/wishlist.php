@@ -1,6 +1,7 @@
-<?php 
-    // Set active page for the sidebar component
-    $activePage = 'wishlist'; 
+<?php
+// Set active page for the sidebar component
+$activePage = 'wishlist';
+require_once __DIR__ . '/../components/header.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -230,9 +231,24 @@
             color: var(--primary-hover);
         }
 
+        .empty-wishlist-msg {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .wishlist-card {
@@ -379,59 +395,17 @@
             </div>
         </header>
 
-        <!-- Wishlist Items Grid -->
-        <section class="wishlist-grid">
-
-            <div class="wishlist-card">
-                <button class="remove-btn" title="Remove Item"><i class="fa-solid fa-xmark"></i></button>
-                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" class="card-img" alt="Watch">
-                <div class="card-body">
-                    <span class="item-brand">H. MOSER & CIE.</span>
-                    <h3 class="item-title">Endeavour Centre Seconds</h3>
-                    <div class="item-price">₦756,000.00</div>
-                    <div class="card-actions">
-                        <button class="add-cart-btn"><i class="fa-solid fa-cart-shopping"></i> Move to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="wishlist-card">
-                <button class="remove-btn" title="Remove Item"><i class="fa-solid fa-xmark"></i></button>
-                <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500" class="card-img" alt="Watch">
-                <div class="card-body">
-                    <span class="item-brand">Rolex</span>
-                    <h3 class="item-title">Submariner Date 41mm</h3>
-                    <div class="item-price">₦2,100,000.00</div>
-                    <div class="card-actions">
-                        <button class="add-cart-btn"><i class="fa-solid fa-cart-shopping"></i> Move to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="wishlist-card">
-                <button class="remove-btn" title="Remove Item"><i class="fa-solid fa-xmark"></i></button>
-                <img src="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=500" class="card-img" alt="Watch">
-                <div class="card-body">
-                    <span class="item-brand">Omega</span>
-                    <h3 class="item-title">Speedmaster Professional</h3>
-                    <div class="item-price">₦1,450,000.00</div>
-                    <div class="card-actions">
-                        <button class="add-cart-btn"><i class="fa-solid fa-cart-shopping"></i> Move to Cart</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="view-more-container">
-                <a href="/catalog" class="view-more-link">
-                    View More Watches <i class="fa-solid fa-arrow-right"></i>
-                </a>
-            </div>
-
+        <!-- Wishlist Container (Grid target for JS rendering) -->
+        <section class="wishlist-grid" id="wishlistContainer">
+            <!-- Dynamic Watch Cards Loaded via JS -->
         </section>
 
     </main>
 
-    <!-- Theme & Drawer Script -->
+    <!-- Wishlist Helper Script Link -->
+    <script src="<?php assets('js/wishlist.js'); ?>"></script>
+
+    <!-- Dynamic Wishlist Fetch & Theme Script -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const themeToggleBtn = document.getElementById("themeToggleBtn");
@@ -466,9 +440,82 @@
                 menuToggleBtn.addEventListener("click", () => sidebar.classList.add("active"));
                 closeSidebarBtn.addEventListener("click", () => sidebar.classList.remove("active"));
             }
+
+            // Fetch and render saved wishlist items from API
+            loadWishlistItems();
         });
+
+        async function loadWishlistItems() {
+            const container = document.getElementById('wishlistContainer');
+            const watchIds = getWishlist();
+
+            if (!watchIds || watchIds.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-wishlist-msg">
+                        <i class="fa-regular fa-heart" style="font-size: 2.5rem; margin-bottom: 12px;"></i>
+                        <p>Your wishlist is currently empty.</p>
+                    </div>
+                    <div class="view-more-container">
+                        <a href="/catalog" class="view-more-link">
+                            Browse Watches <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>`;
+                return;
+            }
+
+            try {
+                const response = await fetch('/Watch_Collection/staff/api/watches/batch', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ids: watchIds
+                    })
+                });
+                const result = await response.json();
+
+                if (result.success && result.data.length > 0) {
+                    const cardsHtml = result.data.map(watch => `
+                        <div class="wishlist-card">
+                            <button class="remove-btn" title="Remove Item" onclick="removeFromWishlist(${watch.id})">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                            <img src="${watch.image_url}" class="card-img" alt="${watch.name}">
+                            <div class="card-body">
+                                <span class="item-brand">${watch.brand || 'ZEITH'}</span>
+                                <h3 class="item-title">${watch.name}</h3>
+                                <div class="item-price">₦${Number(watch.price).toLocaleString('en-NG', {minimumFractionDigits: 2})}</div>
+                                <div class="card-actions">
+                                    <button class="add-cart-btn"><i class="fa-solid fa-cart-shopping"></i> Move to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    container.innerHTML = cardsHtml + `
+                        <div class="view-more-container">
+                            <a href="/catalog" class="view-more-link">
+                                View More Watches <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>`;
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-wishlist-msg">
+                            <p>No saved items found.</p>
+                        </div>`;
+                }
+            } catch (error) {
+                console.error("Error loading wishlist items:", error);
+            }
+        }
+
+        function removeFromWishlist(watchId) {
+            toggleWishlist(watchId);
+            loadWishlistItems(); // Re-render without full page reload
+        }
     </script>
-    
+
 </body>
 
 </html>

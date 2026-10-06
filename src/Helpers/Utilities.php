@@ -1,35 +1,33 @@
 <?php
+
 namespace App\Helpers;
+
 require_once(__DIR__ . "/../../load_env.php");
 
 class Utilities
 {
     public static function hashPassword($password)
     {
-        $salt = $_ENV['SALT'];
+        // Safe fallback if 'SALT' is not set in $_ENV
+        $salt = $_ENV['SALT'] ?? 'default_secure_salt_string';
         $salted = "$salt+$password";
-        $myPassword = password_hash($salted, PASSWORD_BCRYPT);
-        return $myPassword;
-        
+        return password_hash($salted, PASSWORD_BCRYPT);
     }
 
     public static function verifyHashpassword($password, $hashPassword)
     {
-        $salt = $_ENV['SALT'];
+        $salt = $_ENV['SALT'] ?? 'default_secure_salt_string';
         $salted = "$salt+$password";
-        $verifyPassey = password_verify($salted, $hashPassword);
-        return $verifyPassey;
+        return password_verify($salted, $hashPassword);
     }
 
     public static function sieve($input)
     {
-        $sieve = htmlspecialchars(htmlentities(trim($input)));
-        return $sieve;
+        return htmlspecialchars(htmlentities(trim($input)));
     }
 
     public static function CSRF_token()
     {
         return bin2hex(random_bytes(32));
-    
     }
 }
