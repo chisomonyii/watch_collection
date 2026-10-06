@@ -3,10 +3,26 @@
 namespace App\Controller;
 
 use App\Models\Watch;
+use App\Helpers\View;
 
 class Home
 {
-    // ... your existing methods (e.g., showLandingpage)
+    /**
+     * Renders the home / landing page with products from the database
+     */
+   public static function showLandingpage()
+    {
+        try {
+            $products = Watch::getNewArrivals(8);
+        } catch (\PDOException $e) {
+            $products = [];
+        }
+
+        // Updated path to include the guests subfolder
+        View::displayView('guests/home.php', [
+            'newArrivals' => $products
+        ]);
+    }
 
     public static function getWishlistItems()
     {

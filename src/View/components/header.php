@@ -14,7 +14,7 @@
 
     <nav class="header-nav">
 
-        <a href="#" title="Wishlist">
+        <a href="/Watch_Collection/user/wishlist" title="Wishlist" class="nav-link">
             <i class="fa-solid fa-heart"></i>
             <span>Wishlist</span>
         </a>

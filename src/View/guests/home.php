@@ -2,12 +2,92 @@
 <html lang="en">
 
 <head>
+    <style>
+        /* Container for the arrivals grid */
+.new {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* Individual Watch Card */
+.arrivals {
+    position: relative; /* CRITICAL: Serves as the anchor for absolute elements inside */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 380px; /* Gives enough vertical space for image, text & bottom button */
+    padding: 16px;
+    padding-bottom: 50px; /* Prevents text from hiding under the bottom-left button */
+    box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 12px;
+}
+
+/* Image styling */
+.arrivals img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 12px;
+}
+
+/* Wishlist Heart Icon - Top Right */
+.wishlist-heart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 50%;
+    color: #f68b1e;
+    font-size: 21px;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.wishlist-heart:hover {
+    background: #f68b1e;
+    color: white;
+    transform: scale(1.08);
+}
+
+/* Add Button - Bottom Left */
+.add-button {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: #f68b1e;
+    color: black;
+    border: none;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    z-index: 5;
+}
+
+.add-button:hover {
+    background: black;
+    color: white;
+    transform: translateY(-1px);
+}
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/69c405441a.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="<?php assets("css/login.css");?>">
-    <link rel="stylesheet" href="<?php assets("css/header.css");?>">
-    <link rel="stylesheet" href="<?php assets("css/footer.css");?>">
+    <link rel="stylesheet" href="<?php assets("css/login.css"); ?>">
+    <link rel="stylesheet" href="<?php assets("css/header.css"); ?>">
+    <link rel="stylesheet" href="<?php assets("css/footer.css"); ?>">
     <title>Watch Collection</title>
 </head>
 
@@ -39,7 +119,7 @@
 
 
         <div class="hero-image">
-            <img src="<?php assets("Images/watch.png");?>" alt="Premium Watch">
+            <img src="<?php assets("Images/watch.png"); ?>" alt="Premium Watch">
         </div>
     </section>
 
@@ -47,55 +127,27 @@
         <h1 class="new-arrhead">New Arrivals!!</h1>
 
         <div class="new">
-            <div class="arrivals">
-                <img src="<?php assets("Images/picture3.png");?>" alt="Rolex Submariner">
+            <?php if (!empty($newArrivals)): ?>
+                <?php foreach ($newArrivals as $product): ?>
+                    <div class="arrivals" data-id="<?= htmlspecialchars($product['id'] ?? ''); ?>">
+                        <div class="wishlist-heart" title="Add to wishlist">♥</div>
+                        <img src="/Watch_Collection/assets/Images/<?= htmlspecialchars($product['image_url'] ?? $product['image'] ?? ''); ?>"
+                            alt="<?= htmlspecialchars($product['name'] ?? 'Watch'); ?>">
 
-                <span class="watch-info">
-                    <h2>Benken</h2>
-                    <p class="watch-name">Submariner • Automatic</p>
-                    <p class="watch-price">$2,000</p>
-                    <p class="watch-rating">★★★★★ <small>4.9</small></p>
-                    <span class="tag">BEST SELLER</span>
-                </span>
-            </div>
-            <div class="arrivals">
-                <img src="<?php assets("Images/picture6.png");?>" alt="Hublot Classic Fusion">
-
-                <span class="watch-info">
-                    <h2>U-Boat</h2>
-                    <p class="watch-name">Classic Fusion • Chronograph</p>
-                    <p class="watch-price">$10,000</p>
-                    <p class="watch-rating">★★★★★ <small>4.8</small></p>
-                    <span class="tag">LIMITED EDITION</span>
-                </span>
-            </div>
-
-            <div class="arrivals">
-                <img src="<?php assets("Images/picture11.png");?>" alt="Cartier Santos">
-
-                <span class="watch-info">
-                    <h2>Tissot</h2>
-                    <p class="watch-name">Santos • Luxury Edition</p>
-                    <p class="watch-price">$4,000</p>
-                    <p class="watch-rating">★★★★★ <small>4.9</small></p>
-                    <span class="tag">NEW</span>
-                </span>
-            </div>
-
-            <div class="arrivals">
-                <img src="<?php assets("Images/picture9.png");?>" alt="Casio G-Shock">
-
-                <span class="watch-info">
-                    <h2>Casio</h2>
-                    <p class="watch-name">Casio • Digital</p>
-                    <p class="watch-price">$2,500</p>
-                    <p class="watch-rating">★★★★☆ <small>4.7</small></p>
-                    <span class="tag">TRENDING</span>
-                </span>
-            </div>
+                        <span class="watch-info">
+                            <!-- Null coalescing (??) prevents undefined key warnings -->
+                            <h2><?= htmlspecialchars($product['brand'] ?? $product['collection_name'] ?? ''); ?></h2>
+                            <p class="watch-name"><?= htmlspecialchars($product['name'] ?? ''); ?></p>
+                            <p class="watch-price">$<?= number_format($product['price'] ?? 0); ?></p>
+                            <button class="add-button">Add</button>
+                        </span>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No products found.</p>
+            <?php endif; ?>
         </div>
-        <div>
-            <button class="arrive-btn search-btn">View all</button>
+        <button class="arrive-btn search-btn">View all</button>
         </div>
     </section>
     <section class="collections">
@@ -115,7 +167,7 @@
 
             <div class="collection-card">
 
-                <img src="<?php assets("Images/picture11.png");?>"
+                <img src="<?php assets("Images/picture11.png"); ?>"
                     alt="Classic Watch">
 
                 <div class="collection-content">
@@ -141,7 +193,7 @@
 
             <div class="collection-card">
 
-                <img src="<?php assets("Images/picture12.png");?>"
+                <img src="<?php assets("Images/picture12.png"); ?>"
                     alt="Chronograph Watch">
 
                 <div class="collection-content">
@@ -167,7 +219,7 @@
 
             <div class="collection-card">
 
-                <img src="<?php assets("Images/picture13.png");?>"
+                <img src="<?php assets("Images/picture13.png"); ?>"
                     alt="Executive Watch">
 
                 <div class="collection-content">
@@ -212,7 +264,7 @@
 
                 <div class="product-image">
 
-                    <img src="<?php assets("Images/picture6.png");?>"
+                    <img src="<?php assets("Images/picture6.png"); ?>"
                         alt="Zeith Classic">
 
                 </div>
@@ -242,7 +294,7 @@
 
                 <div class="product-image">
 
-                    <img src="<?php assets("Images/picture11.png");?>"
+                    <img src="<?php assets("Images/picture11.png"); ?>"
                         alt="Zeith Chrono">
 
                 </div>
@@ -272,7 +324,7 @@
 
                 <div class="product-image">
 
-                    <img src="<?php assets("Images/picture4.png");?>"
+                    <img src="<?php assets("Images/picture4.png"); ?>"
                         alt="Zeith Executive">
 
                 </div>
@@ -304,7 +356,7 @@
 
         <div class="story-image">
 
-            <img src="<?php assets("Images/picture2.png");?>"
+            <img src="<?php assets("Images/picture2.png"); ?>"
                 alt="Zeith Watch">
 
         </div>
@@ -505,6 +557,7 @@
 
     </section>
     <?php require_once __DIR__ . '/../components/footer.php'; ?>
+    <script src="<?php assets("js/home.js"); ?>"></script>
 </body>
 
 </html>

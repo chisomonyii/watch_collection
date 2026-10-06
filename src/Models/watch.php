@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use PDO;
+
 class Watch extends Model
 {
     /**
@@ -64,5 +66,61 @@ class Watch extends Model
         $stmt->execute(['slug' => $slug]);
 
         return $stmt->fetchAll();
+    }
+
+    /**
+     * Fetch the newest watches ordered by latest ID
+     */
+    public static function getNewArrivals($limit = 8)
+    {
+        $db = parent::connect();
+
+        $sql = "SELECT 
+                w.id, 
+                w.name, 
+                w.price, 
+                w.image_url, 
+                w.rating,
+                w.reviews_count,
+                w.description,
+                w.in_stock,
+                c.name AS brand,
+                c.name AS collection_name
+            FROM watches w
+            LEFT JOIN collections c ON w.collection_id = c.id
+            ORDER BY w.id DESC 
+            LIMIT :limit";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Fetch all watches from the database
+     */
+    public static function getAll()
+    {
+        $db = parent::connect();
+
+        $sql = "SELECT 
+                    w.id, 
+                    w.name, 
+                    w.price, 
+                    w.image_url, 
+                    w.rating,
+                    w.reviews_count,
+                    w.description,
+                    w.in_stock,
+                    c.name AS collection_name
+                FROM watches w
+                LEFT JOIN collections c ON w.collection_id = c.id";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +39,7 @@
             text-align: center;
             font-size: 32px;
             font-weight: 700;
-            color: #003b2f;
+            color: #f68b1e;
             margin-bottom: 35px;
         }
 
@@ -52,6 +53,14 @@
             gap: 35px;
         }
 
+        .empty-wishlist {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            padding: 50px 0;
+        }
+
         /* =========================
            PRODUCT CARD
         ========================= */
@@ -59,13 +68,16 @@
         .watch-card {
             position: relative;
             text-align: center;
-            padding: 10px 15px 20px;
-            background: transparent;
-            transition: transform 0.3s ease;
+            padding: 10px 15px 60px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .watch-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         /* =========================
@@ -74,8 +86,8 @@
 
         .wishlist-heart {
             position: absolute;
-            top: 8px;
-            left: 10px;
+            top: 10px;
+            right: 10px;
 
             width: 38px;
             height: 38px;
@@ -84,10 +96,10 @@
             align-items: center;
             justify-content: center;
 
-            background: #ffffff;
+            background: #f68b1e;
             border-radius: 50%;
 
-            color: #f68b1e;
+            color: #ffffff;
             font-size: 21px;
 
             cursor: pointer;
@@ -100,7 +112,7 @@
         }
 
         .wishlist-heart:hover {
-            background: #f68b1e;
+            background: #e07810;
             color: white;
             transform: scale(1.08);
         }
@@ -111,7 +123,7 @@
 
         .watch-image {
             width: 100%;
-            height: 320px;
+            height: 200px;
 
             display: flex;
             align-items: center;
@@ -134,11 +146,11 @@
         ========================= */
 
         .watch-name {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 700;
             color: #003b2f;
             margin-top: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         /* =========================
@@ -146,9 +158,9 @@
         ========================= */
 
         .watch-description {
-            font-size: 16px;
-            color: #c9c9c9;
-            margin-bottom: 14px;
+            font-size: 15px;
+            color: #888888;
+            margin-bottom: 10px;
             font-weight: 400;
         }
 
@@ -157,10 +169,10 @@
         ========================= */
 
         .watch-price {
-            font-size: 25px;
+            font-size: 22px;
             font-weight: 700;
             color: #003b2f;
-            margin-bottom: 14px;
+            margin-bottom: 10px;
         }
 
         /* =========================
@@ -173,7 +185,7 @@
             justify-content: center;
             gap: 2px;
 
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .stars {
@@ -183,8 +195,8 @@
         }
 
         .rating-number {
-            color: #c5c5c5;
-            font-size: 15px;
+            color: #888;
+            font-size: 14px;
             margin-left: 4px;
         }
 
@@ -198,11 +210,11 @@
             background: #003b2f;
             color: white;
 
-            padding: 9px 17px;
+            padding: 6px 14px;
 
             border-radius: 30px;
 
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
 
             text-transform: uppercase;
@@ -211,114 +223,52 @@
         }
 
         /* =========================
-           IPAD / TABLET
+           ADD BUTTON
         ========================= */
 
-        @media (max-width: 1024px) {
+        .add-button {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
 
-            .wishlist-container {
-                padding: 30px 30px 45px;
-            }
+            background: #f68b1e;
+            color: black;
 
-            .wishlist-title {
-                font-size: 30px;
-                margin-bottom: 30px;
-            }
+            border: none;
+            border-radius: 20px;
 
-            .wishlist-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 45px 25px;
-            }
+            padding: 8px 18px;
 
-            .watch-image {
-                height: 300px;
-            }
+            font-size: 13px;
+            font-weight: 700;
 
-            .watch-name {
-                font-size: 24px;
-            }
+            cursor: pointer;
 
-            .watch-price {
-                font-size: 23px;
-            }
+            transition: all 0.3s ease;
         }
 
-        /* =========================
-           MOBILE
-        ========================= */
+        .add-button:hover {
+            background: black;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .wishlist-container { padding: 30px 30px 45px; }
+            .wishlist-title { font-size: 30px; margin-bottom: 30px; }
+            .wishlist-grid { grid-template-columns: repeat(2, 1fr); gap: 35px 25px; }
+            .watch-image { height: 240px; }
+            .watch-name { font-size: 20px; }
+            .watch-price { font-size: 20px; }
+        }
 
         @media (max-width: 600px) {
-
-            .wishlist-container {
-                padding: 25px 18px 40px;
-            }
-
-            .wishlist-title {
-                font-size: 27px;
-                margin-bottom: 25px;
-            }
-
-            .wishlist-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .watch-card {
-                padding: 10px 10px 20px;
-            }
-
-            .watch-image {
-                height: 300px;
-            }
-
-            .watch-name {
-                font-size: 24px;
-            }
-
-            .watch-description {
-                font-size: 15px;
-            }
-
-            .watch-price {
-                font-size: 23px;
-            }
-
-            .wishlist-heart {
-                top: 8px;
-                left: 5px;
-            }
-        }
-
-        /* =========================
-           SMALL PHONES
-        ========================= */
-
-        @media (max-width: 375px) {
-
-            .wishlist-container {
-                padding: 20px 12px 35px;
-            }
-
-            .wishlist-title {
-                font-size: 24px;
-            }
-
-            .watch-image {
-                height: 260px;
-            }
-
-            .watch-name {
-                font-size: 22px;
-            }
-
-            .watch-price {
-                font-size: 21px;
-            }
-
-            .badge {
-                font-size: 11px;
-                padding: 8px 14px;
-            }
+            .wishlist-container { padding: 25px 18px 40px; }
+            .wishlist-title { font-size: 27px; margin-bottom: 25px; }
+            .wishlist-grid { grid-template-columns: 1fr; gap: 30px; }
+            .watch-card { padding: 10px 10px 55px; }
+            .watch-image { height: 240px; }
         }
     </style>
 </head>
@@ -330,161 +280,64 @@
         <!-- PAGE TITLE -->
         <h1 class="wishlist-title">My Wishlist</h1>
 
+        <!-- WATCHES GRID -->
+        <section class="wishlist-grid" id="wishlist-grid">
 
-        <!-- WATCHES -->
-        <section class="wishlist-grid">
+            <?php if (!empty($wishlistItems)): ?>
+                <?php foreach ($wishlistItems as$item): ?>
+                    <div class="watch-card" data-id="<?= htmlspecialchars($item['id']); ?>">
 
+                        <!-- HEART (CLICK TO REMOVE) -->
+                        <div class="wishlist-heart" title="Remove from wishlist" onclick="removeFromWishlist('<?= htmlspecialchars($item['id']); ?>')">
+                            ♥
+                        </div>
 
-            <!-- WATCH 1 -->
-            <div class="watch-card">
+                        <div class="watch-image">
+                            <img src="<?php assets("Images/" . $item['image']); ?>" alt="<?= htmlspecialchars($item['name']); ?>">
+                        </div>
 
-                <!-- HEART -->
-                <div class="wishlist-heart" title="Remove from wishlist">
-                    ♥
+                        <h2 class="watch-name"><?= htmlspecialchars($item['brand']); ?></h2>
+
+                        <p class="watch-description">
+                            <?= htmlspecialchars($item['name']); ?>
+                        </p>
+
+                        <div class="watch-price">
+                            ₦<?= number_format($item['price']); ?>
+                        </div>
+
+                        <div class="rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-number"><?= htmlspecialchars($item['rating'] ?? '5.0'); ?></span>
+                        </div>
+
+                        <?php if (!empty($item['tag'])): ?>
+                            <span class="badge">
+                                <?= htmlspecialchars($item['tag']); ?>
+                            </span>
+                        <?php endif; ?>
+
+                        <button class="add-button">
+                            Add
+                        </button>
+
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <!-- FALLBACK PLACEHOLDER IF PHP ARRAY IS EMPTY -->
+                <div class="empty-wishlist" id="empty-wishlist-msg">
+                    <p>Your wishlist is currently empty.</p>
                 </div>
-
-                <div class="watch-image">
-                    <img
-                        src="images/benken-watch.png"
-                        alt="Benken Watch"
-                    >
-                </div>
-
-                <h2 class="watch-name">Benken</h2>
-
-                <p class="watch-description">
-                    Submariner • Automatic
-                </p>
-
-                <div class="watch-price">
-                    $2,000
-                </div>
-
-                <div class="rating">
-                    <span class="stars">★★★★★</span>
-                    <span class="rating-number">4.9</span>
-                </div>
-
-                <span class="badge">
-                    Best Seller
-                </span>
-
-            </div>
-
-
-            <!-- WATCH 2 -->
-            <div class="watch-card">
-
-                <!-- HEART -->
-                <div class="wishlist-heart" title="Remove from wishlist">
-                    ♥
-                </div>
-
-                <div class="watch-image">
-                    <img
-                        src="images/u-boat-watch.png"
-                        alt="U-Boat Watch"
-                    >
-                </div>
-
-                <h2 class="watch-name">U-Boat</h2>
-
-                <p class="watch-description">
-                    Classic Fusion • Chronograph
-                </p>
-
-                <div class="watch-price">
-                    $10,000
-                </div>
-
-                <div class="rating">
-                    <span class="stars">★★★★★</span>
-                    <span class="rating-number">4.8</span>
-                </div>
-
-                <span class="badge">
-                    Limited Edition
-                </span>
-
-            </div>
-
-
-            <!-- WATCH 3 -->
-            <div class="watch-card">
-
-                <!-- HEART -->
-                <div class="wishlist-heart" title="Remove from wishlist">
-                    ♥
-                </div>
-
-                <div class="watch-image">
-                    <img
-                        src="images/tissot-watch.png"
-                        alt="Tissot Watch"
-                    >
-                </div>
-
-                <h2 class="watch-name">Tissot</h2>
-
-                <p class="watch-description">
-                    Santos • Luxury Edition
-                </p>
-
-                <div class="watch-price">
-                    $4,000
-                </div>
-
-                <div class="rating">
-                    <span class="stars">★★★★★</span>
-                    <span class="rating-number">4.9</span>
-                </div>
-
-                <span class="badge">
-                    New
-                </span>
-
-            </div>
-
-
-            <!-- WATCH 4 -->
-            <div class="watch-card">
-
-                <!-- HEART -->
-                <div class="wishlist-heart" title="Remove from wishlist">
-                    ♥
-                </div>
-
-                <div class="watch-image">
-                    <img
-                        src="images/casio-watch.png"
-                        alt="Casio Watch"
-                    >
-                </div>
-
-                <h2 class="watch-name">Casio</h2>
-
-                <p class="watch-description">
-                    Casio • Digital
-                </p>
-
-                <div class="watch-price">
-                    $2,500
-                </div>
-
-                <div class="rating">
-                    <span class="stars">★★★★★</span>
-                    <span class="rating-number">4.7</span>
-                </div>
-
-                <span class="badge">
-                    Trending
-                </span>
-
-            </div>
+            <?php endif; ?>
 
         </section>
 
     </main>
 
+    <!-- JS BACKUP HYDRATION FROM LOCALSTORAGE -->
+    
+
+    <script src="<?php assets("js/wishlist.js"); ?>"></script>
 </body>
+
 </html>

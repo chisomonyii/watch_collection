@@ -19,6 +19,7 @@ require_once __DIR__ . '/routes/auth.php';
 require_once __DIR__ . '/routes/staff.php';
 require_once __DIR__ . '/routes/watch.php';
 require_once __DIR__ . '/routes/user.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 // 404 Fallback
 $router->set404(function () {
@@ -28,5 +29,13 @@ $router->set404(function () {
 $router->mount('/user', function () use ($router) {
     require_once __DIR__ . '/routes/user.php';
 });
+
+$router->get('/user/wishlist', function() {
+    \App\Helpers\View::displayView('user/wishlist.php'); 
+});
+$router->get('/user/wishlist', '\App\Controller\UserController@showWishlist');
+$router->post('/api/wishlist-items', '\App\Controller\Home@getWishlistItems');
+
+$router->post('/api/wishlist', [App\Controller\Home::class, 'getWishlistItems']);
 
 $router->run();
