@@ -1,12 +1,20 @@
 <?php
 
-// User / Buyer Routes
+use App\Helpers\View;
 
-$router->get('/wishlist', function () {
-    \App\Helpers\View::displayView('user/wishlist.php');
+// Group all buyer routes under the /user prefix
+$router->mount('/user', function () use ($router) {
+
+    $router->get('/wishlist', function () {
+        View::displayView('user/wishlist.php');
+    });
+
+    $router->get('/profile', function () {
+        View::displayView('user/profile.php');
+    });
+
+    $router->get('/orders', function () {
+        View::displayView('user/orders.php');
+    });
+
 });
-
-// Add other buyer pages here in the future:
-// $router->get('/profile', function () {
-//     \App\Helpers\View::displayView('user/profile.php');
-// });

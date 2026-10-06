@@ -28,4 +28,12 @@ function updateWishlistBadge() {
     }
 }
 
+const response = await fetch('/Watch_Collection/api/watches/batch', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ ids: watchIds })
+});
+
 document.addEventListener('DOMContentLoaded', updateWishlistBadge);

@@ -25,4 +25,8 @@ $router->set404(function () {
     View::displayView('404.php');
 });
 
+$router->mount('/user', function () use ($router) {
+    require_once __DIR__ . '/routes/user.php';
+});
+
 $router->run();
