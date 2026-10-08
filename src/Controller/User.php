@@ -121,22 +121,22 @@ class User extends Controller
 
     public static function dashboard()
     {
-        View::displayView('users/dashboard.php');
+        View::displayView('staffs/dashboard.php');
     }
 
     public static function Settings()
     {
-        View::displayView('users/settings.php');
+        View::displayView('staffs/settings.php');
     }
 
     public static function showWishlist()
     {
-        View::displayView('users/wishlist.php');
+        View::displayView('staffs/wishlist.php');
     }
 
     public static function displayOrders()
     {
-        View::displayView('users/orders.php');
+        View::displayView('staffs/orders.php');
     }
 }
 

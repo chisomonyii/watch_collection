@@ -10,16 +10,16 @@
     </div>
 
     <nav class="sidebar-nav">
-        <a href="<?php echo "/Watch_Collection/user/dashboard";?>" class="nav-item <?= ($current_page === 'overview') ? 'active' : ''; ?>">
+        <a href="<?php echo "/Watch_Collection/staff/dashboard";?>" class="nav-item <?= ($current_page === 'overview') ? 'active' : ''; ?>">
             <i class="fa-solid fa-chart-pie"></i> <span>Overview</span>
         </a>
-        <a href="<?php echo "/Watch_Collection/user/orders";?>" class="nav-item <?= ($current_page === 'orders') ? 'active' : ''; ?>">
-            <i class="fa-solid fa-bag-shopping"></i> <span>My Orders</span>
+        <a href="<?php echo "/Watch_Collection/staff/orders";?>" class="nav-item <?= ($current_page === 'orders') ? 'active' : ''; ?>">
+            <i class="fa-solid fa-bag-shopping"></i> <span>Orders</span>
         </a>
-        <a href="<?php echo "/Watch_Collection/user/wishlist";?>" class="nav-item <?= ($current_page === 'wishlist') ? 'active' : ''; ?>">
+        <a href="<?php echo "/Watch_Collection/staff/wishlist";?>" class="nav-item <?= ($current_page === 'wishlist') ? 'active' : ''; ?>">
             <i class="fa-solid fa-heart"></i> <span>Wishlist</span>
         </a>
-        <a href="<?php echo "/Watch_Collection/user/settings"; ?>" class="nav-item <?= ($current_page === 'settings') ? 'active' : ''; ?>">
+        <a href="<?php echo "/Watch_Collection/staff/settings"; ?>" class="nav-item <?= ($current_page === 'settings') ? 'active' : ''; ?>">
             <i class="fa-solid fa-user-gear"></i> <span>Settings</span>
         </a>
     </nav>

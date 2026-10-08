@@ -16,7 +16,7 @@
 
     <a href="#" title="Information">
         <i class="fa-solid fa-circle-info"></i>
-        <span>Info</span>
+        <span>wishlist</span>
     </a>
 
     <a href="#" title="Contact Us">
