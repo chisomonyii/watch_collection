@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="../../assets/css/footer.css">
 <footer class="zeith-footer">
     <div class="footer-main">
     <div class="footer-brand">

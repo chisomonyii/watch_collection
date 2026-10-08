@@ -557,7 +557,6 @@
 </head>
 
 <body>
-    <?php require '../header.php'; ?>
 
     <div class="checkout-wrapper">
 
@@ -865,7 +864,7 @@
             setupModal("privacyTrigger", "privacyModal", "closePrivacyBtn");
         });
     </script>
-    <?php include '../footer.php'; ?>
+    <?php require_once __DIR__ . '../../src/View/components/footer.php'; ?>
 </body>
 
 </html>

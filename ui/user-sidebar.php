@@ -25,7 +25,7 @@
     </nav>
 
     <div class="sidebar-footer">
-        <a href="logout.php" class="nav-item logout-btn">
+        <a href="./login.php" class="nav-item logout-btn">
             <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
         </a>
     </div>

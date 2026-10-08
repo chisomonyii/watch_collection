@@ -1,7 +1,21 @@
 <?php
 
-$router->before('GET|POST|PATCH|PUT|DELETE', '/.*', 'Auth@unauthorize_request');
-$router->get('/dashboard', "User@dashboard");
-$router->get('/settings', 'User@Settings');
-$router->get('/wishlist', 'User@showWishlist');
-$router->get('/orders', 'User@displayOrders');
+// GET view for Staff Wishlist
+
+// Other staff pages...
+$router->get('/dashboard', function () {
+    \App\Helpers\View::displayView('staffs/dashboard.php');
+});
+
+$router->get('/orders', function () {
+    \App\Helpers\View::displayView('staffs/orders.php');
+});
+
+$router->get('/settings', function () {
+    \App\Helpers\View::displayView('staffs/settings.php');
+});
+
+// API endpoint for batch fetching wishlist items
+$router->post('/api/watches/batch', function () {
+    \App\Controller\Home::getWishlistItems();
+});
