@@ -9,6 +9,9 @@ class Watch extends Model
     /**
      * Fetch a batch of watches by IDs along with their collection details & ratings
      */
+    /**
+     * Fetch a batch of watches by IDs along with their collection details & ratings
+     */
     public static function getByIds(array $ids)
     {
         if (empty($ids)) {
@@ -25,20 +28,22 @@ class Watch extends Model
                     w.name, 
                     w.price, 
                     w.image_url, 
+                    w.image_url AS image, 
                     w.rating,
                     w.reviews_count,
                     w.description,
                     w.in_stock,
+                    c.name AS brand,
                     c.name AS collection_name,
                     c.slug AS collection_slug
                 FROM watches w
-                INNER JOIN collections c ON w.collection_id = c.id
+                LEFT JOIN collections c ON w.collection_id = c.id
                 WHERE w.id IN ($placeholders)";
 
         $stmt = $db->prepare($sql);
         $stmt->execute($cleanIds);
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

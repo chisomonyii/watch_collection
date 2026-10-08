@@ -20,14 +20,14 @@
         </a>
 
 
-        <a href="#" title="Contact Us">
+        <a href="/Watch_Collection/user/contact" title="Contact Us">
             <i class="fa-solid fa-phone"></i>
             <span>Contact</span>
         </a>
 
         <a href="#" title="Cart">
-            <i class="fa-solid fa-cart-shopping"></i>   
-            <span>Cart</span>
+            <i class="fa-solid fa-clock"></i> 
+            <span>watch</span>
         </a>
 
         <a href="" title="Login">

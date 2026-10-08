@@ -1,24 +1,35 @@
-// Get existing wishlist array from localStorage
+// ==========================================
+// WISHLIST HELPER FUNCTIONS
+// ==========================================
+
+// 1. Retrieve saved IDs array from localStorage using a single uniform key
 function getWishlist() {
     return JSON.parse(localStorage.getItem('zeith_wishlist')) || [];
 }
 
-// Add or remove watch ID from local storage
+// 2. Add or remove watch ID from local storage & sync badge
 function toggleWishlist(watchId) {
+    if (!watchId) return false;
+    
     let wishlist = getWishlist();
-    const index = wishlist.indexOf(watchId);
+    const stringId = String(watchId);
+    const index = wishlist.indexOf(stringId);
+    let isLiked = false;
 
     if (index === -1) {
-        wishlist.push(watchId);
+        wishlist.push(stringId);
+        isLiked = true;
     } else {
         wishlist.splice(index, 1);
+        isLiked = false;
     }
 
     localStorage.setItem('zeith_wishlist', JSON.stringify(wishlist));
     updateWishlistBadge();
+    return isLiked;
 }
 
-// Update the counter badge in header.php
+// 3. Update the counter badge in header.php
 function updateWishlistBadge() {
     const badge = document.getElementById('wishlist-count');
     if (badge) {
@@ -28,89 +39,69 @@ function updateWishlistBadge() {
     }
 }
 
-const response = await fetch('/Watch_Collection/api/watches/batch', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ ids: watchIds })
-});
-
-document.addEventListener('DOMContentLoaded', updateWishlistBadge);
+// ==========================================
+// HOME PAGE HEART CLICK & UI HIGHLIGHTING
+// ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Target all wishlist heart icons across products
+    // Sync badge count on load
+    updateWishlistBadge();
+
+    const wishlist = getWishlist();
     const wishlistHearts = document.querySelectorAll('.wishlist-heart');
 
+    // Highlight hearts on page load based on localStorage
+    document.querySelectorAll('.arrivals, .watch-card').forEach(card => {
+        const id = card.getAttribute('data-id');
+        const heart = card.querySelector('.wishlist-heart');
+        if (id && wishlist.includes(String(id)) && heart) {
+            heart.classList.add('active');
+            heart.style.color = '#e74c3c';
+            heart.setAttribute('title', 'Remove from wishlist');
+        }
+    });
+
+    // Attach click listener to heart icons
     wishlistHearts.forEach(heart => {
-        heart.addEventListener('click', async (event) => {
+        heart.addEventListener('click', (event) => {
+            event.stopPropagation();
             const heartBtn = event.currentTarget;
-            const productContainer = heartBtn.closest('.arrivals') || heartBtn.closest('.product-card');
+            const productContainer = heartBtn.closest('.arrivals') || heartBtn.closest('.watch-card');
 
-            // Extract product identifier (assuming data-id attribute on container or extracted details)
             const productId = productContainer ? productContainer.dataset.id : null;
-            
-            // Toggle active state locally
-            const isLiked = heartBtn.classList.toggle('active');
+            if (!productId) return;
 
-            // Visual feedback update
-            if (isLiked) {
-                heartBtn.style.color = '#e74c3c'; // Liked state color
-                heartBtn.setAttribute('title', 'Remove from wishlist');
-            } else {
-                heartBtn.style.color = '#f68b1e'; // Default state color
-                heartBtn.setAttribute('title', 'Add to wishlist');
-            }
+            // Save/remove directly in LocalStorage
+            const isLiked = toggleWishlist(productId);
 
-            // Send request to backend (PHP/API Endpoint)
-            try {
-                const response = await fetch('/api/wishlist-toggle.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        product_id: productId,
-                        action: isLiked ? 'add' : 'remove'
-                    }),
-                });
-
-                const result = await response.json();
-
-                if (!result.success) {
-                    // Revert UI changes if backend request fails
-                    heartBtn.classList.toggle('active');
-                    heartBtn.style.color = isLiked ? '#f68b1e' : '#e74c3c';
-                    console.error('Wishlist update failed:', result.message);
-                }
-            } catch (error) {
-                console.error('Network or server error:', error);
-                // Revert UI state on error
-                heartBtn.classList.toggle('active');
-                heartBtn.style.color = isLiked ? '#f68b1e' : '#e74c3c';
-            }
+            // Update UI visuals
+            heartBtn.classList.toggle('active', isLiked);
+            heartBtn.style.color = isLiked ? '#e74c3c' : '#f68b1e';
+            heartBtn.setAttribute('title', isLiked ? 'Remove from wishlist' : 'Add to wishlist');
         });
     });
 });
 
+// ==========================================
+// WISHLIST PAGE RENDERING & DELETION
+// ==========================================
+
 document.addEventListener('DOMContentLoaded', async () => {
     const grid = document.getElementById('wishlist-grid');
     const emptyMsg = document.getElementById('empty-wishlist-msg');
-    
-    // Check if PHP already rendered cards on server-side
+
+    // Skip API request if PHP already rendered wishlist items server-side
     const hasPhpItems = grid && grid.querySelectorAll('.watch-card').length > 0;
     if (hasPhpItems) return;
 
-    // Fetch saved product IDs from localStorage
-    const savedIds = JSON.parse(localStorage.getItem('wishlist_ids')) || [];
+    const savedIds = JSON.parse(localStorage.getItem('zeith_wishlist')) || [];
 
-    if (savedIds.length === 0) {
+    if (!grid || savedIds.length === 0) {
         if (emptyMsg) emptyMsg.style.display = 'block';
         return;
     }
 
     try {
-        // Send saved IDs to backend API to retrieve watch details
         const response = await fetch('/Watch_Collection/api/wishlist-items', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -124,15 +115,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             grid.innerHTML = result.data.map(item => `
                 <div class="watch-card" data-id="${item.id}">
-                    <div class="wishlist-heart" title="Remove from wishlist" onclick="removeFromWishlist('${item.id}')">
+                    <div class="wishlist-heart active" title="Remove from wishlist" onclick="removeFromWishlist('${item.id}')" style="color: #e74c3c;">
                         ♥
                     </div>
                     <div class="watch-image">
-                        <img src="/Watch_Collection/public/assets/Images/${item.image}" alt="${item.name}">
+                        <img src="/Watch_Collection/assets/Images/${item.image || item.image_url}" alt="${item.name}">
                     </div>
-                    <h2 class="watch-name">${item.brand || ''}</h2>
+                    <h2 class="watch-name">${item.brand || item.collection_name || ''}</h2>
                     <p class="watch-description">${item.name || ''}</p>
-                    <div class="watch-price">₦${Number(item.price).toLocaleString()}</div>
+                    <div class="watch-price">₦${Number(item.price || 0).toLocaleString()}</div>
                     <div class="rating">
                         <span class="stars">★★★★★</span>
                         <span class="rating-number">${item.rating || '5.0'}</span>
@@ -150,33 +141,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-/**
- * Removes an item from localStorage and updates the DOM immediately
- * @param {string|number} id 
- */
 function removeFromWishlist(id) {
-    let wishlist = JSON.parse(localStorage.getItem('wishlist_ids')) || [];
-    
-    // Filter out removed ID
+    let wishlist = JSON.parse(localStorage.getItem('zeith_wishlist')) || [];
     wishlist = wishlist.filter(item => String(item) !== String(id));
-    localStorage.setItem('wishlist_ids', JSON.stringify(wishlist));
+    localStorage.setItem('zeith_wishlist', JSON.stringify(wishlist));
 
-    // Remove item card directly from DOM
     const card = document.querySelector(`.watch-card[data-id="${id}"]`);
-    if (card) {
-        card.remove();
-    }
+    if (card) card.remove();
 
-    // Display empty message if no items remain
     const remainingCards = document.querySelectorAll('.watch-card');
     if (remainingCards.length === 0) {
-        const grid = document.getElementById('wishlist-grid');
-        if (grid) {
-            grid.innerHTML = `
-                <div class="empty-wishlist" id="empty-wishlist-msg">
-                    <p>Your wishlist is currently empty.</p>
-                </div>
-            `;
-        }
+        const emptyMsg = document.getElementById('empty-wishlist-msg');
+        if (emptyMsg) emptyMsg.style.display = 'block';
     }
 }

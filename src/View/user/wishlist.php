@@ -96,10 +96,10 @@
             align-items: center;
             justify-content: center;
 
-            background: #f68b1e;
+            background: #ffffff;
             border-radius: 50%;
 
-            color: #ffffff;
+            color: #e74c3c;
             font-size: 21px;
 
             cursor: pointer;
@@ -112,7 +112,7 @@
         }
 
         .wishlist-heart:hover {
-            background: #e07810;
+            background: #e74c3c;
             color: white;
             transform: scale(1.08);
         }
@@ -255,20 +255,55 @@
 
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
-            .wishlist-container { padding: 30px 30px 45px; }
-            .wishlist-title { font-size: 30px; margin-bottom: 30px; }
-            .wishlist-grid { grid-template-columns: repeat(2, 1fr); gap: 35px 25px; }
-            .watch-image { height: 240px; }
-            .watch-name { font-size: 20px; }
-            .watch-price { font-size: 20px; }
+            .wishlist-container {
+                padding: 30px 30px 45px;
+            }
+
+            .wishlist-title {
+                font-size: 30px;
+                margin-bottom: 30px;
+            }
+
+            .wishlist-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 35px 25px;
+            }
+
+            .watch-image {
+                height: 240px;
+            }
+
+            .watch-name {
+                font-size: 20px;
+            }
+
+            .watch-price {
+                font-size: 20px;
+            }
         }
 
         @media (max-width: 600px) {
-            .wishlist-container { padding: 25px 18px 40px; }
-            .wishlist-title { font-size: 27px; margin-bottom: 25px; }
-            .wishlist-grid { grid-template-columns: 1fr; gap: 30px; }
-            .watch-card { padding: 10px 10px 55px; }
-            .watch-image { height: 240px; }
+            .wishlist-container {
+                padding: 25px 18px 40px;
+            }
+
+            .wishlist-title {
+                font-size: 27px;
+                margin-bottom: 25px;
+            }
+
+            .wishlist-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .watch-card {
+                padding: 10px 10px 55px;
+            }
+
+            .watch-image {
+                height: 240px;
+            }
         }
     </style>
 </head>
@@ -284,19 +319,19 @@
         <section class="wishlist-grid" id="wishlist-grid">
 
             <?php if (!empty($wishlistItems)): ?>
-                <?php foreach ($wishlistItems as$item): ?>
+                <?php foreach ($wishlistItems as $item): ?>
                     <div class="watch-card" data-id="<?= htmlspecialchars($item['id']); ?>">
 
                         <!-- HEART (CLICK TO REMOVE) -->
-                        <div class="wishlist-heart" title="Remove from wishlist" onclick="removeFromWishlist('<?= htmlspecialchars($item['id']); ?>')">
+                        <div class="wishlist-heart active" title="Remove from wishlist" onclick="removeFromWishlist('<?= htmlspecialchars($item['id']); ?>')">
                             ♥
                         </div>
 
                         <div class="watch-image">
-                            <img src="<?php assets("Images/" . $item['image']); ?>" alt="<?= htmlspecialchars($item['name']); ?>">
+                            <img src="<?php assets("Images/" . ($item['image'] ?? $item['image_url'])); ?>" alt="<?= htmlspecialchars($item['name']); ?>">
                         </div>
 
-                        <h2 class="watch-name"><?= htmlspecialchars($item['brand']); ?></h2>
+                        <h2 class="watch-name"><?= htmlspecialchars($item['brand'] ?? $item['collection_name'] ?? ''); ?></h2>
 
                         <p class="watch-description">
                             <?= htmlspecialchars($item['name']); ?>
@@ -334,10 +369,82 @@
 
     </main>
 
-    <!-- JS BACKUP HYDRATION FROM LOCALSTORAGE -->
-    
+    <!-- EXTERNAL JS FOR HYDRATION & REMOVAL LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const grid = document.getElementById('wishlist-grid');
+            const emptyMsg = document.getElementById('empty-wishlist-msg');
 
-    <script src="<?php assets("js/wishlist.js"); ?>"></script>
+            // If PHP already rendered items, don't fetch from API
+            const hasPhpItems = grid && grid.querySelectorAll('.watch-card').length > 0;
+            if (hasPhpItems) return;
+
+            const savedIds = JSON.parse(localStorage.getItem('zeith_wishlist')) || [];
+
+            if (!grid || savedIds.length === 0) {
+                if (emptyMsg) emptyMsg.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/Watch_Collection/api/wishlist-items', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ids: savedIds
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success && result.data && result.data.length > 0) {
+                    if (emptyMsg) emptyMsg.style.display = 'none';
+
+                    grid.innerHTML = result.data.map(item => `
+                <div class="watch-card" data-id="${item.id}">
+                    <div class="wishlist-heart active" title="Remove from wishlist" onclick="removeFromWishlist('${item.id}')" style="color: #e74c3c;">
+                        ♥
+                    </div>
+                    <div class="watch-image">
+                        <img src="/Watch_Collection/assets/Images/${item.image || item.image_url}" alt="${item.name}">
+                    </div>
+                    <h2 class="watch-name">${item.brand || item.collection_name || ''}</h2>
+                    <p class="watch-description">${item.name || ''}</p>
+                    <div class="watch-price">₦${Number(item.price || 0).toLocaleString()}</div>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-number">${item.rating || '5.0'}</span>
+                    </div>
+                    ${item.tag ? `<span class="badge">${item.tag}</span>` : ''}
+                    <button class="add-button">Add</button>
+                </div>
+            `).join('');
+                } else {
+                    if (emptyMsg) emptyMsg.style.display = 'block';
+                }
+            } catch (err) {
+                console.error('Error fetching wishlist products:', err);
+                if (emptyMsg) emptyMsg.style.display = 'block';
+            }
+        });
+
+        function removeFromWishlist(id) {
+            let wishlist = JSON.parse(localStorage.getItem('zeith_wishlist')) || [];
+            wishlist = wishlist.filter(item => String(item) !== String(id));
+            localStorage.setItem('zeith_wishlist', JSON.stringify(wishlist));
+
+            const card = document.querySelector(`.watch-card[data-id="${id}"]`);
+            if (card) card.remove();
+
+            const remainingCards = document.querySelectorAll('.watch-card');
+            if (remainingCards.length === 0) {
+                const emptyMsg = document.getElementById('empty-wishlist-msg');
+                if (emptyMsg) emptyMsg.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 
 </html>

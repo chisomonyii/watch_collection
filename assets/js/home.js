@@ -1,42 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Highlight hearts already saved in wishlist on page load
-    let wishlist = JSON.parse(localStorage.getItem('wishlist_ids')) || [];
-    
-    document.querySelectorAll('.arrivals').forEach(card => {
-        const id = card.getAttribute('data-id');
+    // 1. Sync header badge on load
+    updateWishlistBadge();
+
+    // 2. Highlight saved hearts on load
+    const saved = JSON.parse(localStorage.getItem('zeith_wishlist')) || [];
+    document.querySelectorAll('.arrivals, .watch-card').forEach(card => {
+        const id = String(card.getAttribute('data-id'));
         const heart = card.querySelector('.wishlist-heart');
-        
-        if (wishlist.includes(id) && heart) {
+        if (id && saved.includes(id) && heart) {
             heart.classList.add('active');
-            heart.style.background = '#f68b1e';
-            heart.style.color = '#ffffff';
+            heart.style.color = '#e74c3c';
         }
     });
 
-    // 2. Click handler for heart icons
+    // 3. Attach click handler for heart icons
     document.querySelectorAll('.wishlist-heart').forEach(heart => {
         heart.addEventListener('click', function (e) {
             e.stopPropagation();
-            const card = this.closest('.arrivals');
-            const watchId = card.getAttribute('data-id');
+            const card = this.closest('.arrivals') || this.closest('.watch-card');
+            if (!card) return;
 
-            let wishlist = JSON.parse(localStorage.getItem('wishlist_ids')) || [];
+            const watchId = String(card.getAttribute('data-id'));
+            let wishlist = JSON.parse(localStorage.getItem('zeith_wishlist')) || [];
 
             if (wishlist.includes(watchId)) {
-                // Remove from wishlist
                 wishlist = wishlist.filter(id => id !== watchId);
                 this.classList.remove('active');
-                this.style.background = '#ffffff';
                 this.style.color = '#f68b1e';
             } else {
-                // Add to wishlist
                 wishlist.push(watchId);
                 this.classList.add('active');
-                this.style.background = '#f68b1e';
-                this.style.color = '#ffffff';
+                this.style.color = '#e74c3c';
             }
 
-            localStorage.setItem('wishlist_ids', JSON.stringify(wishlist));
+            localStorage.setItem('zeith_wishlist', JSON.stringify(wishlist));
+            updateWishlistBadge();
         });
     });
 });
+
+function updateWishlistBadge() {
+    const badge = document.getElementById('wishlist-count');
+    if (badge) {
+        const wishlist = JSON.parse(localStorage.getItem('zeith_wishlist')) || [];
+        badge.textContent = wishlist.length;
+        badge.style.display = wishlist.length > 0 ? 'inline-block' : 'none';
+    }
+}
