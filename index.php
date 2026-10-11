@@ -29,7 +29,7 @@ $router->get('/user/wishlist', function () {
 // API Endpoint for Wishlist Items Hydration
 $router->post('/api/wishlist-items', 'Home@getWishlistItems');
 
-// Mount User Routes Sub-router (if you have additional user routes in routes/user.php)
+// Mount User Routes Sub-router
 $router->mount('/user', function () use ($router) {
     require_once __DIR__ . '/routes/user.php';
 });
@@ -38,6 +38,16 @@ $router->mount('/user', function () use ($router) {
 $router->set404(function () {
     View::displayView('404.php');
 });
+
+// View route for watch catalog
+$router->get('/user/watch', 'Watch@showWatchPage');
+
+// View route for brand/collection pages
+// Dynamic route matching /user/watch/collection/hublot or /user/watch/collection/rolex
+$router->get('/user/watch/collection/{name}', 'Collection@showByPath');
+
+// API route to get watch details for saved items
+$router->post('/api/watch-items', 'Watch@getCartItems');
 
 require_once __DIR__ . '/routes/contact.php';
 

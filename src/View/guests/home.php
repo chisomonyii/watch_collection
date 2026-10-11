@@ -4,7 +4,6 @@
 <head>
 
     <style>
-
         /* =========================================
            NEW ARRIVALS GRID
         ========================================= */
@@ -142,14 +141,14 @@
            FIXED SHOPPING CART
         ========================================= */
 
+        /* Floating Cart */
         .floating-cart {
             position: fixed;
-
             right: 30px;
             bottom: 30px;
 
-            width: 62px;
-            height: 62px;
+            width: 65px;
+            height: 65px;
 
             display: flex;
             align-items: center;
@@ -159,110 +158,78 @@
             color: #ffffff;
 
             border-radius: 50%;
-
             text-decoration: none;
-
-            font-size: 24px;
+            font-size: 25px;
 
             box-shadow: 0 5px 18px rgba(0, 0, 0, 0.20);
-
             z-index: 9999;
 
-            transition: all 0.3s ease;
+            transition: 0.3s ease;
         }
-
 
         .floating-cart:hover {
             background: #003b2f;
             color: #ffffff;
-
             transform: scale(1.08);
         }
 
-
-        /* =========================================
-           CART COUNT
-        ========================================= */
-
+        /* Quantity badge overlapping the orange circle */
+        /* Cart Quantity - Top Center */
         .cart-count {
             position: absolute;
-
-            top: -5px;
-            right: -5px;
-
-            min-width: 22px;
-            height: 22px;
-
-            padding: 2px 6px;
-
-            display: none;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 26px;
+            height: 26px;
+            padding: 0 5px;
+            border-radius: 50%;
+            background: #ffffff;
+            color: #f68b1e;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
             align-items: center;
             justify-content: center;
-
-            background: #e74c3c;
-            color: #ffffff;
-
-            border: 2px solid #ffffff;
-
-            border-radius: 50%;
-
-            font-size: 11px;
-            font-weight: 700;
+            border: 2px solid #f68b1e;
         }
 
-
-        /* =========================================
-           TABLET
-        ========================================= */
-
+        /* Tablet */
         @media (max-width: 768px) {
-
             .floating-cart {
                 width: 58px;
                 height: 58px;
-
                 right: 22px;
                 bottom: 22px;
-
                 font-size: 22px;
             }
-
         }
 
-
-        /* =========================================
-           MOBILE
-        ========================================= */
-
+        /* Mobile */
         @media (max-width: 480px) {
-
             .floating-cart {
-                width: 52px;
-                height: 52px;
-
+                width: 55px;
+                height: 55px;
                 right: 18px;
                 bottom: 18px;
-
-                font-size: 20px;
+                font-size: 21px;
             }
-
 
             .cart-count {
-                min-width: 20px;
-                height: 20px;
-
-                font-size: 10px;
+                top: -6px;
+                right: -5px;
+                min-width: 23px;
+                height: 23px;
+                font-size: 11px;
             }
-
         }
-
     </style>
 
 
     <meta charset="UTF-8">
 
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0">
 
     <script
         src="https://kit.fontawesome.com/69c405441a.js"
@@ -270,13 +237,13 @@
     </script>
 
     <link rel="stylesheet"
-          href="<?php assets("css/login.css"); ?>">
+        href="<?php assets("css/login.css"); ?>">
 
     <link rel="stylesheet"
-          href="<?php assets("css/header.css"); ?>">
+        href="<?php assets("css/header.css"); ?>">
 
     <link rel="stylesheet"
-          href="<?php assets("css/footer.css"); ?>">
+        href="<?php assets("css/footer.css"); ?>">
 
     <title>Watch Collection</title>
 
@@ -347,67 +314,43 @@
 
                 <?php foreach ($newArrivals as $product): ?>
 
-                    <div
-                        class="arrivals watch-card"
-                        data-id="<?= htmlspecialchars($product['id'] ?? ''); ?>"
-                    >
+                    <div class="arrivals watch-card" data-id="<?= htmlspecialchars($product['id'] ?? ''); ?>">
 
                         <!-- WISHLIST HEART -->
-
-                        <div
-                            class="wishlist-heart"
-                            title="Add to wishlist"
-                        >
+                        <div class="wishlist-heart" title="Add to wishlist">
                             ♥
                         </div>
 
-
                         <!-- WATCH IMAGE -->
-
-                        <img
-                            src="/Watch_Collection/assets/Images/<?= htmlspecialchars($product['image_url'] ?? $product['image'] ?? ''); ?>"
-                            alt="<?= htmlspecialchars($product['name'] ?? 'Watch'); ?>"
-                        >
-
+                        <img src="/Watch_Collection/assets/Images/<?= htmlspecialchars($product['image_url'] ?? $product['image'] ?? ''); ?>" alt="<?= htmlspecialchars($product['name'] ?? 'Watch'); ?>">
 
                         <!-- WATCH INFORMATION -->
-
                         <span class="watch-info">
-
                             <h2>
                                 <?= htmlspecialchars(
                                     $product['brand']
-                                    ?? $product['collection_name']
-                                    ?? ''
+                                        ?? $product['collection_name']
+                                        ?? ''
                                 ); ?>
                             </h2>
-
 
                             <p class="watch-name">
                                 <?= htmlspecialchars(
                                     $product['name']
-                                    ?? ''
+                                        ?? ''
                                 ); ?>
                             </p>
-
 
                             <p class="watch-price">
-                                $<?= number_format(
-                                    $product['price']
-                                    ?? 0
-                                ); ?>
+                                ₦<?= number_format(
+                                        $product['price'] ?? 0
+                                    ); ?>
                             </p>
 
-
                             <!-- ADD BUTTON -->
-
-                            <button
-                                class="add-button"
-                                type="button"
-                            >
+                            <button class="add-button" type="button">
                                 Add
                             </button>
-
                         </span>
 
                     </div>
@@ -415,11 +358,7 @@
                 <?php endforeach; ?>
 
             <?php else: ?>
-
-                <p>
-                    No products found.
-                </p>
-
+                <p>No products found.</p>
             <?php endif; ?>
 
         </div>
@@ -459,8 +398,7 @@
 
                 <img
                     src="<?php assets("Images/picture11.png"); ?>"
-                    alt="Classic Watch"
-                >
+                    alt="Classic Watch">
 
                 <div class="collection-content">
 
@@ -478,8 +416,7 @@
 
                     <a
                         href="#"
-                        class="search-btn exp"
-                    >
+                        class="search-btn exp">
                         Explore
                     </a>
 
@@ -493,8 +430,7 @@
 
                 <img
                     src="<?php assets("Images/picture12.png"); ?>"
-                    alt="Chronograph Watch"
-                >
+                    alt="Chronograph Watch">
 
                 <div class="collection-content">
 
@@ -512,8 +448,7 @@
 
                     <a
                         href="#"
-                        class="search-btn exp"
-                    >
+                        class="search-btn exp">
                         Explore
                     </a>
 
@@ -527,8 +462,7 @@
 
                 <img
                     src="<?php assets("Images/picture13.png"); ?>"
-                    alt="Executive Watch"
-                >
+                    alt="Executive Watch">
 
                 <div class="collection-content">
 
@@ -546,8 +480,7 @@
 
                     <a
                         href="#"
-                        class="search-btn exp"
-                    >
+                        class="search-btn exp">
                         Explore
                     </a>
 
@@ -590,8 +523,7 @@
 
                     <img
                         src="<?php assets("Images/picture6.png"); ?>"
-                        alt="Zeith Classic"
-                    >
+                        alt="Zeith Classic">
 
                 </div>
 
@@ -612,8 +544,7 @@
 
                     <a
                         href="#"
-                        class="btn-view search-btn exp"
-                    >
+                        class="btn-view search-btn exp">
                         View Watch
                     </a>
 
@@ -629,8 +560,7 @@
 
                     <img
                         src="<?php assets("Images/picture11.png"); ?>"
-                        alt="Zeith Chrono"
-                    >
+                        alt="Zeith Chrono">
 
                 </div>
 
@@ -651,8 +581,7 @@
 
                     <a
                         href="#"
-                        class="btn-view search-btn exp"
-                    >
+                        class="btn-view search-btn exp">
                         View Watch
                     </a>
 
@@ -668,8 +597,7 @@
 
                     <img
                         src="<?php assets("Images/picture4.png"); ?>"
-                        alt="Zeith Executive"
-                    >
+                        alt="Zeith Executive">
 
                 </div>
 
@@ -690,8 +618,7 @@
 
                     <a
                         href="#"
-                        class="btn-view search-btn exp"
-                    >
+                        class="btn-view search-btn exp">
                         View Watch
                     </a>
 
@@ -716,8 +643,7 @@
 
             <img
                 src="<?php assets("Images/picture2.png"); ?>"
-                alt="Zeith Watch"
-            >
+                alt="Zeith Watch">
 
         </div>
 
@@ -746,8 +672,7 @@
 
             <a
                 href="#"
-                class="btn-view exp search-btn"
-            >
+                class="btn-view exp search-btn">
                 Discover Zeith
             </a>
 
@@ -877,8 +802,7 @@
 
             <a
                 href="#"
-                class="btn-shop exp search-btn"
-            >
+                class="btn-shop exp search-btn">
                 Shop Now
             </a>
 
@@ -978,21 +902,9 @@
          FIXED SHOPPING CART
     ========================================= -->
 
-    <a
-        href="cart.php"
-        class="floating-cart"
-        title="Shopping Cart"
-    >
-
+    <a href="cart.php" class="floating-cart" title="Shopping Cart">
         <i class="fa-solid fa-cart-shopping"></i>
-
-        <span
-            class="cart-count"
-            id="cart-count"
-        >
-            0
-        </span>
-
+        <span class="cart-count" id="cart-count">0</span>
     </a>
 
 
@@ -1002,7 +914,6 @@
     ========================================= -->
 
     <script>
-
         document.addEventListener('DOMContentLoaded', () => {
 
 
@@ -1065,7 +976,7 @@
 
                     heart.addEventListener(
                         'click',
-                        function (e) {
+                        function(e) {
 
                             e.stopPropagation();
 
@@ -1103,7 +1014,7 @@
                                 wishlist =
                                     wishlist.filter(
                                         id =>
-                                            id !== watchId
+                                        id !== watchId
                                     );
 
 
@@ -1115,9 +1026,7 @@
                                 this.style.color =
                                     '#f68b1e';
 
-                            }
-
-                            else {
+                            } else {
 
                                 wishlist.push(
                                     watchId
@@ -1162,7 +1071,7 @@
 
                     button.addEventListener(
                         'click',
-                        function (e) {
+                        function(e) {
 
                             e.stopPropagation();
 
@@ -1298,9 +1207,9 @@
 
 
                 badge.style.display =
-                    wishlist.length > 0
-                        ? 'inline-block'
-                        : 'none';
+                    wishlist.length > 0 ?
+                    'inline-block' :
+                    'none';
 
             }
 
@@ -1311,46 +1220,19 @@
         /* =========================================
            UPDATE CART BADGE
         ========================================= */
-
         function updateCartBadge() {
+            const badge = document.getElementById('cart-count');
+            if (!badge) return;
 
-            const cartCount =
-                document.getElementById(
-                    'cart-count'
-                );
+            const cart = JSON.parse(
+                localStorage.getItem('zeith_cart') || '[]'
+            );
 
-
-            if (!cartCount) return;
-
-
-            const cart =
-                JSON.parse(
-                    localStorage.getItem(
-                        'zeith_cart'
-                    )
-                ) || [];
-
-
-            cartCount.textContent =
-                cart.length;
-
-
-            if (cart.length > 0) {
-
-                cartCount.style.display =
-                    'flex';
-
-            }
-
-            else {
-
-                cartCount.style.display =
-                    'none';
-
-            }
-
+            badge.textContent = cart.length;
+            badge.style.display = 'flex';
         }
 
+        updateCartBadge();
     </script>
 
 

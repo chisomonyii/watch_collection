@@ -2714,7 +2714,7 @@ body {
 }
 
 .mobile-filter-dropdown-container {
-  display: none;
+  display: block;
 }
 
 .property-select {
@@ -2867,7 +2867,7 @@ body {
 
 .dropdown-item:hover {
   background-color: #f1f5f9;
-  color: #2563eb;
+  color: #2563eb; 
 }
 
 /* Responsive Styles */
@@ -2963,4 +2963,6 @@ body {
     display: grid;
     grid-template-columns: 1fr;
   }
+
+  
 }

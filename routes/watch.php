@@ -8,3 +8,5 @@ $router->get('/wishlist', function() {
 $router->post('/api/watches/batch', function() {
     \App\Controller\Home::getWishlistItems();
 });
+
+$router->get('/user/collection', 'App\Controller\Collection@show');
