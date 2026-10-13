@@ -1,10 +1,6 @@
 <?php
-// Render wishlist view
-$router->get('/wishlist', function() {
-    \App\Helpers\View::displayView('users/wishlist.php');
-});
+$router->get('/user-wishlist', 'Home@displaywishlist');
 
-// API endpoint to fetch details of saved watch IDs
-$router->post('/api/watches/batch', function() {
-    \App\Controller\Home::getWishlistItems();
-});
+$router->post('api/wishlist', 'Home@getWishlistItems');
+
+$router->post('/watches/api', 'Watchcontroller@createWatch');

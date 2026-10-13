@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Helpers\Response;
 use App\Models\Watch;
 use App\Helpers\View;
 
@@ -24,6 +25,11 @@ class Home
         ]);
     }
 
+    public function displaywishlist()
+    {
+        View::displayView('user/wishlist.php');
+    }
+
     public static function getWishlistItems()
     {
         // Clear any previous output buffers to ensure clean JSON output
@@ -39,7 +45,7 @@ class Home
         $ids = $data['ids'] ?? [];
 
         if (empty($ids) || !is_array($ids)) {
-            echo json_encode([
+            Response::json([
                 'success' => true,
                 'data' => []
             ]);
@@ -49,16 +55,16 @@ class Home
         try {
             $watches = Watch::getByIds($ids);
 
-            echo json_encode([
+            Response::json([
                 'success' => true,
                 'data' => $watches
             ]);
-        } catch (\PDOException $e) {
-            http_response_code(500);
-            echo json_encode([
+        } catch (\PDOException $error) {
+            Response::json([
                 'success' => false,
-                'message' => 'Database error: ' . $e->getMessage()
-            ]);
+                'message' => 'Database error: ' . $error->getMessage()
+            ], 500);
+            
         }
         exit;
     }

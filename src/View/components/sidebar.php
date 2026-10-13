@@ -16,7 +16,7 @@
         <a href="<?php echo "/Watch_Collection/staff/orders";?>" class="nav-item <?= ($current_page === 'orders') ? 'active' : ''; ?>">
             <i class="fa-solid fa-bag-shopping"></i> <span>Orders</span>
         </a>
-        <a href="<?php echo "/Watch_Collection/user/settings"; ?>" class="nav-item <?= ($current_page === 'settings') ? 'active' : ''; ?>">
+        <a href="<?php echo "/Watch_Collection/staff/settings"; ?>" class="nav-item <?= ($current_page === 'settings') ? 'active' : ''; ?>">
             <i class="fa-solid fa-user-gear"></i> <span>Settings</span>
         </a>
     </nav>

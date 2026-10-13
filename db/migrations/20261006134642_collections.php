@@ -19,6 +19,12 @@ final class Collections extends AbstractMigration
      */
     public function change(): void
     {
+        $this->table('collections')
+             ->addColumn('name', 'string', ['limit' => 100])
+             ->addColumn('slug', 'string', ['limit' => 100])
+             ->addIndex('slug', ['unique' => 'true'])
+             ->addTimestamps()
+             ->create();
 
     }
 }

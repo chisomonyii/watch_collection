@@ -1,10 +1,13 @@
+<?php
+
+use App\Helpers;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
     <style>
-
         /* =========================================
            NEW ARRIVALS GRID
         ========================================= */
@@ -255,14 +258,13 @@
             }
 
         }
-
     </style>
 
 
     <meta charset="UTF-8">
 
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0">
 
     <script
         src="https://kit.fontawesome.com/69c405441a.js"
@@ -270,13 +272,17 @@
     </script>
 
     <link rel="stylesheet"
-          href="<?php assets("css/login.css"); ?>">
+        href="<?php
+
+                use App\Helpers\View;
+
+                assets("css/login.css"); ?>">
 
     <link rel="stylesheet"
-          href="<?php assets("css/header.css"); ?>">
+        href="<?php assets("css/header.css"); ?>">
 
     <link rel="stylesheet"
-          href="<?php assets("css/footer.css"); ?>">
+        href="<?php assets("css/footer.css"); ?>">
 
     <title>Watch Collection</title>
 
@@ -349,15 +355,13 @@
 
                     <div
                         class="arrivals watch-card"
-                        data-id="<?= htmlspecialchars($product['id'] ?? ''); ?>"
-                    >
+                        data-id="<?= htmlspecialchars($product['id'] ?? ''); ?>">
 
                         <!-- WISHLIST HEART -->
 
                         <div
                             class="wishlist-heart"
-                            title="Add to wishlist"
-                        >
+                            title="Add to wishlist">
                             ♥
                         </div>
 
@@ -365,9 +369,8 @@
                         <!-- WATCH IMAGE -->
 
                         <img
-                            src="/Watch_Collection/assets/Images/<?= htmlspecialchars($product['image_url'] ?? $product['image'] ?? ''); ?>"
-                            alt="<?= htmlspecialchars($product['name'] ?? 'Watch'); ?>"
-                        >
+                            src="<?php assets('Images/picture1.png'); ?><?= htmlspecialchars($product['image_url'] ?? $product['image'] ?? ''); ?>"
+                            alt="<?= htmlspecialchars($product['name'] ?? 'Watch'); ?>">
 
 
                         <!-- WATCH INFORMATION -->
@@ -377,8 +380,8 @@
                             <h2>
                                 <?= htmlspecialchars(
                                     $product['brand']
-                                    ?? $product['collection_name']
-                                    ?? ''
+                                        ?? $product['collection_name']
+                                        ?? ''
                                 ); ?>
                             </h2>
 
@@ -386,16 +389,16 @@
                             <p class="watch-name">
                                 <?= htmlspecialchars(
                                     $product['name']
-                                    ?? ''
+                                        ?? ''
                                 ); ?>
                             </p>
 
 
                             <p class="watch-price">
                                 $<?= number_format(
-                                    $product['price']
-                                    ?? 0
-                                ); ?>
+                                        $product['price']
+                                            ?? 0
+                                    ); ?>
                             </p>
 
 
@@ -403,8 +406,7 @@
 
                             <button
                                 class="add-button"
-                                type="button"
-                            >
+                                type="button">
                                 Add
                             </button>
 
@@ -459,8 +461,7 @@
 
                 <img
                     src="<?php assets("Images/picture11.png"); ?>"
-                    alt="Classic Watch"
-                >
+                    alt="Classic Watch">
 
                 <div class="collection-content">
 
@@ -478,8 +479,7 @@
 
                     <a
                         href="#"
-                        class="search-btn exp"
-                    >
+                        class="search-btn exp">
                         Explore
                     </a>
 
@@ -493,8 +493,7 @@
 
                 <img
                     src="<?php assets("Images/picture12.png"); ?>"
-                    alt="Chronograph Watch"
-                >
+                    alt="Chronograph Watch">
 
                 <div class="collection-content">
 
@@ -512,8 +511,7 @@
 
                     <a
                         href="#"
-                        class="search-btn exp"
-                    >
+                        class="search-btn exp">
                         Explore
                     </a>
 
@@ -527,8 +525,7 @@
 
                 <img
                     src="<?php assets("Images/picture13.png"); ?>"
-                    alt="Executive Watch"
-                >
+                    alt="Executive Watch">
 
                 <div class="collection-content">
 
@@ -546,8 +543,7 @@
 
                     <a
                         href="#"
-                        class="search-btn exp"
-                    >
+                        class="search-btn exp">
                         Explore
                     </a>
 
@@ -590,8 +586,7 @@
 
                     <img
                         src="<?php assets("Images/picture6.png"); ?>"
-                        alt="Zeith Classic"
-                    >
+                        alt="Zeith Classic">
 
                 </div>
 
@@ -612,8 +607,7 @@
 
                     <a
                         href="#"
-                        class="btn-view search-btn exp"
-                    >
+                        class="btn-view search-btn exp">
                         View Watch
                     </a>
 
@@ -629,8 +623,7 @@
 
                     <img
                         src="<?php assets("Images/picture11.png"); ?>"
-                        alt="Zeith Chrono"
-                    >
+                        alt="Zeith Chrono">
 
                 </div>
 
@@ -651,8 +644,7 @@
 
                     <a
                         href="#"
-                        class="btn-view search-btn exp"
-                    >
+                        class="btn-view search-btn exp">
                         View Watch
                     </a>
 
@@ -668,8 +660,7 @@
 
                     <img
                         src="<?php assets("Images/picture4.png"); ?>"
-                        alt="Zeith Executive"
-                    >
+                        alt="Zeith Executive">
 
                 </div>
 
@@ -690,8 +681,7 @@
 
                     <a
                         href="#"
-                        class="btn-view search-btn exp"
-                    >
+                        class="btn-view search-btn exp">
                         View Watch
                     </a>
 
@@ -716,8 +706,7 @@
 
             <img
                 src="<?php assets("Images/picture2.png"); ?>"
-                alt="Zeith Watch"
-            >
+                alt="Zeith Watch">
 
         </div>
 
@@ -746,8 +735,7 @@
 
             <a
                 href="#"
-                class="btn-view exp search-btn"
-            >
+                class="btn-view exp search-btn">
                 Discover Zeith
             </a>
 
@@ -877,8 +865,7 @@
 
             <a
                 href="#"
-                class="btn-shop exp search-btn"
-            >
+                class="btn-shop exp search-btn">
                 Shop Now
             </a>
 
@@ -970,7 +957,7 @@
 
 
 
-    <?php require_once __DIR__ . '/../components/footer.php'; ?>
+    <?php View::displayComponent('footer.php'); ?>
 
 
 
@@ -981,15 +968,13 @@
     <a
         href="cart.php"
         class="floating-cart"
-        title="Shopping Cart"
-    >
+        title="Shopping Cart">
 
         <i class="fa-solid fa-cart-shopping"></i>
 
         <span
             class="cart-count"
-            id="cart-count"
-        >
+            id="cart-count">
             0
         </span>
 
@@ -1002,7 +987,6 @@
     ========================================= -->
 
     <script>
-
         document.addEventListener('DOMContentLoaded', () => {
 
 
@@ -1065,7 +1049,7 @@
 
                     heart.addEventListener(
                         'click',
-                        function (e) {
+                        function(e) {
 
                             e.stopPropagation();
 
@@ -1103,7 +1087,7 @@
                                 wishlist =
                                     wishlist.filter(
                                         id =>
-                                            id !== watchId
+                                        id !== watchId
                                     );
 
 
@@ -1115,9 +1099,7 @@
                                 this.style.color =
                                     '#f68b1e';
 
-                            }
-
-                            else {
+                            } else {
 
                                 wishlist.push(
                                     watchId
@@ -1162,7 +1144,7 @@
 
                     button.addEventListener(
                         'click',
-                        function (e) {
+                        function(e) {
 
                             e.stopPropagation();
 
@@ -1298,9 +1280,9 @@
 
 
                 badge.style.display =
-                    wishlist.length > 0
-                        ? 'inline-block'
-                        : 'none';
+                    wishlist.length > 0 ?
+                    'inline-block' :
+                    'none';
 
             }
 
@@ -1340,9 +1322,7 @@
                 cartCount.style.display =
                     'flex';
 
-            }
-
-            else {
+            } else {
 
                 cartCount.style.display =
                     'none';
@@ -1350,7 +1330,6 @@
             }
 
         }
-
     </script>
 
 

@@ -74,12 +74,11 @@ async function handleRegistration(data) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             },
             body: JSON.stringify(data)
         });
 
-        const responseText = await response.text();
+        const responseText = await response.json();
         let result;
 
         try {
