@@ -1,3 +1,57 @@
+<?php
+// PHP Backend Processing when user clicks "Proceed to Payment"
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $host = 'localhost';$db   = 'Watch_Collection'; // Update if your database name is different
+    $user = 'root';$pass = '';
+
+    try {
+        $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Collect form data
+        $fullName = trim($_POST['fullname'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $phone = trim($_POST['phone'] ?? '');
+        $address = trim($_POST['address'] ?? '');
+        $notes = trim($_POST['notes'] ?? '');
+        $subtotal = floatval($_POST['subtotal'] ?? 0);
+        $cartItemsJson =$_POST['cart_items_json'] ?? '[]';
+        $cartItems = json_decode($cartItemsJson, true);
+
+        if (!empty($fullName) && !empty($email) && !empty($phone) && !empty($address) && !empty($cartItems)) {
+            
+            // Generate unique order reference number
+            $orderNumber = 'ZEITH-' . strtoupper(uniqid());
+
+            // 1. Insert into orders table
+            $stmt =$pdo->prepare("INSERT INTO orders (order_number, full_name, email, phone, address, delivery_instructions, subtotal, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$orderNumber, $fullName,$email, $phone,$address, $notes, $subtotal,$subtotal]);
+            $orderId =$pdo->lastInsertId();
+
+            // 2. Insert each item into order_items table
+            $itemStmt =$pdo->prepare("INSERT INTO order_items (order_id, watch_id, watch_name, brand, price, quantity, strap_variant) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            
+            foreach ($cartItems as$item) {
+                $itemStmt->execute([$orderId,
+                    $item['id'] ?? '',$item['name'] ?? 'Luxury Watch',
+                    $item['brand'] ?? 'ZEITH',$item['price'] ?? 0,
+                    $item['quantity'] ?? 1,$item['strap'] ?? 'Steel'
+                ]);
+            }
+
+            // Save order session for Frame 3 (payment.php)
+            session_start();
+            $_SESSION['active_order_id'] =$orderId;
+            $_SESSION['order_number'] =$orderNumber;
+            $_SESSION['order_subtotal'] =$subtotal;
+
+            // Redirect to Frame 3: payment.php
+            header('Location: payment.php');
+            exit;
+        }
+    } catch (PDOException $e) {$error = "Database Error: " . $e->getMessage();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -77,24 +131,6 @@
             font-weight: 700;
             color: var(--text-dark);
             margin-bottom: 30px;
-        }
-
-        .btn-clear-cart {
-            background: none;
-            border: none;
-            color: var(--danger-color);
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: opacity 0.2s;
-        }
-
-        .btn-clear-cart:hover {
-            opacity: 0.8;
-            text-decoration: underline;
         }
 
         /* Layout Grid */
@@ -182,7 +218,7 @@
             font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
+            transition: background-color 0.2s ease;
             box-shadow: 0 4px 12px rgba(246, 139, 30, 0.2);
         }
 
@@ -220,7 +256,7 @@
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             padding: 16px;
-            width: 180px;
+            width: 200px;
             box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
@@ -243,40 +279,31 @@
             line-height: 1.2;
         }
 
-        .product-price {
-            font-size: 0.85rem;
+        .product-subtitle {
+            font-size: 0.8rem;
             color: var(--text-muted);
-            margin: 6px 0 12px 0;
-            font-weight: 600;
+            margin: 4px 0;
+            font-weight: 500;
         }
 
-        /* Quantity Controls */
+        .product-price {
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            margin: 4px 0 12px 0;
+            font-weight: 700;
+        }
+
         .qty-controls {
             display: flex;
             align-items: center;
             background-color: #f1f5f9;
             border-radius: 6px;
-            padding: 2px 6px;
-            gap: 8px;
-        }
-
-        .qty-btn {
-            background: none;
-            border: none;
-            font-size: 0.85rem;
-            color: var(--text-dark);
-            cursor: pointer;
-            padding: 4px 6px;
+            padding: 4px 10px;
         }
 
         .qty-number {
             font-size: 0.85rem;
             font-weight: 700;
-        }
-
-        .btn-remove-item {
-            color: var(--danger-color);
-            margin-left: 4px;
         }
 
         /* RIGHT SECTION: Order Summary Card */
@@ -318,238 +345,25 @@
             color: var(--text-dark);
         }
 
-
-        /* RESPONSIVE MEDIA QUERIES */
-
-        @media (max-width: 1100px) {
-            .cart-container {
-                max-width: 950px;
-            }
-
-            .cart-grid {
-                grid-template-columns: 1fr 300px;
-                gap: 20px;
-            }
-
-            .details-card {
-                padding: 26px;
-            }
-        }
-
         @media (max-width: 900px) {
-            body {
-                padding: 24px 16px;
-            }
-
             .cart-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
             }
-
             .order-summary-card {
                 order: -1;
             }
-
-            .details-card {
-                padding: 24px;
-            }
-
             .cart-items-wrapper {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
-                gap: 16px;
             }
-
             .cart-item-card {
                 width: 100%;
-            }
-        }
-
-        @media (max-width: 650px) {
-            body {
-                padding: 16px 12px;
-            }
-
-            .cart-top-bar {
-                margin-bottom: 18px;
-            }
-
-            .btn-back {
-                padding: 8px 12px;
-                font-size: 0.8rem;
-            }
-
-            .btn-clear-cart {
-                font-size: 0.8rem;
-            }
-
-            .page-title {
-                font-size: 1.5rem;
-                margin-bottom: 22px;
-            }
-
-            .details-card {
-                padding: 20px 16px;
-                border-radius: 12px;
-            }
-
-            .details-card h2 {
-                font-size: 1.1rem;
-            }
-
-            .sub-text {
-                margin-bottom: 20px;
-            }
-
-            .form-row-split {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-
-            .form-group {
-                margin-bottom: 14px;
-            }
-
-            .form-input,
-            .form-select,
-            .form-textarea {
-                font-size: 0.88rem;
-                padding: 11px 13px;
-            }
-
-            .cart-actions {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .btn-submit-order,
-            .btn-continue {
-                width: 100%;
-                padding: 13px 18px;
-            }
-
-            .cart-items-wrapper {
-                grid-template-columns: 1fr;
-            }
-
-            .cart-item-card {
-                width: 100%;
-                min-width: 0;
-                display: grid;
-                grid-template-columns: 65px 1fr auto;
-                align-items: center;
-                gap: 10px;
-                padding: 12px;
-            }
-
-            .product-img {
-                width: 65px;
-                height: 65px;
-                margin: 0;
-            }
-
-            .cart-item-info {
-                min-width: 0;
-                padding: 0;
-            }
-
-            .product-title {
-                font-size: 0.78rem;
-                word-break: break-word;
-            }
-
-            .product-price {
-                font-size: 0.78rem;
-                margin: 5px 0 0;
-            }
-
-            .qty-controls {
-                gap: 3px;
-                padding: 2px 4px;
-            }
-
-            .qty-btn {
-                padding: 4px;
-                font-size: 0.75rem;
-            }
-
-            .qty-number {
-                font-size: 0.78rem;
-            }
-
-            .order-summary-card {
-                padding: 22px 18px;
-                border-radius: 12px;
-            }
-
-            .summary-title {
-                font-size: 1.05rem;
-            }
-
-            .summary-line {
-                font-size: 0.85rem;
-            }
-
-            .summary-total {
-                font-size: 1rem;
-            }
-        }
-
-        @media (max-width: 400px) {
-            body {
-                padding: 12px 8px;
-            }
-
-            .cart-top-bar {
-                align-items: flex-start;
-            }
-
-            .btn-back {
-                font-size: 0.72rem;
-                padding: 7px 10px;
-            }
-
-            .btn-clear-cart {
-                font-size: 0.72rem;
-            }
-
-            .page-title {
-                font-size: 1.3rem;
-            }
-
-            .details-card {
-                padding: 18px 13px;
-            }
-
-            .cart-item-card {
-                grid-template-columns: 55px 1fr;
-                gap: 8px;
-            }
-
-            .product-img {
-                width: 55px;
-                height: 55px;
-            }
-
-            .qty-controls {
-                grid-column: 2;
-                justify-self: start;
-                margin-top: 5px;
-            }
-
-            .order-summary-card {
-                padding: 18px 14px;
-            }
-
-            .summary-line {
-                gap: 10px;
             }
         }
     </style>
 </head>
 
 <body>
-
 
     <div class="cart-container">
 
@@ -558,12 +372,15 @@
             <a href="admin-list.php" class="btn-back">
                 <i class="fa-solid fa-arrow-left"></i> Back to Watches
             </a>
-            <button type="button" class="btn-clear-cart" id="clearCartBtn">
-                <i class="fa-regular fa-trash-can"></i> Clear Cart
-            </button>
         </div>
 
         <h1 class="page-title">Your Shopping Cart</h1>
+
+        <?php if (isset($error)): ?>
+            <div style="background: #ffe6e6; color: #d9534f; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                <?= htmlspecialchars($error); ?>
+            </div>
+        <?php endif; ?>
 
         <div class="cart-grid">
 
@@ -573,7 +390,7 @@
                     <h2>Enter your details</h2>
                     <p class="sub-text">All fields are required.</p>
 
-                    <form id="checkoutForm" action="checkout.php" method="POST">
+                    <form id="checkoutForm" action="/Watch_Collection/checkout/process" method="POST">
                         <div class="form-row-split">
                             <input type="text" name="fullname" class="form-input" placeholder="Full name" required>
                             <input type="email" name="email" class="form-input" placeholder="Email address" required>
@@ -588,40 +405,19 @@
                         </div>
 
                         <div class="form-group">
-                            <select name="payment_method" class="form-select" required>
-                                <option value="" disabled selected>Select Payment Method</option>
-                                <option value="card">Credit / Debit Card</option>
-                                <option value="transfer">Bank Transfer</option>
-                                <option value="apple_pay">Apple Pay</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
                             <textarea name="notes" class="form-textarea" placeholder="Message / delivery instructions (optional)"></textarea>
                         </div>
 
                         <div class="cart-actions">
-                            <button type="submit" class="btn-submit-order">Submit Order</button>
+                            <button type="submit" class="btn-submit-order">Proceed to Payment</button>
                             <a href="admin-list.php" class="btn-continue">Continue Shopping</a>
                         </div>
                     </form>
                 </div>
 
-                <!-- Product Thumbnails Container -->
+                <!-- Product Thumbnails Container (Populated dynamically via JavaScript) -->
                 <div class="cart-items-wrapper">
-                    <div class="cart-item-card">
-                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300" alt="H. MOSER & CIE" class="product-img">
-                        <div class="cart-item-info">
-                            <div class="product-title">H. MOSER & CIE.</div>
-                            <div class="product-price">₦700,000.00</div>
-                        </div>
-                        <div class="qty-controls">
-                            <button type="button" class="qty-btn">-</button>
-                            <span class="qty-number">1</span>
-                            <button type="button" class="qty-btn">+</button>
-                            <button type="button" class="qty-btn btn-remove-item"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
+                    <!-- JS renders items here -->
                 </div>
             </div>
 
@@ -631,16 +427,15 @@
                     <h3 class="summary-title">Order Summary</h3>
 
                     <div class="summary-line">
-                        <span>Subtotal (1 items)</span>
-                        <strong>₦700,000.00</strong>
+                        <span>Cart (0 items)</span>
+                        <strong>₦0.00</strong>
                     </div>
-
 
                     <div class="summary-divider"></div>
 
                     <div class="summary-total">
                         <span>Total</span>
-                        <span>₦700,000.00</span>
+                        <span>₦0.00</span>
                     </div>
                 </div>
             </div>
@@ -649,7 +444,71 @@
 
     </div>
 
-    <?php require_once __DIR__ . '../../src/View/components/footer.php'; ?>
+    <!-- JavaScript to Hydrate Cart Items from localStorage & Pass to Database -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cart = JSON.parse(localStorage.getItem('zeith_cart')) || [];
+
+            if (cart.length === 0) {
+                alert('Your shopping bag is empty.');
+                window.location.href = 'admin-list.php';
+                return;
+            }
+
+            const itemsWrapper = document.querySelector('.cart-items-wrapper');
+            const summaryLine = document.querySelector('.summary-line');
+            const summaryTotal = document.querySelector('.summary-total');
+
+            // Calculate totals
+            const totalItems = cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
+            const subtotal = cart.reduce((sum, item) => sum + (Number(item.price || 0) * Number(item.quantity || 1)), 0);
+
+            const formatNaira = amount => '₦' + Number(amount || 0).toLocaleString('en-NG', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            // 1. Render all cart items dynamically into .cart-items-wrapper
+            itemsWrapper.innerHTML = cart.map(item => `
+                <div class="cart-item-card" data-id="${item.id}">
+                    <img src="${item.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300'}" alt="${item.name}" class="product-img">
+                    <div class="cart-item-info">
+                        <div class="product-title">${item.brand || 'ZEITH'}</div>
+                        <div class="product-subtitle">${item.name}</div>
+                        <div class="product-price">${formatNaira(item.price)}</div>
+                    </div>
+                    <div class="qty-controls">
+                        <span class="qty-number">Qty: ${item.quantity}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // 2. Update Order Summary Section
+            summaryLine.innerHTML = `
+                <span>Cart (${totalItems} item${totalItems > 1 ? 's' : ''})</span>
+                <strong>${formatNaira(subtotal)}</strong>
+            `;
+            summaryTotal.innerHTML = `
+                <span>Total</span>
+                <span>${formatNaira(subtotal)}</span>
+            `;
+
+            // 3. Inject hidden inputs into the form so PHP receives the cart data and subtotal on submit
+            const form = document.getElementById('checkoutForm');
+
+            const hiddenCart = document.createElement('input');
+            hiddenCart.type = 'hidden';
+            hiddenCart.name = 'cart_items_json';
+            hiddenCart.value = JSON.stringify(cart);
+            form.appendChild(hiddenCart);
+
+            const hiddenSubtotal = document.createElement('input');
+            hiddenSubtotal.type = 'hidden';
+            hiddenSubtotal.name = 'subtotal';
+            hiddenSubtotal.value = subtotal;
+            form.appendChild(hiddenSubtotal);
+        });
+    </script>
 
 </body>
 

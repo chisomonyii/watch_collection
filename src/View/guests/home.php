@@ -194,6 +194,259 @@
             border: 2px solid #f68b1e;
         }
 
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .45);
+            opacity: 0;
+            visibility: hidden;
+            transition: .3s ease;
+            z-index: 10000;
+        }
+
+        .cart-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 440px;
+            max-width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            background: #fff;
+            z-index: 10001;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -8px 0 30px rgba(0, 0, 0, .12);
+            transform: translateX(100%);
+            visibility: hidden;
+            transition: transform .35s ease, visibility .35s ease;
+        }
+
+        .cart-drawer.open {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        body.cart-open {
+            overflow: hidden;
+        }
+
+        .cart-drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 22px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-drawer-header small {
+            color: #f68b1e;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .cart-drawer-header h2 {
+            color: #003b2f;
+            font-size: 22px;
+            margin: 8px 0 0;
+        }
+
+        #drawer-item-count {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .cart-close {
+            border: 0;
+            background: #f5f5f5;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .cart-close:hover {
+            background: #f68b1e;
+            color: white;
+        }
+
+        .cart-items {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 0 22px;
+        }
+
+        .cart-empty {
+            height: 100%;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #777;
+        }
+
+        .cart-empty i {
+            color: #f68b1e;
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .cart-empty h3 {
+            color: #003b2f;
+            margin-bottom: 8px;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 90px minmax(0, 1fr);
+            gap: 14px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-image {
+            height: 105px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            padding: 5px;
+            object-fit: contain;
+        }
+
+        .cart-item-brand {
+            color: #888;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .cart-item-name {
+            color: #003b2f;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .cart-item-price {
+            color: #f68b1e;
+            font-weight: 800;
+        }
+
+        .cart-variant {
+            display: block;
+            width: 100%;
+            max-width: 180px;
+            margin-top: 10px;
+            padding: 7px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+
+        .cart-item-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .cart-quantity {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .cart-quantity button {
+            width: 28px;
+            height: 28px;
+            border: 0;
+            background: #f8f8f8;
+            cursor: pointer;
+        }
+
+        .cart-quantity span {
+            min-width: 25px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .cart-remove {
+            border: 0;
+            background: transparent;
+            color: #888;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .cart-drawer-footer {
+            padding: 20px 22px;
+            border-top: 1px solid #eee;
+            background: white;
+        }
+
+        .cart-subtotal-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-subtotal-row strong {
+            color: #003b2f;
+            font-size: 21px;
+        }
+
+        .cart-drawer-footer p {
+            color: #888;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .checkout-button {
+            width: 100%;
+            padding: 16px;
+            border: 0;
+            border-radius: 6px;
+            background: #f68b1e;
+            color: white;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .checkout-button:hover {
+            background: #003b2f;
+        }
+
+        .checkout-button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        .continue-shopping {
+            width: 100%;
+            margin-top: 12px;
+            padding: 8px;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+        }
+
         /* Tablet */
         @media (max-width: 768px) {
             .floating-cart {
@@ -221,6 +474,17 @@
                 min-width: 23px;
                 height: 23px;
                 font-size: 11px;
+            }
+
+            .cart-drawer {
+                width: 100%;
+            }
+
+            .cart-drawer-header,
+            .cart-items,
+            .cart-drawer-footer {
+                padding-left: 17px;
+                padding-right: 17px;
             }
         }
     </style>
@@ -314,7 +578,12 @@
 
                 <?php foreach ($newArrivals as $product): ?>
 
-                    <div class="arrivals watch-card" data-id="<?= htmlspecialchars($product['id'] ?? ''); ?>">
+
+                    <div class="arrivals watch-card"
+                        data-id="<?= htmlspecialchars($product['id'] ?? ''); ?>"
+                        data-brand="<?= htmlspecialchars($product['collection_name'] ?? $product['brand'] ?? 'ZEITH'); ?>"
+                        data-price="<?= htmlspecialchars((string)($product['price'] ?? 0)); ?>">
+
 
                         <!-- WISHLIST HEART -->
                         <div class="wishlist-heart" title="Add to wishlist">
@@ -902,10 +1171,60 @@
          FIXED SHOPPING CART
     ========================================= -->
 
-    <a href="cart.php" class="floating-cart" title="Shopping Cart">
+
+    <button type="button"
+        class="floating-cart"
+        id="open-cart"
+        title="Shopping Cart"
+        aria-label="Open shopping cart"
+        aria-controls="cart-drawer"
+        aria-expanded="false">
         <i class="fa-solid fa-cart-shopping"></i>
         <span class="cart-count" id="cart-count">0</span>
-    </a>
+    </button>
+
+
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <aside class="cart-drawer"
+        id="cart-drawer"
+        aria-hidden="true"
+        aria-label="Shopping cart">
+
+        <div class="cart-drawer-header">
+            <div>
+                <small>THE ZEITH EXPERIENCE</small>
+                <h2>Shopping Bag <span id="drawer-item-count">(0)</span></h2>
+            </div>
+
+            <button type="button" id="close-cart" class="cart-close"
+                aria-label="Close cart">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="cart-items" id="cart-items"></div>
+
+        <div class="cart-drawer-footer">
+            <div class="cart-subtotal-row">
+                <span>Subtotal</span>
+                <strong id="cart-subtotal">₦0.00</strong>
+            </div>
+
+            <p>Shipping and applicable fees are calculated at checkout.</p>
+
+            <button type="button" id="checkout-button" class="checkout-button">
+                Proceed to Checkout
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <button type="button" id="continue-shopping" class="continue-shopping">
+                Continue Shopping
+            </button>
+        </div>
+    </aside>
+
+
 
 
 
@@ -913,327 +1232,381 @@
          JAVASCRIPT
     ========================================= -->
 
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-
-            /* =====================================
-               WISHLIST BADGE
-            ===================================== */
-
-            updateWishlistBadge();
-
-
-            /* =====================================
-               LOAD SAVED WISHLIST
-            ===================================== */
-
-            const saved =
-                JSON.parse(
-                    localStorage.getItem('zeith_wishlist')
-                ) || [];
-
-
-            document
-                .querySelectorAll('.arrivals, .watch-card')
-                .forEach(card => {
-
-                    const id =
-                        String(
-                            card.getAttribute('data-id')
-                        );
-
-                    const heart =
-                        card.querySelector(
-                            '.wishlist-heart'
-                        );
-
-
-                    if (
-                        id &&
-                        saved.includes(id) &&
-                        heart
-                    ) {
-
-                        heart.classList.add('active');
-
-                        heart.style.color =
-                            '#e74c3c';
-
-                    }
-
-                });
-
-
-
-            /* =====================================
-               WISHLIST HEART CLICK
-            ===================================== */
-
-            document
-                .querySelectorAll('.wishlist-heart')
-                .forEach(heart => {
-
-                    heart.addEventListener(
-                        'click',
-                        function(e) {
-
-                            e.stopPropagation();
-
-
-                            const card =
-                                this.closest('.arrivals') ||
-                                this.closest('.watch-card');
-
-
-                            if (!card) return;
-
-
-                            const watchId =
-                                String(
-                                    card.getAttribute(
-                                        'data-id'
-                                    )
-                                );
-
-
-                            let wishlist =
-                                JSON.parse(
-                                    localStorage.getItem(
-                                        'zeith_wishlist'
-                                    )
-                                ) || [];
-
-
-                            if (
-                                wishlist.includes(
-                                    watchId
-                                )
-                            ) {
-
-                                wishlist =
-                                    wishlist.filter(
-                                        id =>
-                                        id !== watchId
-                                    );
-
-
-                                this.classList.remove(
-                                    'active'
-                                );
-
-
-                                this.style.color =
-                                    '#f68b1e';
-
-                            } else {
-
-                                wishlist.push(
-                                    watchId
-                                );
-
-
-                                this.classList.add(
-                                    'active'
-                                );
-
-
-                                this.style.color =
-                                    '#e74c3c';
-
-                            }
-
-
-                            localStorage.setItem(
-                                'zeith_wishlist',
-                                JSON.stringify(
-                                    wishlist
-                                )
-                            );
-
-
-                            updateWishlistBadge();
-
-                        }
-                    );
-
-                });
-
-
-
-            /* =====================================
-               ADD TO CART
-            ===================================== */
-
-            document
-                .querySelectorAll('.add-button')
-                .forEach(button => {
-
-                    button.addEventListener(
-                        'click',
-                        function(e) {
-
-                            e.stopPropagation();
-
-
-                            const card =
-                                this.closest(
-                                    '.arrivals'
-                                );
-
-
-                            if (!card) return;
-
-
-                            const productId =
-                                String(
-                                    card.getAttribute(
-                                        'data-id'
-                                    )
-                                );
-
-
-                            let cart =
-                                JSON.parse(
-                                    localStorage.getItem(
-                                        'zeith_cart'
-                                    )
-                                ) || [];
-
-
-                            /*
-                             * Add the product ID
-                             * only if it is not already
-                             * inside the cart.
-                             */
-
-                            if (
-                                productId &&
-                                productId !== 'null' &&
-                                productId !== 'undefined' &&
-                                !cart.includes(productId)
-                            ) {
-
-                                cart.push(
-                                    productId
-                                );
-
-                            }
-
-
-                            localStorage.setItem(
-                                'zeith_cart',
-                                JSON.stringify(
-                                    cart
-                                )
-                            );
-
-
-                            updateCartBadge();
-
-
-                            /* Button feedback */
-
-                            const originalText =
-                                this.textContent;
-
-
-                            this.textContent =
-                                'Added';
-
-
-                            this.style.background =
-                                '#003b2f';
-
-
-                            this.style.color =
-                                '#ffffff';
-
-
-                            setTimeout(() => {
-
-                                this.textContent =
-                                    originalText;
-
-                                this.style.background =
-                                    '#f68b1e';
-
-                                this.style.color =
-                                    'black';
-
-                            }, 1000);
-
-                        }
-                    );
-
-                });
-
-
-
-            /* =====================================
-               LOAD CART COUNT
-            ===================================== */
-
-            updateCartBadge();
-
-        });
-
-
-
-        /* =========================================
-           UPDATE WISHLIST BADGE
-        ========================================= */
-
-        function updateWishlistBadge() {
-
-            const badge =
-                document.getElementById(
-                    'wishlist-count'
-                );
-
-
-            if (badge) {
-
-                const wishlist =
-                    JSON.parse(
-                        localStorage.getItem(
-                            'zeith_wishlist'
-                        )
-                    ) || [];
-
-
-                badge.textContent =
-                    wishlist.length;
-
-
-                badge.style.display =
-                    wishlist.length > 0 ?
-                    'inline-block' :
-                    'none';
-
+            const $ = (selector) => document.querySelector(selector);
+
+            const drawer = $('#cart-drawer');
+            const overlay = $('#cart-overlay');
+            const openButton = $('#open-cart');
+            const closeButton = $('#close-cart');
+            const continueButton = $('#continue-shopping');
+            const itemsContainer = $('#cart-items');
+            const subtotalElement = $('#cart-subtotal');
+            const badge = $('#cart-count');
+            const drawerCount = $('#drawer-item-count');
+            const checkoutButton = $('#checkout-button');
+
+            function readStorage(key) {
+                try {
+                    const value = JSON.parse(localStorage.getItem(key) || '[]');
+                    return Array.isArray(value) ? value : [];
+                } catch {
+                    return [];
+                }
             }
 
-        }
+            function readCart() {
+                return readStorage('zeith_cart').map(item => {
+                    if (item && typeof item === 'object') {
+                        return {
+                            ...item,
+                            id: String(item.id ?? ''),
+                            price: Number(item.price) || 0,
+                            quantity: Math.max(1, Number(item.quantity) || 1),
+                            strap: item.strap || 'Steel'
+                        };
+                    }
+
+                    // Legacy ID-only cart entries have no product details.
+                    return {
+                        id: String(item ?? ''),
+                        name: 'Watch details unavailable',
+                        brand: 'ZEITH',
+                        price: 0,
+                        image: '',
+                        quantity: 1,
+                        strap: 'Steel'
+                    };
+                });
+            }
+
+            function saveCart(cart) {
+                localStorage.setItem('zeith_cart', JSON.stringify(cart));
+                renderCart();
+            }
+
+            function money(value) {
+                return '₦' + Number(value || 0).toLocaleString('en-NG', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+
+            function escapeHTML(value) {
+                return String(value ?? '').replace(/[&<>"']/g, character => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                })[character]);
+            }
+
+            function updateWishlistBadge() {
+                const wishlistBadge = $('#wishlist-count');
+                if (!wishlistBadge) return;
+
+                const wishlist = readStorage('zeith_wishlist').map(String);
+                wishlistBadge.textContent = wishlist.length;
+                wishlistBadge.style.display =
+                    wishlist.length ? 'inline-block' : 'none';
+            }
+
+            function updateCartBadge(cart = readCart()) {
+                const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+                if (badge) {
+                    badge.textContent = count;
+                    badge.style.display = count > 0 ? 'flex' : 'none';
+                }
+
+                if (drawerCount) {
+                    drawerCount.textContent = `(${count})`;
+                }
+            }
+
+            function openCart() {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.body.classList.add('cart-open');
+
+                drawer.setAttribute('aria-hidden', 'false');
+                openButton.setAttribute('aria-expanded', 'true');
+
+                renderCart();
+                closeButton.focus();
+            }
+
+            function closeCart() {
+                drawer.classList.remove('open');
+                overlay.classList.remove('open');
+                document.body.classList.remove('cart-open');
+
+                drawer.setAttribute('aria-hidden', 'true');
+                openButton.setAttribute('aria-expanded', 'false');
+                openButton.focus();
+            }
+
+            function renderCart() {
+                const cart = readCart();
+                const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const subtotal = cart.reduce(
+                    (sum, item) => sum + item.price * item.quantity,
+                    0
+                );
+
+                updateCartBadge(cart);
+
+                if (cart.length === 0) {
+                    itemsContainer.innerHTML = `
+                <div class="cart-empty">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <h3>Your bag is waiting</h3>
+                    <p>Add a luxury timepiece to get started.</p>
+                </div>
+            `;
+                } else {
+                    itemsContainer.innerHTML = cart.map((item, index) => `
+                <article class="cart-item" data-index="${index}">
+                    <div class="cart-item-image">
+                        ${
+                            item.image
+                                ? `<img src="${escapeHTML(item.image)}"
+                                        alt="${escapeHTML(item.name)}">`
+                                : '<i class="fa-regular fa-clock"></i>'
+                        }
+                    </div>
+
+                    
+                <div>
+                    <span class="cart-item-brand">
+                        ${escapeHTML(item.brand || 'ZEITH')}
+                    </span>
+
+                    <h3 class="cart-item-name">
+                        ${escapeHTML(item.name)}
+                    </h3>
+
+                    <div class="cart-item-price">
+                        ${money(item.price)}
+                    </div>
+
+                    <div class="cart-item-bottom">
+                        <div class="cart-quantity">
+                            <button type="button"
+                                    data-action="decrease"
+                                    aria-label="Decrease quantity">−</button>
+
+                            <span>${item.quantity}</span>
+
+                            <button type="button"
+                                    data-action="increase"
+                                    aria-label="Increase quantity">+</button>
+                        </div>
+
+                        <button type="button"
+                                class="cart-remove"
+                                data-action="remove">Remove</button>
+                    </div>
+                </div>
+
+                </article>
+            `).join('');
+                }
+
+                subtotalElement.textContent = money(subtotal);
+                drawerCount.textContent = `(${count})`;
+                checkoutButton.disabled = cart.length === 0;
+            }
+
+            /* Open and close the drawer */
+            openButton.addEventListener('click', openCart);
+            closeButton.addEventListener('click', closeCart);
+            continueButton.addEventListener('click', closeCart);
+            overlay.addEventListener('click', closeCart);
+
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape' && drawer.classList.contains('open')) {
+                    closeCart();
+                }
+            });
+
+            /* Wishlist */
+            document.querySelectorAll('.arrivals, .watch-card').forEach(card => {
+                const id = String(card.dataset.id || card.getAttribute('data-id') || '');
+                const heart = card.querySelector('.wishlist-heart');
+
+                if (!heart || !id) return;
+
+                const wishlist = readStorage('zeith_wishlist').map(String);
+                if (wishlist.includes(id)) {
+                    heart.classList.add('active');
+                    heart.style.color = '#e74c3c';
+                }
+
+                heart.addEventListener('click', event => {
+                    event.stopPropagation();
+
+                    let saved = readStorage('zeith_wishlist').map(String);
+
+                    if (saved.includes(id)) {
+                        saved = saved.filter(savedId => savedId !== id);
+                        heart.classList.remove('active');
+                        heart.style.color = '#f68b1e';
+                    } else {
+                        saved.push(id);
+                        heart.classList.add('active');
+                        heart.style.color = '#e74c3c';
+                    }
+
+                    localStorage.setItem('zeith_wishlist', JSON.stringify(saved));
+                    updateWishlistBadge();
+                });
+            });
+
+            /* Add a complete product object to the cart */
+            document.querySelectorAll('.add-button').forEach(button => {
+                button.addEventListener('click', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const card = button.closest('.arrivals, .watch-card, .property-card');
+                    if (!card) {
+                        console.error('Add button: watch card was not found.');
+                        return;
+                    }
+
+                    const id = String(card.dataset.id || card.getAttribute('data-id') || '');
+                    const nameElement = card.querySelector(
+                        '.property-card-name, .watch-name, .arrivals-name, h3, h4'
+                    );
+                    const brandElement = card.querySelector(
+                        '.watch-info h2, .property-card-brand, .watch-brand, .arrivals-brand, .brand'
+                    );
+                    const imageElement = card.querySelector('img');
+                    const priceElement = card.querySelector(
+                        '.property-card-price, .watch-price, .price'
+                    );
+
+                    const rawPrice = card.dataset.price ||
+                        (priceElement ? priceElement.textContent : '');
+
+                    const price = Number(
+                        String(rawPrice).replace(/[^\d.]/g, '')
+                    ) || 0;
+
+                    const name = nameElement ?
+                        nameElement.textContent.trim() :
+                        'Watch';
+
+                    const brand = card.dataset.brand ||
+                        (brandElement ? brandElement.textContent.trim() : 'ZEITH');
+
+                    const image = imageElement ?
+                        imageElement.getAttribute('src') || '' :
+                        '';
+
+                    if (!id || id === 'null' || id === 'undefined') {
+                        console.error('Add button: this watch has no valid data-id.');
+                        return;
+                    }
+
+                    if (!priceElement && !card.dataset.price) {
+                        console.warn('No price found for this watch:', name);
+                    }
+
+                    const cart = readCart();
+
+                    const existing = cart.find(item => item.id === id);
+
+                    if (existing) {
+                        existing.quantity = (Number(existing.quantity) || 1) + 1;
+                        existing.name = name;
+                        existing.brand = brand;
+                        existing.price = price;
+                        existing.image = image;
+                    } else {
+                        cart.push({
+                            id,
+                            name,
+                            brand,
+                            price,
+                            image,
+                            quantity: 1
+                        });
+                    }
 
 
+                    saveCart(cart);
 
-        /* =========================================
-           UPDATE CART BADGE
-        ========================================= */
-        function updateCartBadge() {
-            const badge = document.getElementById('cart-count');
-            if (!badge) return;
+                    const oldText = button.textContent;
+                    button.textContent = 'Added!';
 
-            const cart = JSON.parse(
-                localStorage.getItem('zeith_cart') || '[]'
-            );
+                    window.setTimeout(() => {
+                        button.textContent = oldText;
+                    }, 900);
+                });
+            });
 
-            badge.textContent = cart.length;
-            badge.style.display = 'flex';
-        }
+            /* Quantity controls and remove */
+            itemsContainer.addEventListener('click', event => {
+                const button = event.target.closest('[data-action]');
+                if (!button) return;
 
-        updateCartBadge();
+                const row = button.closest('.cart-item');
+                if (!row) return;
+
+                const index = Number(row.dataset.index);
+                const cart = readCart();
+                const item = cart[index];
+
+                if (!item) return;
+
+                switch (button.dataset.action) {
+                    case 'increase':
+                        item.quantity++;
+                        break;
+
+                    case 'decrease':
+                        item.quantity--;
+                        if (item.quantity <= 0) {
+                            cart.splice(index, 1);
+                        }
+                        break;
+
+                    case 'remove':
+                        cart.splice(index, 1);
+                        break;
+
+                    default:
+                        return;
+                }
+
+                saveCart(cart);
+            });
+
+            /* Checkout placeholder */
+            /* Checkout placeholder */
+            checkoutButton.addEventListener('click', () => {
+                if (readCart().length === 0) return;
+
+                window.location.href = '/Watch_Collection/checkout';
+            });
+
+            /* Keep the cart synchronized if another tab changes it */
+            window.addEventListener('storage', event => {
+                if (event.key === 'zeith_cart') renderCart();
+                if (event.key === 'zeith_wishlist') updateWishlistBadge();
+            });
+
+            /* Initial page setup */
+            updateWishlistBadge();
+            renderCart();
+        });
     </script>
+
 
 
 </body>

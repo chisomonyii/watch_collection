@@ -6,7 +6,7 @@ use App\Helpers\Helper;
 
 class View extends Helper
 {
-    public static function displayView($filename, $data = null)
+    public static function displayView(string $filename, ?array $data = null)
     {
         Session::start();
         $csrf_token = "";
@@ -22,7 +22,7 @@ class View extends Helper
 
         if (file_exists($filepath)) {
             require_once (new self)->root_dir . "/Core/utilities.php";
-            
+
             // Extract BEFORE including the template file
             if (is_array($data)) {
                 extract($data);
@@ -35,14 +35,14 @@ class View extends Helper
         return;
     }
 
-    public static function displayComponent($filename, $data = null)
+    public static function displayComponent(string $filename, ?array $data = null)
     {
         $filepath = (new self)->root_dir . "/src/View/component/{$filename}";
         $root_dir = (new self)->root_dir;
 
         if (file_exists($filepath)) {
             require_once (new self)->root_dir . "/Core/utilities.php";
-            
+
             if (is_array($data)) {
                 extract($data);
             }

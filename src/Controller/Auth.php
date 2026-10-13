@@ -72,7 +72,7 @@ class Auth
             exit;
         }
 
-        // 4. Register User
+        // 4. Register User by calling Authentication class
         $registered = Authentication::processRegister($data);
 
         // Wipe output buffer clean before outputting JSON response
@@ -177,4 +177,5 @@ class Auth
 
         return;
     }
+    
 }
