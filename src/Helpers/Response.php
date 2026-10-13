@@ -2,11 +2,13 @@
 
 namespace App\Helpers;
 
-class Response{
-    
+class Response
+{
 
-    public static function json($data, $code = 200){
-        header("Content-Type:application/json");
+
+    public static function json($data, int $code = 200)
+    {
+        header("Content-Type: application/json");
         http_response_code($code);
         echo json_encode($data);
     }

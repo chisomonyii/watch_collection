@@ -1,12 +1,29 @@
+<?php
+
+/** @var array $shippingMethods */
+// ... rest of your code
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$orderNumber = $_SESSION['order_number'] ?? 'ZEITH-UNKNOWN';
+$subtotal = floatval($_SESSION['order_subtotal'] ?? 0);
+$activeOrderId = $_SESSION['active_order_id'] ?? null;
+
+if (!$activeOrderId) {
+    header('Location: /Watch_Collection/');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZEITH - Checkout</title>
-    <link rel="stylesheet" href="../header.css">
-    <link rel="stylesheet" href="../footer.css">
+    <title>ZEITH - Payment</title>
+    <link rel="stylesheet" href="/Watch_Collection/assets/css/header.css">
+    <link rel="stylesheet" href="/Watch_Collection/assets/css/footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
@@ -194,7 +211,6 @@
             white-space: nowrap;
         }
 
-        /* RIGHT COLUMN: Payment Form */
         .payment-section {
             flex: 1.1;
             background-color: var(--card-bg);
@@ -237,11 +253,6 @@
             background-color: #000000;
             color: #ffffff;
             font-size: 1.05rem;
-        }
-
-        .btn-apple i {
-            font-size: 1.2rem;
-            margin-bottom: 2px;
         }
 
         .btn-link {
@@ -349,7 +360,74 @@
             gap: 12px;
         }
 
-        /* Checkbox Box */
+        .transfer-header-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .transfer-user-email {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .bank-transfer-box {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background-color: #f8fafc;
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+        }
+
+        .bank-transfer-title {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .bank-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .bank-account-num {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .bank-transfer-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .btn-sent-money {
+            width: 100%;
+            background-color: #ffffff;
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.2s ease;
+            margin-bottom: 20px;
+        }
+
+        .btn-sent-money:hover {
+            background-color: #f1f5f9;
+        }
+
         .save-info-card {
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
@@ -400,10 +478,6 @@
             background-color: var(--primary-hover);
         }
 
-        .btn-pay:active {
-            transform: scale(0.99);
-        }
-
         .checkout-footer {
             margin-top: 24px;
             text-align: center;
@@ -423,61 +497,6 @@
             text-decoration: underline;
         }
 
-        @media (max-width: 1024px) {
-            .checkout-wrapper {
-                flex-direction: column;
-            }
-
-            .summary-section {
-                padding: 30px 40px;
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-            }
-
-            .payment-section {
-                padding: 40px;
-            }
-
-            .total-price-display {
-                font-size: 2rem;
-                margin-bottom: 20px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .summary-section {
-                padding: 24px 20px;
-            }
-
-            .payment-section {
-                padding: 24px 20px;
-            }
-
-            .express-buttons {
-                grid-template-columns: 1fr;
-            }
-
-            .total-price-display {
-                font-size: 1.75rem;
-            }
-
-            .back-link {
-                margin-bottom: 20px;
-            }
-
-            .split-row {
-                grid-template-columns: 1fr;
-            }
-
-            .form-control,
-            .form-select,
-            .btn-pay,
-            .btn-express {
-                padding: 14px;
-                font-size: 16px;
-            }
-        }
-
         .terms-modal-overlay {
             position: fixed;
             top: 0;
@@ -486,7 +505,6 @@
             height: 100vh;
             background-color: rgba(0, 0, 0, 0.55);
             backdrop-filter: blur(4px);
-            /* Smooth background blur */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -553,6 +571,101 @@
             color: var(--text-muted, #555555);
             line-height: 1.6;
         }
+
+        /* Transfer Section Styling */
+        #transferFieldsSection {
+            background: #fdfdfd;
+            border: 1px solid #eaeaea;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .bank-transfer-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px dashed #d1d5db;
+        }
+
+        .bank-transfer-title {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bank-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 5px;
+        }
+
+        .bank-account-num {
+            font-size: 22px;
+            font-weight: 800;
+            color: #f97316;
+            /* ZEITH Orange accent */
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .bank-transfer-note {
+            font-size: 12px;
+            color: #4b5563;
+        }
+
+        /* File Input Styling */
+        #transferFieldsSection .form-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #374151;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        #transferFieldsSection input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            color: #4b5563;
+            background: #fff;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+
+        #transferFieldsSection input[type="file"]:focus {
+            border-color: #f97316;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+        }
+
+        /* Optional secondary button style if needed */
+        .btn-sent-money {
+            display: block;
+            width: 100%;
+            background-color: #111827;
+            color: #fff;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+
+        .btn-sent-money:hover {
+            background-color: #1f2937;
+        }
     </style>
 </head>
 
@@ -561,22 +674,23 @@
     <div class="checkout-wrapper">
 
         <div class="summary-section">
-            <a href="cart-slip.php" class="back-link">
-                <i class="fa-solid fa-arrow-left"></i> Back to Cart
+            <a href="/Watch_Collection/checkout" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> Back to Review
             </a>
 
             <div class="store-badge">
-                <span class="store-name"><span class="zeith">ZEITH</span> Payment stripe</span>
+                <span class="store-name"><span class="zeith">ZEITH</span> Payment Gateway</span>
             </div>
 
+            <!-- Dynamic Subtotal + Shipping Total Display -->
             <div class="total-price-display" id="totalPriceDisplay">
-                ₦704,000.00
+                ₦<?= number_format($subtotal + 4000, 2) ?>
             </div>
 
             <div class="itemized-list">
                 <div class="line-item">
-                    <span class="item-name">Speedmaster (The "Moonwatch")</span>
-                    <span class="item-price">₦700,000.00</span>
+                    <span class="item-name">Order Ref: <?= htmlspecialchars($orderNumber) ?></span>
+                    <span class="item-price">₦<?= number_format($subtotal, 2) ?></span>
                 </div>
                 <div class="line-item" style="color: var(--text-muted);">
                     <span>Shipping</span>
@@ -586,60 +700,28 @@
 
             <div class="shipping-section">
                 <h3 class="shipping-title">Shipping method</h3>
-                <div class="shipping-container">
+                <div class="shipping-container" id="shippingOptionsContainer">
 
-                    <label class="shipping-option selected">
-                        <input type="radio" name="shipping_method" value="4000" checked>
-                        <div class="shipping-details">
-                            <div class="shipping-name">
-                                Lagos Island 1 [Lekki Phase 1, Ikoyi, Victoria Island, Ikate, Lagos Island, etc] Delivered within 1-2 Days (EXCLUDING HOLIDAY)
+                    <?php
+                    $isFirst = true;
+                    foreach ($shippingMethods as $method):
+                    ?>
+                        <label class="shipping-option <?= $isFirst ? 'selected' : '' ?>">
+                            <input type="radio" name="shipping_method" value="<?= htmlspecialchars($method['price']) ?>" <?= $isFirst ? 'checked' : '' ?>>
+                            <div class="shipping-details">
+                                <div class="shipping-name">
+                                    <?= htmlspecialchars($method['method_name']) ?>
+                                    <?php if (!empty($method['description'])): ?>
+                                        <div class="shipping-desc"><?= htmlspecialchars($method['description']) ?></div>
+                                    <?php endif; ?>
+                                </div>
                             </div>
-                        </div>
-                        <div class="shipping-price">₦4,000.00</div>
-                    </label>
-
-                    <label class="shipping-option">
-                        <input type="radio" name="shipping_method" value="4500">
-                        <div class="shipping-details">
-                            <div class="shipping-name">
-                                Lagos Mainland 1 [Yaba, Ikeja, Maryland, Magodo, Shomolu, Ojota, etc]
-                            </div>
-                        </div>
-                        <div class="shipping-price">₦4,500.00</div>
-                    </label>
-
-                    <label class="shipping-option">
-                        <input type="radio" name="shipping_method" value="5000">
-                        <div class="shipping-details">
-                            <div class="shipping-name">
-                                Lagos Island 2 [Ajah, Osapa, Epe, Orchid, Sangotedo, Lekki Phase 2, etc]
-                            </div>
-                            <div class="shipping-desc">
-                                Orders before 10am will be delivered same day, others the next day
-                            </div>
-                        </div>
-                        <div class="shipping-price">₦5,000.00</div>
-                    </label>
-
-                    <label class="shipping-option">
-                        <input type="radio" name="shipping_method" value="7500">
-                        <div class="shipping-details">
-                            <div class="shipping-name">
-                                Lagos/Ogun Opic Agbara Sango Arepo (1-2 days delivery)
-                            </div>
-                        </div>
-                        <div class="shipping-price">₦7,500.00</div>
-                    </label>
-
-                    <label class="shipping-option">
-                        <input type="radio" name="shipping_method" value="7500">
-                        <div class="shipping-details">
-                            <div class="shipping-name">
-                                Mainland Edge: Command/Ajasa, Ikorodu, Igbo Elerin, Apapa,Inside Iju Ishaga
-                            </div>
-                        </div>
-                        <div class="shipping-price">₦7,500.00</div>
-                    </label>
+                            <div class="shipping-price">₦<?= number_format($method['price'], 2) ?></div>
+                        </label>
+                    <?php
+                        $isFirst = false;
+                    endforeach;
+                    ?>
 
                 </div>
             </div>
@@ -648,14 +730,17 @@
 
         <div class="payment-section">
             <div class="form-inner">
-                <form action="process-payment.php" method="POST">
+                <form action="/Watch_Collection/payment/process" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="order_id" value="<?= htmlspecialchars($activeOrderId) ?>">
+                    <input type="hidden" name="subtotal" value="<?= $subtotal ?>">
+                    <input type="hidden" name="shipping_fee" id="hiddenShippingInput" value="4000">
 
                     <div class="express-buttons">
                         <button type="button" class="btn-express btn-apple">
                             <i class="fa-brands fa-apple"></i> Pay
                         </button>
                         <button type="button" class="btn-express btn-link">
-                            <i class="fa-solid fa-arrow-right"></i> link
+                            <i class="fa-solid fa-bolt"></i> link
                         </button>
                     </div>
 
@@ -664,63 +749,75 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="section-label">Contact information</label>
-                        <input type="email" name="email" class="form-control" placeholder="Email address" value="chibuikemnweze2020@gmail.com" required>
+                        <select name="gateway" id="paymentMethodSelect" class="form-select" required>
+                            <option value="card" selected>Credit / Debit Card</option>
+                            <option value="transfer">Bank Transfer</option>
+                        </select>
                     </div>
 
-                    <div class="form-group">
-                        <label class="section-label">Payment method</label>
+                    <!-- CONTAINER FOR TOGGLING PAYMENT METHODS -->
+                    <div id="paymentFieldsContainer">
 
-                        <div class="card-input-box">
-                            <div class="card-header-tab">
-                                <i class="fa-regular fa-credit-card"></i> Card
-                            </div>
+                        <!-- CREDIT CARD FORM -->
+                        <div class="form-group" id="cardFieldsSection">
+                            <label class="section-label">Payment details</label>
 
-                            <div class="card-fields-wrapper">
-                                <div>
-                                    <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Card information</label>
-                                    <div class="card-number-wrapper" style="margin-top: 4px;">
-                                        <input type="text" name="card_number" class="form-control" placeholder="1234 1234 1234 1234" required>
-                                        <span class="card-icons">
-                                            <i class="fa-brands fa-cc-visa"></i>
-                                            <i class="fa-brands fa-cc-mastercard"></i>
-                                        </span>
+                            <div class="card-input-box">
+                                <div class="card-header-tab">
+                                    <i class="fa-regular fa-credit-card"></i> Card
+                                </div>
+
+                                <div class="card-fields-wrapper">
+                                    <div>
+                                        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Card information</label>
+                                        <div class="card-number-wrapper" style="margin-top: 4px;">
+                                            <input type="text" name="card_number" class="form-control" placeholder="1234 1234 1234 1234" maxlength="19">
+                                            <span class="card-icons">
+                                                <i class="fa-brands fa-cc-visa"></i>
+                                                <i class="fa-brands fa-cc-mastercard"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="split-row">
+                                        <input type="text" name="card_exp" class="form-control" placeholder="MM / YY" maxlength="5">
+                                        <input type="text" name="card_cvc" class="form-control" placeholder="CVC" maxlength="4">
+                                    </div>
+
+                                    <div>
+                                        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Cardholder name</label>
+                                        <input type="text" name="card_name" class="form-control" placeholder="Full name on card" style="margin-top: 4px;">
                                     </div>
                                 </div>
-
-                                <div class="split-row">
-                                    <input type="text" name="card_exp" class="form-control" placeholder="MM / YY" required>
-                                    <input type="text" name="card_cvc" class="form-control" placeholder="CVC" required>
-                                </div>
-
-                                <div>
-                                    <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Cardholder name</label>
-                                    <input type="text" name="card_name" class="form-control" placeholder="Full name on card" style="margin-top: 4px;" required>
-                                </div>
-
-                                <div>
-                                    <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Country or region</label>
-                                    <select name="country" class="form-select" style="margin-top: 4px;">
-                                        <option value="Nigeria" selected>Nigeria</option>
-                                        <option value="United States">United States</option>
-                                        <option value="United Kingdom">United Kingdom</option>
-                                        <option value="Canada">Canada</option>
-                                    </select>
-                                </div>
                             </div>
                         </div>
+
+                        <!-- BANK TRANSFER VIEW -->
+                        <div class="form-group" id="transferFieldsSection" style="display: none;">
+                            <div class="transfer-header-row">
+                                <span class="transfer-user-email">Secure Zeith Pay Transfer</span>
+                            </div>
+                            <div class="bank-transfer-box">
+                                <div class="bank-transfer-title">Transfer to ZEITH Checkout</div>
+                                <div class="bank-name">Moniepoint</div>
+                                <div class="bank-account-num">9161426400</div>
+                                <div class="bank-transfer-note">Use this account for this transaction only. Account expires in 30 minutes.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="payment_receipt" class="form-label">Upload Transfer Receipt</label>
+                                <input type="file" class="form-control" name="payment_receipt" id="payment_receipt" accept="image/*,.pdf" required>
+                            </div>
+
+                            <button type="submit" class="btn-sent-money">
+                                I've sent the money
+                            </button>
+                        </div>
+
                     </div>
 
-                    <label class="save-info-card">
-                        <input type="checkbox" name="save_info" checked>
-                        <div class="save-info-text">
-                            <div class="save-info-title">Save my information for faster checkout</div>
-                            <div class="save-info-sub">Pay securely across ZEITH and everywhere Link is accepted.</div>
-                        </div>
-                    </label>
-
                     <button type="submit" class="btn-pay" id="btnPay">
-                        Pay ₦704,000.00
+                        Pay ₦<?= number_format($subtotal + 4000, 2) ?>
                     </button>
 
                     <div class="checkout-footer">
@@ -731,20 +828,17 @@
                         <a href="#" id="privacyTrigger">Privacy</a>
                     </div>
 
+                    <!-- Modals -->
                     <div class="terms-modal-overlay" id="termsModal">
                         <div class="terms-modal-card">
                             <button type="button" class="terms-modal-close" id="closeTermsBtn" aria-label="Close modal">
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
-
                             <div class="terms-modal-header">
                                 <h3>Terms of Service</h3>
                             </div>
-
                             <div class="terms-modal-body">
-                                <p>
-                                    Welcome to ZEITH. By placing an order or using our services, you agree to provide accurate checkout information and comply with our purchase guidelines. All transactions processed via ZEITH Pay are encrypted and authorized securely before order dispatch. Standard local delivery timelines range from 1 to 2 business days depending on your selected location. Eligible items may be returned within 7 days of delivery provided they remain unworn, undamaged, and retain all original packaging and protective seals. We reserve the right to update product pricing and service terms at any time without prior notice.
-                                </p>
+                                <p>Welcome to ZEITH. All transactions processed via ZEITH Pay are encrypted and authorized securely before order dispatch.</p>
                             </div>
                         </div>
                     </div>
@@ -754,15 +848,11 @@
                             <button type="button" class="terms-modal-close" id="closePrivacyBtn" aria-label="Close modal">
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
-
                             <div class="terms-modal-header">
                                 <h3>Privacy Policy</h3>
                             </div>
-
                             <div class="terms-modal-body">
-                                <p>
-                                    At ZEITH, we value your privacy and are committed to protecting your personal data. The information collected during checkout—including your contact details, shipping address, and payment information—is processed exclusively to fulfill your orders and provide a seamless payment experience via ZEITH Pay. We do not sell, rent, or share your personal information with third parties except as necessary to complete your transaction (such as payment gateways and logistics partners). All payment data is encrypted using industry-standard protocols.
-                                </p>
+                                <p>At ZEITH, we value your privacy and protect your personal checkout information rigorously.</p>
                             </div>
                         </div>
                     </div>
@@ -773,13 +863,25 @@
 
     </div>
 
+    <script src="https://js.paystack.co/v2/inline.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const productPrice = 700000;
+            const productPrice = <?= floatval($subtotal ?? 0) ?>;
             const shippingOptions = document.querySelectorAll('.shipping-option');
             const totalPriceDisplay = document.getElementById('totalPriceDisplay');
             const shippingSummaryPrice = document.getElementById('shippingSummaryPrice');
-            const btnPay = document.getElementById('btnPay');
+            const paymentForm = document.querySelector('form');
+
+            // 1. Create or reference hidden shipping input
+            let hiddenShippingInput = document.getElementById('hiddenShippingInput');
+            if (!hiddenShippingInput) {
+                hiddenShippingInput = document.createElement('input');
+                hiddenShippingInput.type = 'hidden';
+                hiddenShippingInput.name = 'shipping_fee';
+                hiddenShippingInput.id = 'hiddenShippingInput';
+                hiddenShippingInput.value = '4000'; // Default first option
+                paymentForm.appendChild(hiddenShippingInput);
+            }
 
             function formatCurrency(amount) {
                 return '₦' + amount.toLocaleString('en-US', {
@@ -788,21 +890,19 @@
                 });
             }
 
+            // 2. Shipping option click handlers
             shippingOptions.forEach(option => {
                 option.addEventListener('click', function() {
-                    // Update active selected class styling
                     shippingOptions.forEach(opt => opt.classList.remove('selected'));
                     this.classList.add('selected');
 
-                    // Check radio button inside clicked block
                     const radio = this.querySelector('input[type="radio"]');
                     radio.checked = true;
 
-                    // Calculate new total
                     const shippingCost = parseFloat(radio.value);
-                    const grandTotal = productPrice + shippingCost;
+                    hiddenShippingInput.value = shippingCost;
 
-                    // Update UI elements
+                    const grandTotal = productPrice + shippingCost;
                     const formattedShipping = formatCurrency(shippingCost);
                     const formattedGrandTotal = formatCurrency(grandTotal);
 
@@ -811,52 +911,77 @@
                     btnPay.textContent = `Pay ${formattedGrandTotal}`;
                 });
             });
-        });
-        document.addEventListener("DOMContentLoaded", () => {
-            const termsModal = document.getElementById("termsModal");
-            const closeTermsBtn = document.getElementById("closeTermsBtn");
 
-            const termsTrigger = document.querySelector(".checkout-footer a[href='#']");
+            // 3. Payment Method Switch (Card vs Transfer)
+            // 3. Payment Method Switch (Card vs Transfer)
+            const paymentMethodSelect = document.getElementById('paymentMethodSelect');
+            const cardFieldsSection = document.getElementById('cardFieldsSection');
+            const transferFieldsSection = document.getElementById('transferFieldsSection');
 
-            // Open Modal
-            if (termsTrigger) {
-                termsTrigger.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    termsModal.classList.add("active");
+            if (paymentMethodSelect) {
+                paymentMethodSelect.addEventListener('change', function() {
+                    if (this.value === 'transfer') {
+                        cardFieldsSection.style.display = 'none';
+                        transferFieldsSection.style.display = 'block';
+                        if (btnPay) btnPay.style.display = 'none'; // Hide bottom Pay button
+                    } else {
+                        cardFieldsSection.style.display = 'block';
+                        transferFieldsSection.style.display = 'none';
+                        if (btnPay) btnPay.style.display = 'block'; // Show bottom Pay button
+                    }
                 });
             }
 
-            closeTermsBtn.addEventListener("click", () => {
-                termsModal.classList.remove("active");
+            // 4. Paystack Popup Trigger on Form Submit
+            const paystackPublicKey = 'pk_test_46537c2e2608da34a412e77a7baec683a5097391';
+
+            paymentForm.addEventListener('submit', function(e) {
+                // If they chose bank transfer, let the form submit normally to handle the file upload
+                if (paymentMethodSelect && paymentMethodSelect.value === 'transfer') {
+                    return;
+                }
+
+                e.preventDefault();
+
+                const userEmail = "<?= htmlspecialchars($_SESSION['customer_email'] ?? 'customer@zeith.com') ?>";
+                const orderId = "<?= $_SESSION['active_order_id'] ?? '' ?>";
+                const totalAmountInKobo = Math.round((productPrice + Number(hiddenShippingInput.value)) * 100);
+
+                if (typeof PaystackPop === 'undefined') {
+                    alert('Paystack SDK failed to load. Please check your internet connection.');
+                    return;
+                }
+
+                const paystack = new PaystackPop();
+                paystack.newTransaction({
+                    key: paystackPublicKey,
+                    email: userEmail,
+                    amount: totalAmountInKobo,
+                    currency: 'NGN',
+                    ref: 'ZEITH_' + Math.floor((Math.random() * 1000000000) + 1),
+                    onSuccess: function(transaction) {
+                        window.location.href = `/Watch_Collection/payment/verify?reference=${transaction.reference}&order_id=${orderId}`;
+                    },
+                    onCancel: function() {
+                        alert('Payment window closed.');
+                    }
+                });
             });
 
-            termsModal.addEventListener("click", (e) => {
-                if (e.target === termsModal) {
-                    termsModal.classList.remove("active");
-                }
-            });
-        });
-        document.addEventListener("DOMContentLoaded", () => {
+            // 5. Modals Setup
             function setupModal(triggerId, modalId, closeBtnId) {
                 const trigger = document.getElementById(triggerId);
                 const modal = document.getElementById(modalId);
                 const closeBtn = document.getElementById(closeBtnId);
-
                 if (!trigger || !modal || !closeBtn) return;
 
                 trigger.addEventListener("click", (e) => {
                     e.preventDefault();
                     modal.classList.add("active");
                 });
-
-                closeBtn.addEventListener("click", () => {
-                    modal.classList.remove("active");
-                });
-
+                closeBtn.addEventListener("click", () => modal.classList.remove("active"));
                 modal.addEventListener("click", (e) => {
-                    if (e.target === modal) {
-                        modal.classList.remove("active");
-                    }
+                    if (e.target === modal) modal.classList.remove("active");
                 });
             }
 
@@ -864,7 +989,6 @@
             setupModal("privacyTrigger", "privacyModal", "closePrivacyBtn");
         });
     </script>
-    <?php require_once __DIR__ . '../../src/View/components/footer.php'; ?>
 </body>
 
 </html>

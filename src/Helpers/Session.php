@@ -6,28 +6,25 @@ class Session
 {
     public static function start()
     {
-        if(session_status() === PHP_SESSION_NONE){
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
     }
 
-    public static function checkToken($token)
+    public static function checkToken(string $token)
     {
-         if(session_start() === PHP_SESSION_NONE){
+        if (session_start() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        if(!isset($_SESSION['csrf_token'])){
+        if (!isset($_SESSION['csrf_token'])) {
             return false;
         }
 
-        if($token !== $_SESSION['csrf_token']){
+        if ($token !== $_SESSION['csrf_token']) {
             return false;
         }
 
         return true;
     }
-   
-
-    
 }

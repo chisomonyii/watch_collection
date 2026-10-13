@@ -6,7 +6,7 @@ require_once(__DIR__ . "/../../load_env.php");
 
 class Utilities
 {
-    public static function hashPassword($password)
+    public static function hashPassword(string $password)
     {
         // Safe fallback if 'SALT' is not set in $_ENV
         $salt = $_ENV['SALT'] ?? 'default_secure_salt_string';
@@ -14,14 +14,14 @@ class Utilities
         return password_hash($salted, PASSWORD_BCRYPT);
     }
 
-    public static function verifyHashpassword($password, $hashPassword)
+    public static function verifyHashpassword(string $password, string $hashPassword)
     {
         $salt = $_ENV['SALT'] ?? 'default_secure_salt_string';
         $salted = "$salt+$password";
         return password_verify($salted, $hashPassword);
     }
 
-    public static function sieve($input)
+    public static function sieve(string $input)
     {
         return htmlspecialchars(htmlentities(trim($input)));
     }

@@ -25,7 +25,7 @@
             <span>Contact</span>
         </a>
 
-        <a href="#" title="Cart">
+        <a href="/Watch_Collection/user/watch" title="Cart">
             <i class="fa-solid fa-clock"></i> 
             <span>watch</span>
         </a>
