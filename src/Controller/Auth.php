@@ -72,13 +72,8 @@ class Auth
             exit;
         }
 
-<<<<<<< HEAD
-        // 4. Register User
-        $registered = Authentication::processLogin($data);
-=======
         // 4. Register User by calling Authentication class
         $registered = Authentication::processRegister($data);
->>>>>>> 3ce9c6dd5acb40d924fb2389fa1253f1de085e14
 
         // Wipe output buffer clean before outputting JSON response
         if (ob_get_length()) ob_clean();

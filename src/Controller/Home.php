@@ -13,15 +13,12 @@ class Home
      */
    public static function showLandingpage()
     {
-        try {
-            $products = Watch::getNewArrivals(8);
-        } catch (\PDOException $e) {
-            $products = [];
-        }
+        // Remove try/catch temporarily to see any database column errors
+        $products = Watch::getNewArrivals(8);
 
-        // Updated path to include the guests subfolder
         View::displayView('guests/home.php', [
-            'newArrivals' => $products
+            'newArrivals' => $products,
+            'watches' => $products
         ]);
     }
 

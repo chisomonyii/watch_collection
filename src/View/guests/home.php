@@ -1,6 +1,6 @@
 <?php
 
-use App\Helpers;
+use App\Helpers\View;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -183,36 +183,40 @@ use App\Helpers;
         /* =========================================
            NEW ARRIVALS GRID
         ========================================= */
+        /* New Arrivals Section Layout */
+        .new-arrivals {
+            width: 100%;
+            padding: 40px 5%;
+            background-color: #f9f9f9;
+            /* Adjust background if you use a dark theme */
+        }
+
+        .new-arrhead {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
 
         .new {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
+        @media (max-width: 768px) {
 
-        /* =========================================
-           WATCH CARD
-        ========================================= */
-
-        .arrivals {
-            position: relative;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-
-            height: 380px;
-
-            padding: 16px;
-            padding-bottom: 50px;
-
-            box-sizing: border-box;
-
-            background: #ffffff;
-            border-radius: 12px;
+            /* Ensure 2 items per row with a tighter gap */
+            .new {
+                display: grid;
+                grid-template-columns: repeat(1, 1fr) !important;
+                gap: 10px !important;
+                padding: 0 8px;
+            }
         }
-
 
         /* =========================================
            WATCH IMAGE
@@ -666,8 +670,255 @@ use App\Helpers;
             .hero-text-column {
                 align-items: center;
                 text-align: center;
-                margin-top: 36px;
+                margin-top: 166px;
             }
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .review {
+            background: #ffffff;
+            padding: 35px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        /* Give each card a slight organic tilt/bend vibe matching your layout */
+        .review-grid .review:nth-child(1) {
+            transform: rotate(-2deg) translateY(10px);
+        }
+
+        .review-grid .review:nth-child(2) {
+            transform: rotate(1deg) translateY(-5px);
+        }
+
+        .review-grid .review:nth-child(3) {
+            transform: rotate(2deg) translateY(12px);
+        }
+
+        /* Interactive hover state to lift and straighten the card */
+        .review-grid .review:hover {
+            transform: rotate(0deg) translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border-color: rgba(212, 143, 56, 0.3);
+            /* subtle accent glow on hover */
+        }
+
+        .review .stars {
+            color: #d48f38;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .review p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #2c2c2c;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .review h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #555555;
+            text-align: right;
+        }
+
+        .watch-card {
+            background: #fdfbf7;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .watch-image-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            background: #f4f0eb;
+            overflow: hidden;
+        }
+
+        /* Top Right Actions (Badge + Heart) */
+        .watch-top-actions {
+            position: absolute;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .stock-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 5px 10px;
+            letter-spacing: 1px;
+            border-radius: 20px;
+        }
+
+        .stock-badge.available {
+            background-color: rgba(46, 125, 50, 0.15);
+            color: #2e7d32;
+        }
+
+        .stock-badge.sold-out {
+            background-color: rgba(198, 40, 40, 0.15);
+            color: #c62828;
+        }
+
+        /* Wishlist Heart Active / Highlighted State */
+        .wishlist-btn.active svg {
+            fill: #e67e22;
+            /* Matches your accent/button orange */
+            stroke: #e67e22;
+        }
+
+        .wishlist-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .wishlist-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Slider Track & Images */
+        .slider-track {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slider-track img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 30px;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .slider-track img.active {
+            opacity: 1;
+        }
+
+        /* Navigation Arrows */
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ffffff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease, background 0.2s ease;
+            z-index: 5;
+        }
+
+        .watch-image-container:hover .slider-arrow {
+            opacity: 1;
+        }
+
+        .prev-arrow {
+            left: 15px;
+        }
+
+        .next-arrow {
+            right: 15px;
+        }
+
+        .slider-arrow:hover {
+            background: #222;
+            color: #fff;
+        }
+
+        /* Bottom Segmented Pagination Bar */
+        .slider-pagination {
+            position: absolute;
+            bottom: 12px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            gap: 6px;
+            z-index: 5;
+        }
+
+        .slider-pagination .dot {
+            flex: 1;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+            transition: background 0.3s ease;
+        }
+
+        .slider-pagination .dot.active {
+            background: #111;
+        }
+
+        .watch-info {
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .watch-info h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #111;
+            letter-spacing: 0.5px;
+        }
+
+        .watch-info p {
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .watch-info .price {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111;
+            margin-top: 4px;
         }
     </style>
 
@@ -756,11 +1007,11 @@ use App\Helpers;
         <div class="new">
             <?php if (!empty($newArrivals)): ?>
 
-                <?php foreach ($newArrivals as $product): ?>
+                <?php foreach ($newArrivals as $watch): ?>
 
                     <?php
                     // 1. Fetch image string from database
-                    $imgVal = trim($product['image_url'] ?? $product['image'] ?? '');
+                    $imgVal = trim($watch['image_url_1'] ?? '');
 
                     // 2. Dual Option Logic (Option A: Web URL | Option B: Local VS Code Assets)
                     if (strpos($imgVal, 'http://') === 0 || strpos($imgVal, 'https://') === 0) {
@@ -775,40 +1026,54 @@ use App\Helpers;
                     }
                     ?>
 
-                    <div class="arrivals watch-card"
-                        data-id="<?= htmlspecialchars($product['id'] ?? ''); ?>"
-                        data-brand="<?= htmlspecialchars($product['collection_name'] ?? $product['brand'] ?? 'ZEITH'); ?>"
-                        data-price="<?= htmlspecialchars((string)($product['price'] ?? 0)); ?>"
-                        data-stock="<?= (int)($product['stock'] ?? 10); ?>">
+                    <!-- data-stock added here so JavaScript can read the stock limit -->
+                    <div class="watch-card" data-id="<?= $watch['id'] ?>" data-stock="<?= $watch['stock'] ?>" data-price="<?= $watch['price'] ?>">
+                        <div class="watch-image-container">
+                            <!-- Top Right Actions: Wishlist Heart & Stock Badge -->
+                            <div class="watch-top-actions">
+                                <?php if ($watch['stock'] == 0): ?>
+                                    <span class="stock-badge sold-out">Sold Out</span>
+                                <?php else: ?>
+                                    <span class="stock-badge available">Available</span>
+                                <?php endif; ?>
 
-                        <!-- WISHLIST HEART -->
-                        <div class="wishlist-heart" title="Add to wishlist">
-                            <i class="fa-regular fa-heart"></i>
+                                <button class="wishlist-btn wishlist-heart" title="Add to Wishlist">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Images Carousel Slides -->
+                            <div class="slider-track">
+                                <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_1'] ?? 'default.png') ?>" class="slide active" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="0">
+                                <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_2'] ?? $watch['image_url_1']) ?>" class="slide" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="1">
+                                <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_3'] ?? $watch['image_url_1']) ?>" class="slide" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="2">
+                                <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_4'] ?? $watch['image_url_1']) ?>" class="slide" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="3">
+                            </div>
+
+                            <!-- Navigation Arrows -->
+                            <button class="slider-arrow prev-arrow">&#10094;</button>
+                            <button class="slider-arrow next-arrow">&#10095;</button>
+
+                            <!-- Bottom Segmented Slide Indicator Bar -->
+                            <div class="slider-pagination">
+                                <span class="dot active" data-index="0"></span>
+                                <span class="dot" data-index="1"></span>
+                                <span class="dot" data-index="2"></span>
+                                <span class="dot" data-index="3"></span>
+                            </div>
                         </div>
 
-                        <!-- WATCH IMAGE (Supports both Web URLs & Local Files) -->
-                        <img src="<?= htmlspecialchars($imagePath); ?>"
-                            alt="<?= htmlspecialchars($product['name'] ?? 'Watch'); ?>"
-                            onerror="this.src='/Watch_Collection/assets/image/placeholder.jpg';" />
+                        <!-- Product Info -->
+                        <div class="watch-info">
+                            <h3><?= htmlspecialchars($watch['name']) ?></h3>
+                            <p><?= htmlspecialchars($watch['description']) ?></p>
+                            <span class="price">$<?= number_format($watch['price']) ?></span>
 
-                        <!-- WATCH INFORMATION -->
-                        <span class="watch-info">
-                            <h2>
-                                <?= htmlspecialchars($product['brand'] ?? $product['collection_name'] ?? 'ZEITH'); ?>
-                            </h2>
-
-                            <p class="watch-name">
-                                <?= htmlspecialchars($product['name'] ?? ''); ?>
-                            </p>
-
-                            <p class="watch-price">
-                                &#8358;<?= number_format((float)($product['price'] ?? 0)); ?>
-                            </p>
-
-                            <!-- ADD BUTTON -->
-                            <button class="add-button" type="button">Add</button>
-                        </span>
-
+                            <!-- Add to Cart Button -->
+                            <button type="button" class="add-button">Add</button>
+                        </div>
                     </div>
 
                 <?php endforeach; ?>
@@ -882,7 +1147,7 @@ use App\Helpers;
             <div class="collection-card">
 
                 <img
-                    src="<?php assets("Images/picture12.png"); ?>"
+                    src="<?php assets("Images/picture11.png"); ?>"
                     alt="Chronograph Watch">
 
                 <div class="collection-content">
@@ -914,7 +1179,7 @@ use App\Helpers;
             <div class="collection-card">
 
                 <img
-                    src="<?php assets("Images/picture13.png"); ?>"
+                    src="<?php assets("Images/picture1.png"); ?>"
                     alt="Executive Watch">
 
                 <div class="collection-content">
@@ -1049,7 +1314,7 @@ use App\Helpers;
                 <div class="product-image">
 
                     <img
-                        src="<?php assets("Images/picture4.png"); ?>"
+                        src="<?php assets("Images/picture3.png"); ?>"
                         alt="Zeith Executive">
 
                 </div>
@@ -1095,7 +1360,7 @@ use App\Helpers;
         <div class="story-image">
 
             <img
-                src="<?php assets("Images/picture2.png"); ?>"
+                src="<?php assets("Images/picture1.png"); ?>"
                 alt="Zeith Watch">
 
         </div>
@@ -1347,8 +1612,6 @@ use App\Helpers;
 
 
 
-    <?php View::displayComponent('footer.php'); ?>
-
 
 
     <!-- =========================================
@@ -1410,15 +1673,15 @@ use App\Helpers;
 
 
 
-
-
     <!-- =========================================
          JAVASCRIPT
     ========================================= -->
 
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // ----------------------------------------------------
+            // 1. SELECTORS & VARIABLES
+            // ----------------------------------------------------
             const $ = (selector) => document.querySelector(selector);
 
             const drawer = $('#cart-drawer');
@@ -1426,15 +1689,18 @@ use App\Helpers;
             const openButton = $('#open-cart');
             const closeButton = $('#close-cart');
             const continueButton = $('#continue-shopping');
-            const itemsContainer = $('#cart-items');
+            const itemContainer = $('#cart-items');
             const subtotalElement = $('#cart-subtotal');
             const badge = $('#cart-count');
             const drawerCount = $('#drawer-item-count');
             const checkoutButton = $('#checkout-button');
 
-            function readStorage(key) {
+            // ----------------------------------------------------
+            // 2. STORAGE & HELPER FUNCTIONS
+            // ----------------------------------------------------
+            function readstorage(key) {
                 try {
-                    const value = JSON.parse(localStorage.getItem(key) || '[]');
+                    const value = JSON.parse(localStorage.getItem(key)) || [];
                     return Array.isArray(value) ? value : [];
                 } catch {
                     return [];
@@ -1442,7 +1708,7 @@ use App\Helpers;
             }
 
             function readCart() {
-                return readStorage('zeith_cart').map(item => {
+                return readstorage('zeith_cart').map(item => {
                     if (item && typeof item === 'object') {
                         return {
                             ...item,
@@ -1450,19 +1716,18 @@ use App\Helpers;
                             price: Number(item.price) || 0,
                             quantity: Math.max(1, Number(item.quantity) || 1),
                             stock: Number(item.stock) || 10,
-                            strap: item.strap || 'Steel'
+                            strap: item.strap || 'steel'
                         };
                     }
-
                     return {
                         id: String(item ?? ''),
-                        name: 'Watch details unavailable',
+                        name: 'watch details unavailable',
                         brand: 'ZEITH',
                         price: 0,
                         image: '',
                         quantity: 1,
                         stock: 10,
-                        strap: 'Steel'
+                        strap: 'steel'
                     };
                 });
             }
@@ -1473,33 +1738,35 @@ use App\Helpers;
             }
 
             function money(value) {
-                return '₦' + Number(value || 0).toLocaleString('en-NG', {
+                return '$' + Number(value || 0).toLocaleString('en-US', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                 });
             }
 
             function escapeHTML(value) {
-                return String(value ?? '').replace(/[&<>"']/g, character => ({
+                return String(value ?? '').replace(/[&<>'"]/g, character => ({
                     '&': '&amp;',
                     '<': '&lt;',
                     '>': '&gt;',
                     '"': '&quot;',
-                    "'": '&#39;'
-                })[character]);
+                    "'": '&#039;'
+                } [character]));
             }
 
+            // ----------------------------------------------------
+            // 3. BADGES & UI UPDATES
+            // ----------------------------------------------------
             function updateWishlistBadge() {
                 const wishlistBadge = $('#wishlist-count');
                 if (!wishlistBadge) return;
 
-                const wishlist = readStorage('zeith_wishlist').map(String);
+                const wishlist = readstorage('zeith_wishlist').map(String);
                 wishlistBadge.textContent = wishlist.length;
-                wishlistBadge.style.display =
-                    wishlist.length ? 'inline-block' : 'none';
+                wishlistBadge.style.display = wishlist.length ? 'inline-block' : 'none';
             }
 
-            function updateCartBadge(cart = readCart()) {
+            function updateCartBadge(cart) {
                 const count = cart.reduce((sum, item) => sum + item.quantity, 0);
 
                 if (badge) {
@@ -1512,6 +1779,9 @@ use App\Helpers;
                 }
             }
 
+            // ----------------------------------------------------
+            // 4. CART DRAWER CONTROLS
+            // ----------------------------------------------------
             function openCart() {
                 if (!drawer || !overlay) return;
                 drawer.classList.add('open');
@@ -1539,60 +1809,39 @@ use App\Helpers;
             function renderCart() {
                 const cart = readCart();
                 const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-                const subtotal = cart.reduce(
-                    (sum, item) => sum + item.price * item.quantity,
-                    0
-                );
+                const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
                 updateCartBadge(cart);
 
                 if (cart.length === 0) {
-                    if (itemsContainer) {
-                        itemsContainer.innerHTML = `
-                            <div class="cart-empty">
-                                <i class="fa-solid fa-bag-shopping"></i>
-                                <h3>Your bag is waiting</h3>
-                                <p>Add a luxury timepiece to get started.</p>
-                            </div>
-                        `;
+                    if (itemContainer) {
+                        itemContainer.innerHTML = `
+                    <div class="cart-empty">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <h3>Your bag is waiting</h3>
+                        <p>Add a luxury timepiece to get started.</p>
+                    </div>`;
                     }
-                } else if (itemsContainer) {
-                    itemsContainer.innerHTML = cart.map((item, index) => `
-                        <article class="cart-item" data-index="${index}">
-                            <div class="cart-item-image">
-                                ${
-                                    item.image
-                                        ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}">`
-                                        : '<i class="fa-regular fa-clock"></i>'
-                                }
+                } else if (itemContainer) {
+                    itemContainer.innerHTML = cart.map((item, index) => `
+                <article class="cart-item" data-index="${index}">
+                    <div class="cart-item-image">
+                        ${item.image ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}">` : `<i class="fa-regular fa-clock"></i>`}
+                    </div>
+                    <div>
+                        <span class="cart-item-brand">${escapeHTML(item.brand || 'ZEITH')}</span>
+                        <h4 class="cart-item-name">${escapeHTML(item.name)}</h4>
+                        <div class="cart-item-price">${money(item.price)}</div>
+                        <div class="cart-item-bottom">
+                            <div class="cart-quantity">
+                                <button type="button" data-action="decrease" aria-label="Decrease quantity">-</button>
+                                <span>${item.quantity}</span>
+                                <button type="button" data-action="increase" aria-label="Increase quantity">+</button>
                             </div>
-                            <div>
-                                <span class="cart-item-brand">
-                                    ${escapeHTML(item.brand || 'ZEITH')}
-                                </span>
-                                <h3 class="cart-item-name">
-                                    ${escapeHTML(item.name)}
-                                </h3>
-                                <div class="cart-item-price">
-                                    ${money(item.price)}
-                                </div>
-                                <div class="cart-item-bottom">
-                                    <div class="cart-quantity">
-                                        <button type="button"
-                                                data-action="decrease"
-                                                aria-label="Decrease quantity">−</button>
-                                        <span>${item.quantity}</span>
-                                        <button type="button"
-                                                data-action="increase"
-                                                aria-label="Increase quantity">+</button>
-                                    </div>
-                                    <button type="button"
-                                            class="cart-remove"
-                                            data-action="remove">Remove</button>
-                                </div>
-                            </div>
-                        </article>
-                    `).join('');
+                            <button type="button" class="cart-remove" data-action="remove">Remove</button>
+                        </div>
+                    </div>
+                </article>`).join('');
                 }
 
                 if (subtotalElement) subtotalElement.textContent = money(subtotal);
@@ -1600,7 +1849,7 @@ use App\Helpers;
                 if (checkoutButton) checkoutButton.disabled = cart.length === 0;
             }
 
-            /* Open and close drawer listeners */
+            // Event Listeners for Cart Drawer
             openButton?.addEventListener('click', openCart);
             closeButton?.addEventListener('click', closeCart);
             continueButton?.addEventListener('click', closeCart);
@@ -1612,31 +1861,33 @@ use App\Helpers;
                 }
             });
 
-            /* Wishlist listeners */
+            // ----------------------------------------------------
+            // 5. WISHLIST TOGGLE FUNCTIONALITY
+            // ----------------------------------------------------
             document.querySelectorAll('.arrivals, .watch-card, .property-card').forEach(card => {
                 const id = String(card.dataset.id || card.getAttribute('data-id') || '');
-                const heart = card.querySelector('.wishlist-heart, .wishlist-heart-btn');
+                const heart = card.querySelector('.wishlist-heart, .wishlist-heart-btn, .wishlist-btn');
 
-                if (!heart || !id) return;
+                if (!id || !heart) return;
 
-                const wishlist = readStorage('zeith_wishlist').map(String);
+                const wishlist = readstorage('zeith_wishlist').map(String);
                 if (wishlist.includes(id)) {
                     heart.classList.add('active');
-                    heart.style.color = '#e74c3c';
+                    heart.style.color = '#d48f38';
                 }
 
                 heart.addEventListener('click', event => {
                     event.stopPropagation();
-                    let saved = readStorage('zeith_wishlist').map(String);
+                    let saved = readstorage('zeith_wishlist').map(String);
 
                     if (saved.includes(id)) {
                         saved = saved.filter(savedId => savedId !== id);
                         heart.classList.remove('active');
-                        heart.style.color = '#f68b1e';
+                        heart.style.color = '';
                     } else {
                         saved.push(id);
                         heart.classList.add('active');
-                        heart.style.color = '#e74c3c';
+                        heart.style.color = '#d48f38';
                     }
 
                     localStorage.setItem('zeith_wishlist', JSON.stringify(saved));
@@ -1644,66 +1895,104 @@ use App\Helpers;
                 });
             });
 
-            const slides = document.querySelectorAll('.hero-slide');
-            let currentSlide = 0;
-            const slideInterval = 5000; // Changes background slide every 5 seconds
+            // ----------------------------------------------------
+            // 6. HERO SLIDER CONTROLLER
+            // ----------------------------------------------------
+            const heroSlides = document.querySelectorAll('.hero-slide');
+            if (heroSlides.length > 0) {
+                let currentHeroSlide = 0;
+                const heroInterval = 5000;
 
-            function nextSlide() {
-                slides[currentSlide].classList.remove('active');
-                slides[currentSlide].classList.add('exit');
+                function nextHeroSlide() {
+                    heroSlides[currentHeroSlide].classList.remove('active');
+                    heroSlides[currentHeroSlide].classList.add('exit');
 
-                let previousSlide = currentSlide;
-                currentSlide = (currentSlide + 1) % slides.length;
+                    let previousSlide = currentHeroSlide;
+                    currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
 
-                setTimeout(() => {
-                    slides[previousSlide].classList.remove('exit');
-                }, 1200);
+                    setTimeout(() => {
+                        heroSlides[previousSlide].classList.remove('exit');
+                    }, 1200);
 
-                slides[currentSlide].classList.add('active');
+                    heroSlides[currentHeroSlide].classList.add('active');
+                }
+
+                setInterval(nextHeroSlide, heroInterval);
             }
 
-            if (slides.length > 0) {
-                setInterval(nextSlide, slideInterval);
-            }
+            // ----------------------------------------------------
+            // 7. NEW ARRIVALS 4-IMAGE CAROUSEL CONTROLLER
+            // ----------------------------------------------------
+            document.querySelectorAll('.watch-card').forEach(card => {
+                const slides = card.querySelectorAll('.slide');
+                const dots = card.querySelectorAll('.dot');
+                const prevBtn = card.querySelector('.prev-arrow');
+                const nextBtn = card.querySelector('.next-arrow');
+                let currentIndex = 0;
 
-            /* Add to Bag handler with Stock limit check */
-            document.querySelectorAll('.add-button, .property-add-btn').forEach(button => {
+                if (slides.length === 0) return;
+
+                function updateSlide(index) {
+                    slides.forEach(s => s.classList.remove('active'));
+                    dots.forEach(d => d.classList.remove('active'));
+
+                    slides[index].classList.add('active');
+                    if (dots[index]) dots[index].classList.add('active');
+                    currentIndex = index;
+                }
+
+                nextBtn?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    let nextIndex = (currentIndex + 1) % slides.length;
+                    updateSlide(nextIndex);
+                });
+
+                prevBtn?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    let prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+                    updateSlide(prevIndex);
+                });
+            });
+
+            // ----------------------------------------------------
+            // 8. ADD TO CART & SOLD OUT VALIDATION
+            // ----------------------------------------------------
+            document.querySelectorAll('.add-button, .property-add-btn, .add-to-cart-btn').forEach(button => {
                 button.addEventListener('click', event => {
                     event.preventDefault();
                     event.stopPropagation();
 
-                    const card = button.closest('.arrivals, .watch-card, .property-card');
+                    const card = button.closest('.watch-card, .property-card');
                     if (!card) return;
 
-                    const stock = Number(card.dataset.stock) || 10;
-                    const id = String(card.dataset.id || card.getAttribute('data-id') || '');
+                    // CHECK 1: Prevent adding if watch is Sold Out
+                    const soldOutBadge = card.querySelector('.stock-badge.sold-out');
+                    if (soldOutBadge) {
+                        alert('This watch is currently Sold Out and cannot be added to your cart.');
+                        return;
+                    }
 
-                    const nameElement = card.querySelector(
-                        '.property-card-title, .property-card-name, .watch-name, .arrivals-name, h3, h4'
-                    );
-                    const brandElement = card.querySelector(
-                        '.watch-info h2, .property-card-brand, .watch-brand, .arrivals-brand, .brand'
-                    );
-                    const imageElement = card.querySelector('img');
-                    const priceElement = card.querySelector(
-                        '.property-card-price, .watch-price, .price'
-                    );
-
-                    const rawPrice = card.dataset.price || (priceElement ? priceElement.textContent : '');
+                    const rawPrice = card.dataset.price || card.querySelector('.price')?.textContent || '';
                     const price = Number(String(rawPrice).replace(/[^\d.]/g, '')) || 0;
-                    const name = nameElement ? nameElement.textContent.trim() : 'Watch';
-                    const brand = card.dataset.brand || (brandElement ? brandElement.textContent.trim() : 'ZEITH');
-                    const image = imageElement ? imageElement.getAttribute('src') || '' : '';
+                    const id = String(card.dataset.id || card.getAttribute('data-id') || '');
+                    const nameElement = card.querySelector('.property-card-title, .watch-info h3, .watch-card h3');
+                    const brandElement = card.querySelector('.property-card-brand, .watch-info span, .brand');
+                    const imageElement = card.querySelector('.slide.active, img');
 
-                    if (!id || id === 'null' || id === 'undefined') return;
+                    const name = nameElement ? nameElement.textContent.trim() : 'Watch';
+                    const brand = brandElement ? brandElement.textContent.trim() : 'ZEITH';
+                    const image = imageElement ? imageElement.getAttribute('src') : '';
+                    const stockLimit = Number(card.dataset.stock) || 10;
+
+                    if (!id) return;
 
                     const cart = readCart();
                     const existing = cart.find(item => item.id === id);
                     const currentQty = existing ? Number(existing.quantity) : 0;
 
-                    // STOCK CHECK
-                    if (currentQty + 1 > stock) {
-                        alert(`Sorry, we only have ${stock} of this item in stock.`);
+                    // CHECK 2: Stock limit check
+                    if (currentQty + 1 > stockLimit) {
+                        alert(`Sorry, we only have ${stockLimit} of this item in stock.`);
                         return;
                     }
 
@@ -1713,7 +2002,7 @@ use App\Helpers;
                         existing.brand = brand;
                         existing.price = price;
                         existing.image = image;
-                        existing.stock = stock;
+                        existing.stock = stockLimit;
                     } else {
                         cart.push({
                             id,
@@ -1721,7 +2010,7 @@ use App\Helpers;
                             brand,
                             price,
                             image,
-                            stock,
+                            stock: stockLimit,
                             quantity: 1
                         });
                     }
@@ -1730,14 +2019,16 @@ use App\Helpers;
 
                     const oldText = button.textContent;
                     button.textContent = 'Added!';
-                    window.setTimeout(() => {
+                    setTimeout(() => {
                         button.textContent = oldText;
                     }, 900);
                 });
             });
 
-            /* Cart Quantity controls inside drawer (+ / - / Remove) */
-            itemsContainer?.addEventListener('click', event => {
+            // ----------------------------------------------------
+            // 9. CART QUANTITY CONTROLS (+ / - / Remove)
+            // ----------------------------------------------------
+            itemContainer?.addEventListener('click', event => {
                 const button = event.target.closest('[data-action]');
                 if (!button) return;
 
@@ -1752,52 +2043,69 @@ use App\Helpers;
 
                 switch (button.dataset.action) {
                     case 'increase':
-                        const stockLimit = Number(item.stock) || 10;
-                        if (item.quantity + 1 > stockLimit) {
-                            alert(`Sorry, only ${stockLimit} available in stock.`);
+                        if (item.quantity + 1 > item.stock) {
+                            alert(`Sorry, only ${item.stock} available in stock.`);
                             return;
                         }
                         item.quantity++;
                         break;
-
                     case 'decrease':
                         item.quantity--;
                         if (item.quantity <= 0) {
                             cart.splice(index, 1);
                         }
                         break;
-
                     case 'remove':
                         cart.splice(index, 1);
                         break;
-
-                    default:
-                        return;
                 }
 
                 saveCart(cart);
             });
 
-            /* Checkout handler */
+            // ----------------------------------------------------
+            // 10. CHECKOUT & CROSS-TAB SYNCHRONIZATION
+            // ----------------------------------------------------
             checkoutButton?.addEventListener('click', () => {
                 if (readCart().length === 0) return;
-                window.location.href = '/Watch_Collection/checkout';
+                window.location.href = '/watch_collection/checkout';
             });
 
-            /* Cross-tab storage listener */
             window.addEventListener('storage', event => {
                 if (event.key === 'zeith_cart') renderCart();
                 if (event.key === 'zeith_wishlist') updateWishlistBadge();
             });
 
-            /* Initial Setup */
+            // Initial setup calls
             updateWishlistBadge();
             renderCart();
         });
+        // Wishlist Heart Toggle Logic
+        document.addEventListener('click', function(e) {
+            const wishlistBtn = e.target.closest('.wishlist-btn');
+            if (!wishlistBtn) return;
+
+            e.preventDefault();
+            wishlistBtn.classList.toggle('active');
+
+            // Optional: Get the watch card ID to save in localStorage
+            const watchCard = wishlistBtn.closest('.watch-card');
+            if (watchCard) {
+                const watchId = watchCard.getAttribute('data-id');
+                let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+
+                if (wishlistBtn.classList.contains('active')) {
+                    if (!wishlist.includes(watchId)) wishlist.push(watchId);
+                } else {
+                    wishlist = wishlist.filter(id => id !== watchId);
+                }
+
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            }
+        });
     </script>
 
-
-
+    <?php include __DIR__ . '/../components/footer.php'; ?>
 </body>
 
 </html>
