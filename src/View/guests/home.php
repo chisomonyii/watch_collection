@@ -5,6 +5,178 @@
 
     <style>
         /* =========================================
+   ZEITH LUXURY HERO CAROUSEL BANNER
+   ========================================= */
+
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 90vh;
+            min-height: 650px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #0d0f12;
+            box-sizing: border-box;
+            padding-top: 80px;
+            /* Accounts for floating header */
+        }
+
+        /* Slide Container (PowerPoint sliding effect) */
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            transform: translateX(100%);
+            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 1;
+        }
+
+        .hero-slide.active {
+            transform: translateX(0);
+            z-index: 2;
+        }
+
+        .hero-slide.exit {
+            transform: translateX(-100%);
+            z-index: 1;
+        }
+
+        /* Gradient Overlay for Background Contrast */
+        .hero-slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(13, 15, 18, 0.55) 0%, rgba(8, 10, 14, 0.85) 100%);
+            z-index: 2;
+        }
+
+        /* Two-Column Grid Layout on top of background */
+        .hero-content-container {
+            position: relative;
+            z-index: 3;
+            max-width: 1250px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 60px;
+            box-sizing: border-box;
+        }
+
+        /* Left Column: Typography & Button */
+        .hero-text-column {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .hero-title {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 52px;
+            font-weight: 400;
+            line-height: 1.15;
+            letter-spacing: 2px;
+            color: #ffffff;
+            margin: 0 0 20px 0;
+            text-transform: uppercase;
+        }
+
+        .hero-description {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #d0d0d0;
+            margin-bottom: 32px;
+            max-width: 440px;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-decoration: none;
+            text-transform: uppercase;
+            padding: 16px 36px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .hero-btn:hover {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border-color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* Right Column: Featured Watch Card */
+        .hero-image-column {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-watch-card {
+            background: rgba(246, 245, 240, 0.95);
+            border-radius: 12px;
+            padding: 2px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 300px;
+            width: 100%;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-watch-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* Responsive Rules for Mobile/Tablet */
+        @media (max-width: 968px) {
+            .hero-content-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+                padding: 0 24px;
+            }
+
+            .hero-text-column {
+                align-items: center;
+                text-align: center;
+            }
+
+            .hero-title {
+                font-size: 38px;
+            }
+
+            .hero-image-column {
+                display: none;
+                /* Hide card on smaller screens to keep clean hero focus */
+            }
+        }
+
+        /* =========================================
            NEW ARRIVALS GRID
         ========================================= */
 
@@ -486,6 +658,12 @@
                 padding-left: 17px;
                 padding-right: 17px;
             }
+
+            .hero-text-column {
+                align-items: center;
+                text-align: center;
+                margin-top: 36px;
+            }
         }
     </style>
 
@@ -525,38 +703,38 @@
     ========================================= -->
 
     <section class="hero">
+        <!-- Slide 1 -->
+        <div class="hero-slide active" style="background-image: url('<?php assets("image/banner/banner1.jpg"); ?>');"></div>
 
-        <div class="hero-text">
+        <!-- Slide 2 (Replace with your 2nd watch image filename) -->
+        <div class="hero-slide" style="background-image: url('<?php assets("image/banner/banner2.jpg"); ?>');"></div>
 
-            <h1>
-                WATCH<br>
-                COLLECTION
-            </h1>
+        <!-- Slide 3 (Replace with your 3rd watch image filename) -->
+        <div class="hero-slide" style="background-image: url('<?php assets("image/banner/banner3.jpg"); ?>');"></div>
 
-            <p>
-                Discover premium watches designed
-                for style and precision.
-            </p>
+        <!-- Slide 4 (Replace with your 4th watch image filename) -->
+        <div class="hero-slide" style="background-image: url('<?php assets("image/banner/banner4.jpg"); ?>');"></div>
 
-            <a href="http://google.com">
+        <!-- Slide 5 (Replace with your 5th watch image filename) -->
+        <div class="hero-slide" style="background-image: url('<?php assets("image/banner/Zeith2.png"); ?>');"></div>
 
-                <button class="product-btn">
-                    SEE PRODUCTS
-                </button>
+        <div class="hero-content-container">
 
-            </a>
+            <!-- Left Column: Text & Button -->
+            <div class="hero-text-column">
+                <h1 class="hero-title">Watch<br>Collection</h1>
+                <p class="hero-description">Discover precision timepieces crafted with exceptional luxury, sophisticated engineering, and timeless style.</p>
+                <a href="/Watch_Collection/collection" class="hero-btn">See Products</a>
+            </div>
+
+            <!-- Right Column: Watch Showcase Card -->
+            <div class="hero-image-column">
+                <div class="hero-watch-card">
+                    <img src="<?php assets("image/banner/Zeith2.png"); ?>" alt="Featured Zeith Watch">
+                </div>
+            </div>
 
         </div>
-
-
-        <div class="hero-image">
-
-            <img
-                src="<?php assets("Images/watch.png"); ?>"
-                alt="Premium Watch">
-
-        </div>
-
     </section>
 
 
@@ -571,65 +749,67 @@
             New Arrivals!!
         </h1>
 
-
         <div class="new">
-
             <?php if (!empty($newArrivals)): ?>
 
                 <?php foreach ($newArrivals as $product): ?>
 
+                    <?php
+                    // 1. Fetch image string from database
+                    $imgVal = trim($product['image_url'] ?? $product['image'] ?? '');
+
+                    // 2. Dual Option Logic (Option A: Web URL | Option B: Local VS Code Assets)
+                    if (strpos($imgVal, 'http://') === 0 || strpos($imgVal, 'https://') === 0) {
+                        // OPTION A: Online Web Link
+                        $imagePath = $imgVal;
+                    } elseif (!empty($imgVal)) {
+                        // OPTION B: Downloaded Image in Watch_Collection/assets/image
+                        $imagePath = '/Watch_Collection/assets/image/' . ltrim($imgVal, '/');
+                    } else {
+                        // Fallback default placeholder
+                        $imagePath = '/Watch_Collection/assets/image/placeholder.jpg';
+                    }
+                    ?>
 
                     <div class="arrivals watch-card"
                         data-id="<?= htmlspecialchars($product['id'] ?? ''); ?>"
                         data-brand="<?= htmlspecialchars($product['collection_name'] ?? $product['brand'] ?? 'ZEITH'); ?>"
-                        data-price="<?= htmlspecialchars((string)($product['price'] ?? 0)); ?>">
-
+                        data-price="<?= htmlspecialchars((string)($product['price'] ?? 0)); ?>"
+                        data-stock="<?= (int)($product['stock'] ?? 10); ?>">
 
                         <!-- WISHLIST HEART -->
                         <div class="wishlist-heart" title="Add to wishlist">
-                            ♥
+                            <i class="fa-regular fa-heart"></i>
                         </div>
 
-                        <!-- WATCH IMAGE -->
-                        <img src="/Watch_Collection/assets/Images/<?= htmlspecialchars($product['image_url'] ?? $product['image'] ?? ''); ?>" alt="<?= htmlspecialchars($product['name'] ?? 'Watch'); ?>">
+                        <!-- WATCH IMAGE (Supports both Web URLs & Local Files) -->
+                        <img src="<?= htmlspecialchars($imagePath); ?>"
+                            alt="<?= htmlspecialchars($product['name'] ?? 'Watch'); ?>"
+                            onerror="this.src='/Watch_Collection/assets/image/placeholder.jpg';" />
 
                         <!-- WATCH INFORMATION -->
                         <span class="watch-info">
                             <h2>
-                                <?= htmlspecialchars(
-                                    $product['brand']
-                                        ?? $product['collection_name']
-                                        ?? ''
-                                ); ?>
+                                <?= htmlspecialchars($product['brand'] ?? $product['collection_name'] ?? 'ZEITH'); ?>
                             </h2>
 
                             <p class="watch-name">
-                                <?= htmlspecialchars(
-                                    $product['name']
-                                        ?? ''
-                                ); ?>
+                                <?= htmlspecialchars($product['name'] ?? ''); ?>
                             </p>
 
                             <p class="watch-price">
-                                ₦<?= number_format(
-                                        $product['price'] ?? 0
-                                    ); ?>
+                                &#8358;<?= number_format((float)($product['price'] ?? 0)); ?>
                             </p>
 
                             <!-- ADD BUTTON -->
-                            <button class="add-button" type="button">
-                                Add
-                            </button>
+                            <button class="add-button" type="button">Add</button>
                         </span>
 
                     </div>
 
                 <?php endforeach; ?>
 
-            <?php else: ?>
-                <p>No products found.</p>
             <?php endif; ?>
-
         </div>
 
 
@@ -1265,11 +1445,11 @@
                             id: String(item.id ?? ''),
                             price: Number(item.price) || 0,
                             quantity: Math.max(1, Number(item.quantity) || 1),
+                            stock: Number(item.stock) || 10,
                             strap: item.strap || 'Steel'
                         };
                     }
 
-                    // Legacy ID-only cart entries have no product details.
                     return {
                         id: String(item ?? ''),
                         name: 'Watch details unavailable',
@@ -1277,6 +1457,7 @@
                         price: 0,
                         image: '',
                         quantity: 1,
+                        stock: 10,
                         strap: 'Steel'
                     };
                 });
@@ -1328,25 +1509,27 @@
             }
 
             function openCart() {
+                if (!drawer || !overlay) return;
                 drawer.classList.add('open');
                 overlay.classList.add('open');
                 document.body.classList.add('cart-open');
 
                 drawer.setAttribute('aria-hidden', 'false');
-                openButton.setAttribute('aria-expanded', 'true');
+                openButton?.setAttribute('aria-expanded', 'true');
 
                 renderCart();
-                closeButton.focus();
+                closeButton?.focus();
             }
 
             function closeCart() {
+                if (!drawer || !overlay) return;
                 drawer.classList.remove('open');
                 overlay.classList.remove('open');
                 document.body.classList.remove('cart-open');
 
                 drawer.setAttribute('aria-hidden', 'true');
-                openButton.setAttribute('aria-expanded', 'false');
-                openButton.focus();
+                openButton?.setAttribute('aria-expanded', 'false');
+                openButton?.focus();
             }
 
             function renderCart() {
@@ -1360,83 +1543,75 @@
                 updateCartBadge(cart);
 
                 if (cart.length === 0) {
-                    itemsContainer.innerHTML = `
-                <div class="cart-empty">
-                    <i class="fa-solid fa-bag-shopping"></i>
-                    <h3>Your bag is waiting</h3>
-                    <p>Add a luxury timepiece to get started.</p>
-                </div>
-            `;
-                } else {
+                    if (itemsContainer) {
+                        itemsContainer.innerHTML = `
+                            <div class="cart-empty">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                                <h3>Your bag is waiting</h3>
+                                <p>Add a luxury timepiece to get started.</p>
+                            </div>
+                        `;
+                    }
+                } else if (itemsContainer) {
                     itemsContainer.innerHTML = cart.map((item, index) => `
-                <article class="cart-item" data-index="${index}">
-                    <div class="cart-item-image">
-                        ${
-                            item.image
-                                ? `<img src="${escapeHTML(item.image)}"
-                                        alt="${escapeHTML(item.name)}">`
-                                : '<i class="fa-regular fa-clock"></i>'
-                        }
-                    </div>
-
-                    
-                <div>
-                    <span class="cart-item-brand">
-                        ${escapeHTML(item.brand || 'ZEITH')}
-                    </span>
-
-                    <h3 class="cart-item-name">
-                        ${escapeHTML(item.name)}
-                    </h3>
-
-                    <div class="cart-item-price">
-                        ${money(item.price)}
-                    </div>
-
-                    <div class="cart-item-bottom">
-                        <div class="cart-quantity">
-                            <button type="button"
-                                    data-action="decrease"
-                                    aria-label="Decrease quantity">−</button>
-
-                            <span>${item.quantity}</span>
-
-                            <button type="button"
-                                    data-action="increase"
-                                    aria-label="Increase quantity">+</button>
-                        </div>
-
-                        <button type="button"
-                                class="cart-remove"
-                                data-action="remove">Remove</button>
-                    </div>
-                </div>
-
-                </article>
-            `).join('');
+                        <article class="cart-item" data-index="${index}">
+                            <div class="cart-item-image">
+                                ${
+                                    item.image
+                                        ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}">`
+                                        : '<i class="fa-regular fa-clock"></i>'
+                                }
+                            </div>
+                            <div>
+                                <span class="cart-item-brand">
+                                    ${escapeHTML(item.brand || 'ZEITH')}
+                                </span>
+                                <h3 class="cart-item-name">
+                                    ${escapeHTML(item.name)}
+                                </h3>
+                                <div class="cart-item-price">
+                                    ${money(item.price)}
+                                </div>
+                                <div class="cart-item-bottom">
+                                    <div class="cart-quantity">
+                                        <button type="button"
+                                                data-action="decrease"
+                                                aria-label="Decrease quantity">−</button>
+                                        <span>${item.quantity}</span>
+                                        <button type="button"
+                                                data-action="increase"
+                                                aria-label="Increase quantity">+</button>
+                                    </div>
+                                    <button type="button"
+                                            class="cart-remove"
+                                            data-action="remove">Remove</button>
+                                </div>
+                            </div>
+                        </article>
+                    `).join('');
                 }
 
-                subtotalElement.textContent = money(subtotal);
-                drawerCount.textContent = `(${count})`;
-                checkoutButton.disabled = cart.length === 0;
+                if (subtotalElement) subtotalElement.textContent = money(subtotal);
+                if (drawerCount) drawerCount.textContent = `(${count})`;
+                if (checkoutButton) checkoutButton.disabled = cart.length === 0;
             }
 
-            /* Open and close the drawer */
-            openButton.addEventListener('click', openCart);
-            closeButton.addEventListener('click', closeCart);
-            continueButton.addEventListener('click', closeCart);
-            overlay.addEventListener('click', closeCart);
+            /* Open and close drawer listeners */
+            openButton?.addEventListener('click', openCart);
+            closeButton?.addEventListener('click', closeCart);
+            continueButton?.addEventListener('click', closeCart);
+            overlay?.addEventListener('click', closeCart);
 
             document.addEventListener('keydown', event => {
-                if (event.key === 'Escape' && drawer.classList.contains('open')) {
+                if (event.key === 'Escape' && drawer?.classList.contains('open')) {
                     closeCart();
                 }
             });
 
-            /* Wishlist */
-            document.querySelectorAll('.arrivals, .watch-card').forEach(card => {
+            /* Wishlist listeners */
+            document.querySelectorAll('.arrivals, .watch-card, .property-card').forEach(card => {
                 const id = String(card.dataset.id || card.getAttribute('data-id') || '');
-                const heart = card.querySelector('.wishlist-heart');
+                const heart = card.querySelector('.wishlist-heart, .wishlist-heart-btn');
 
                 if (!heart || !id) return;
 
@@ -1448,7 +1623,6 @@
 
                 heart.addEventListener('click', event => {
                     event.stopPropagation();
-
                     let saved = readStorage('zeith_wishlist').map(String);
 
                     if (saved.includes(id)) {
@@ -1466,21 +1640,42 @@
                 });
             });
 
-            /* Add a complete product object to the cart */
-            document.querySelectorAll('.add-button').forEach(button => {
+            const slides = document.querySelectorAll('.hero-slide');
+            let currentSlide = 0;
+            const slideInterval = 5000; // Changes background slide every 5 seconds
+
+            function nextSlide() {
+                slides[currentSlide].classList.remove('active');
+                slides[currentSlide].classList.add('exit');
+
+                let previousSlide = currentSlide;
+                currentSlide = (currentSlide + 1) % slides.length;
+
+                setTimeout(() => {
+                    slides[previousSlide].classList.remove('exit');
+                }, 1200);
+
+                slides[currentSlide].classList.add('active');
+            }
+
+            if (slides.length > 0) {
+                setInterval(nextSlide, slideInterval);
+            }
+
+            /* Add to Bag handler with Stock limit check */
+            document.querySelectorAll('.add-button, .property-add-btn').forEach(button => {
                 button.addEventListener('click', event => {
                     event.preventDefault();
                     event.stopPropagation();
 
                     const card = button.closest('.arrivals, .watch-card, .property-card');
-                    if (!card) {
-                        console.error('Add button: watch card was not found.');
-                        return;
-                    }
+                    if (!card) return;
 
+                    const stock = Number(card.dataset.stock) || 10;
                     const id = String(card.dataset.id || card.getAttribute('data-id') || '');
+
                     const nameElement = card.querySelector(
-                        '.property-card-name, .watch-name, .arrivals-name, h3, h4'
+                        '.property-card-title, .property-card-name, .watch-name, .arrivals-name, h3, h4'
                     );
                     const brandElement = card.querySelector(
                         '.watch-info h2, .property-card-brand, .watch-brand, .arrivals-brand, .brand'
@@ -1490,43 +1685,31 @@
                         '.property-card-price, .watch-price, .price'
                     );
 
-                    const rawPrice = card.dataset.price ||
-                        (priceElement ? priceElement.textContent : '');
+                    const rawPrice = card.dataset.price || (priceElement ? priceElement.textContent : '');
+                    const price = Number(String(rawPrice).replace(/[^\d.]/g, '')) || 0;
+                    const name = nameElement ? nameElement.textContent.trim() : 'Watch';
+                    const brand = card.dataset.brand || (brandElement ? brandElement.textContent.trim() : 'ZEITH');
+                    const image = imageElement ? imageElement.getAttribute('src') || '' : '';
 
-                    const price = Number(
-                        String(rawPrice).replace(/[^\d.]/g, '')
-                    ) || 0;
+                    if (!id || id === 'null' || id === 'undefined') return;
 
-                    const name = nameElement ?
-                        nameElement.textContent.trim() :
-                        'Watch';
+                    const cart = readCart();
+                    const existing = cart.find(item => item.id === id);
+                    const currentQty = existing ? Number(existing.quantity) : 0;
 
-                    const brand = card.dataset.brand ||
-                        (brandElement ? brandElement.textContent.trim() : 'ZEITH');
-
-                    const image = imageElement ?
-                        imageElement.getAttribute('src') || '' :
-                        '';
-
-                    if (!id || id === 'null' || id === 'undefined') {
-                        console.error('Add button: this watch has no valid data-id.');
+                    // STOCK CHECK
+                    if (currentQty + 1 > stock) {
+                        alert(`Sorry, we only have ${stock} of this item in stock.`);
                         return;
                     }
 
-                    if (!priceElement && !card.dataset.price) {
-                        console.warn('No price found for this watch:', name);
-                    }
-
-                    const cart = readCart();
-
-                    const existing = cart.find(item => item.id === id);
-
                     if (existing) {
-                        existing.quantity = (Number(existing.quantity) || 1) + 1;
+                        existing.quantity = currentQty + 1;
                         existing.name = name;
                         existing.brand = brand;
                         existing.price = price;
                         existing.image = image;
+                        existing.stock = stock;
                     } else {
                         cart.push({
                             id,
@@ -1534,24 +1717,23 @@
                             brand,
                             price,
                             image,
+                            stock,
                             quantity: 1
                         });
                     }
-
 
                     saveCart(cart);
 
                     const oldText = button.textContent;
                     button.textContent = 'Added!';
-
                     window.setTimeout(() => {
                         button.textContent = oldText;
                     }, 900);
                 });
             });
 
-            /* Quantity controls and remove */
-            itemsContainer.addEventListener('click', event => {
+            /* Cart Quantity controls inside drawer (+ / - / Remove) */
+            itemsContainer?.addEventListener('click', event => {
                 const button = event.target.closest('[data-action]');
                 if (!button) return;
 
@@ -1566,6 +1748,11 @@
 
                 switch (button.dataset.action) {
                     case 'increase':
+                        const stockLimit = Number(item.stock) || 10;
+                        if (item.quantity + 1 > stockLimit) {
+                            alert(`Sorry, only ${stockLimit} available in stock.`);
+                            return;
+                        }
                         item.quantity++;
                         break;
 
@@ -1587,21 +1774,19 @@
                 saveCart(cart);
             });
 
-            /* Checkout placeholder */
-            /* Checkout placeholder */
-            checkoutButton.addEventListener('click', () => {
+            /* Checkout handler */
+            checkoutButton?.addEventListener('click', () => {
                 if (readCart().length === 0) return;
-
                 window.location.href = '/Watch_Collection/checkout';
             });
 
-            /* Keep the cart synchronized if another tab changes it */
+            /* Cross-tab storage listener */
             window.addEventListener('storage', event => {
                 if (event.key === 'zeith_cart') renderCart();
                 if (event.key === 'zeith_wishlist') updateWishlistBadge();
             });
 
-            /* Initial page setup */
+            /* Initial Setup */
             updateWishlistBadge();
             renderCart();
         });

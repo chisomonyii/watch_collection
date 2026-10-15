@@ -632,7 +632,8 @@
 
             <?php if (!empty($watches)): ?>
                 <?php foreach ($watches as $watch): ?>
-                    <div class="property-card" data-id="<?= htmlspecialchars($watch['id']); ?>">
+                    <div class="property-card" data-id="<?= htmlspecialchars($watch['id']); ?>" data-stock="<?= (int)($watch['stock'] ?? 10); ?>">
+
 
                         <!-- WISHLIST BUTTON -->
                         <button class="wishlist-heart-btn" data-id="<?= htmlspecialchars($watch['id']); ?>" title="Add to Wishlist">
@@ -752,6 +753,7 @@
                             id: String(item.id ?? ''),
                             price: Number(item.price) || 0,
                             quantity: Math.max(1, Number(item.quantity) || 1),
+                            stock: Number(item.stock) || 10,
                             strap: item.strap || 'Steel'
                         };
                     }
@@ -762,6 +764,7 @@
                         price: 0,
                         image: '',
                         quantity: 1,
+                        stock: 10,
                         strap: 'Steel'
                     };
                 });
@@ -911,6 +914,11 @@
 
                 switch (button.dataset.action) {
                     case 'increase':
+                        const stockLimit = Number(item.stock) || 10;
+                        if (item.quantity + 1 > stockLimit) {
+                            alert(`Sorry, we only have ${stockLimit} of this item in stock.`);
+                            return;
+                        }
                         item.quantity++;
                         break;
                     case 'decrease':
@@ -957,30 +965,34 @@
                         const card = addButton.closest('.property-card');
                         if (!card) return;
 
-                        const nameElement = card.querySelector('.property-card-title');
-                        const priceElement = card.querySelector('.property-card-price');
-                        const imageElement = card.querySelector('.property-card-image img');
-
-                        const rawPrice = priceElement ? priceElement.textContent : '0';
-                        const price = Number(rawPrice.replace(/[^\d.]/g, '')) || 0;
+                        const stock = Number(card.dataset.stock) || 10;
 
                         const watch = {
                             id: String(card.dataset.id || ''),
-                            name: nameElement ? nameElement.textContent.trim() : 'Watch',
+                            name: card.querySelector('.property-card-title, .property-card-name')?.textContent.trim() || 'Watch',
                             brand: 'ZEITH',
-                            price: price,
-                            image: imageElement ? imageElement.getAttribute('src') : '',
+                            price: Number(card.querySelector('.property-card-price')?.textContent.replace(/[^\d.]/g, '')) || 0,
+                            image: card.querySelector('.property-card-image img')?.getAttribute('src') || '',
+                            stock: stock,
                             quantity: 1
                         };
 
                         let cart = readCart();
                         const existingIndex = cart.findIndex(item => item.id === watch.id);
+                        const currentQty = existingIndex !== -1 ? (Number(cart[existingIndex].quantity) || 1) : 0;
+
+                        // STOCK CHECK
+                        if (currentQty + 1 > stock) {
+                            alert(`Sorry, we only have ${stock} of this item in stock.`);
+                            return;
+                        }
 
                         if (existingIndex !== -1) {
-                            cart[existingIndex].quantity = (Number(cart[existingIndex].quantity) || 1) + 1;
+                            cart[existingIndex].quantity = currentQty + 1;
                             cart[existingIndex].name = watch.name;
                             cart[existingIndex].price = watch.price;
                             cart[existingIndex].image = watch.image;
+                            cart[existingIndex].stock = stock;
                         } else {
                             cart.push(watch);
                         }

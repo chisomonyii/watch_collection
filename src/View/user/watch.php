@@ -566,6 +566,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                             data-id="<?= htmlspecialchars((string)$watch['id']); ?>"
                             data-brand="<?= htmlspecialchars($watch['brand'] ?? $watch['name']); ?>"
                             data-price="<?= htmlspecialchars((string)$watch['price']); ?>">
+                            data-stock="<?= (int)($watch['stock'] ?? 10); ?>">
 
                             <button type="button" class="wishlist-btn"
                                 data-id="<?= htmlspecialchars((string)$watch['id']); ?>"
@@ -661,9 +662,9 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             const priceSlider = document.getElementById('priceRangeSlider');
             const priceLabel = document.getElementById('priceRangeLabel');
             const btnFilter = document.getElementById('btnApplyFilter');
-            const cards = Array.from(document.querySelectorAll('.property-card, .watch-card, .arrivals'));
+            const cards = Array.from(document.querySelectorAll('.property-card, .watch-card, .arrivals, .watch-detail'));
             const noResultsMsg = document.getElementById('noResultsMsg');
-            const watchGrid = document.getElementById('watchGrid');
+            const watchGrid = document.getElementById('watchGrid') || document.body;
             const brandLinks = document.querySelectorAll('.brand-filter-link');
             const selectedCategoryText = document.getElementById('selectedCategoryText');
 
@@ -698,6 +699,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                             id: String(item.id ?? ''),
                             price: Number(item.price) || 0,
                             quantity: Math.max(1, Number(item.quantity) || 1),
+                            stock: Number(item.stock) || 10,
                             strap: item.strap || 'Steel'
                         };
                     }
@@ -708,9 +710,15 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                         price: 0,
                         image: '',
                         quantity: 1,
+                        stock: 10,
                         strap: 'Steel'
                     };
                 });
+            }
+
+            function saveCart(cart) {
+                localStorage.setItem('zeith_cart', JSON.stringify(cart));
+                renderCart();
             }
 
             function money(value) {
@@ -732,7 +740,8 @@ $watches = $watches ?? \App\Models\Watch::getAll();
 
             // PRICE FILTER
             function filterWatches() {
-                const maxPrice = parseFloat(priceSlider?.value) || 0;
+                if (!priceSlider) return;
+                const maxPrice = parseFloat(priceSlider.value) || 0;
                 let visibleCount = 0;
 
                 cards.forEach(card => {
@@ -782,8 +791,9 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             function syncWishlist() {
                 const wishlist = readStorage('zeith_wishlist').map(String);
 
-                document.querySelectorAll('.wishlist-btn, .wishlist-heart').forEach(button => {
-                    const isActive = wishlist.includes(String(button.dataset.id));
+                document.querySelectorAll('.wishlist-btn, .wishlist-heart, .wishlist-heart-btn').forEach(button => {
+                    const id = String(button.dataset.id || button.getAttribute('data-id') || '');
+                    const isActive = wishlist.includes(id);
                     button.classList.toggle('active', isActive);
                     if (button.classList.contains('wishlist-heart')) {
                         button.style.color = isActive ? '#e74c3c' : '#f68b1e';
@@ -797,7 +807,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                 }
             }
 
-            // CART & DRAWER RENDERING
+            // CART BADGE
             function updateCartBadge(cart = readCart()) {
                 const count = cart.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -907,19 +917,27 @@ $watches = $watches ?? \App\Models\Watch::getAll();
 
                 switch (button.dataset.action) {
                     case 'increase':
+                        const maxStock = Number(item.stock) || 10;
+                        if (item.quantity + 1 > maxStock) {
+                            alert(`Sorry, we only have ${maxStock} of this item in stock.`);
+                            return;
+                        }
                         item.quantity++;
                         break;
+
                     case 'decrease':
                         item.quantity--;
-                        if (item.quantity <= 0) cart.splice(index, 1);
+                        if (item.quantity <= 0) {
+                            cart.splice(index, 1);
+                        }
                         break;
+
                     case 'remove':
                         cart.splice(index, 1);
                         break;
                 }
 
-                localStorage.setItem('zeith_cart', JSON.stringify(cart));
-                renderCart();
+                saveCart(cart);
             });
 
             checkoutButton?.addEventListener('click', () => {
@@ -927,13 +945,15 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                 window.location.href = '/Watch_Collection/checkout';
             });
 
-            // WISHLIST AND ADD-TO-CART HANDLERS (Delegated on grid)
-            watchGrid?.addEventListener('click', event => {
-                const wishlistButton = event.target.closest('.wishlist-btn, .wishlist-heart');
-                const addButton = event.target.closest('.add-button');
+            // WISHLIST AND ADD-TO-CART HANDLERS
+            document.addEventListener('click', event => {
+                const wishlistButton = event.target.closest('.wishlist-btn, .wishlist-heart, .wishlist-heart-btn');
+                const addButton = event.target.closest('.add-button, .property-add-btn');
 
                 if (wishlistButton) {
-                    const id = String(wishlistButton.dataset.id);
+                    const id = String(wishlistButton.dataset.id || wishlistButton.getAttribute('data-id') || '');
+                    if (!id) return;
+
                     let wishlist = readStorage('zeith_wishlist').map(String);
 
                     wishlist = wishlist.includes(id) ?
@@ -945,33 +965,45 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                 }
 
                 if (addButton) {
-                    const card = addButton.closest('.property-card, .watch-card, .arrivals');
+                    const card = addButton.closest('.property-card, .watch-card, .arrivals, .watch-detail');
                     if (!card) return;
 
+                    const stock = Number(card.dataset.stock) || 10;
+                    const id = String(card.dataset.id || card.getAttribute('data-id') || addButton.getAttribute('data-id') || '');
+
                     const watch = {
-                        id: String(card.dataset.id || ''),
-                        name: card.querySelector('.property-card-name, .watch-name, .arrivals-name, h3')?.textContent.trim() || 'Watch',
-                        brand: card.dataset.brand || card.querySelector('.property-card-brand, .watch-brand, .arrivals-brand')?.textContent.trim() || 'ZEITH',
+                        id,
+                        name: card.querySelector('.property-card-title, .property-card-name, .watch-name, h3, h1')?.textContent.trim() || 'Watch',
+                        brand: card.dataset.brand || card.querySelector('.property-card-brand, .watch-brand')?.textContent.trim() || 'ZEITH',
                         price: Number(card.dataset.price || String(card.querySelector('.property-card-price, .watch-price, .price')?.textContent || '').replace(/[^\d.]/g, '')) || 0,
-                        image: card.querySelector('.property-card-media img, img')?.getAttribute('src') || '',
+                        image: card.querySelector('.property-card-image img, img')?.getAttribute('src') || '',
+                        stock,
                         quantity: 1
                     };
 
+                    if (!id || id === 'null' || id === 'undefined') return;
+
                     let cart = readCart();
                     const existingIndex = cart.findIndex(item => item.id === watch.id);
+                    const currentQty = existingIndex !== -1 ? (Number(cart[existingIndex].quantity) || 1) : 0;
+
+                    if (currentQty + 1 > stock) {
+                        alert(`Sorry, we only have ${stock} of this item in stock.`);
+                        return;
+                    }
 
                     if (existingIndex !== -1) {
-                        cart[existingIndex].quantity = (Number(cart[existingIndex].quantity) || 1) + 1;
+                        cart[existingIndex].quantity = currentQty + 1;
                         cart[existingIndex].name = watch.name;
                         cart[existingIndex].brand = watch.brand;
                         cart[existingIndex].price = watch.price;
                         cart[existingIndex].image = watch.image;
+                        cart[existingIndex].stock = stock;
                     } else {
                         cart.push(watch);
                     }
 
-                    localStorage.setItem('zeith_cart', JSON.stringify(cart));
-                    renderCart();
+                    saveCart(cart);
 
                     const oldText = addButton.textContent;
                     addButton.textContent = 'Added!';
