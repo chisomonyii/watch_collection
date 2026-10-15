@@ -274,7 +274,7 @@
 
                         <div class="rating">
                             <span class="stars">★★★★★</span>
-                            <span class="rating-number"><?= htmlspecialchars($item['rating'] ?? '5.0'); ?></span>
+                            <span class="rating-number"><?= htmlspecialchars($item['ratin'] ?? '5.0'); ?></span>
                         </div>
 
                         <?php if (!empty($item['tag'])): ?>

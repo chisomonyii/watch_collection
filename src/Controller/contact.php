@@ -12,7 +12,7 @@ class Contact
      */
     public static function showContactPage()
     {
-        \App\Helpers\View::displayView('user/contact.php');
+        View::displayView('user/contact.php');
     }
 
     /**

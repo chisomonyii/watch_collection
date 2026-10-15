@@ -124,14 +124,9 @@ class User extends Controller
         View::displayView('users/dashboard.php');
     }
 
-    public static function Settings()
+    public static function showSettings()
     {
         View::displayView('users/settings.php');
-    }
-
-    public static function showWishlist()
-    {
-        View::displayView('users/wishlist.php');
     }
 
     public static function displayOrders()

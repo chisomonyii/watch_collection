@@ -14,10 +14,8 @@ $router = new Router();
 // Set base path for XAMPP subfolder
 $router->setBasePath('/Watch_Collection');
 
-// Set default controller namespace
 $router->setNamespace("App\Controller");
 
-// Home Route
 $router->get("/", "Home@showLandingpage");
 
 // Route modules
@@ -37,10 +35,9 @@ $router->post('/api/wishlist-items', 'Home@getWishlistItems');
 
 // Mount User Routes Sub-router
 $router->mount('/user', function () use ($router) {
-    require_once __DIR__ . '/routes/user.php';
+    require_once('./routes/user.php');
 });
 
-// 404 Fallback
 $router->set404(function () {
     View::displayView('404.php');
 });
