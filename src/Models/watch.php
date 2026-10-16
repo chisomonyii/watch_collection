@@ -7,6 +7,30 @@ use PDO;
 class Watch extends Model
 {
     /**
+     * Fetch a single watch by ID along with collection attributes and details
+     */
+    public static function getWatchById($id)
+    {
+        $db = parent::connect();
+
+        $sql = "SELECT 
+                    w.*, 
+                    c.name AS brand,
+                    c.name AS collection_name,
+                    c.slug AS collection_slug,
+                    c.attributes AS attributes
+                FROM watches w
+                LEFT JOIN collections c ON w.collection_id = c.id
+                WHERE w.id = :id 
+                LIMIT 1";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Fetch a batch of watches by IDs along with their collection details & ratings
      */
     public static function getByIds(array $ids)
@@ -31,6 +55,8 @@ class Watch extends Model
                     w.rating,
                     w.reviews_count,
                     w.description,
+                    w.strap,
+                    w.manual_file,
                     w.in_stock,
                     w.stock,
                     c.name AS brand,
@@ -72,6 +98,8 @@ class Watch extends Model
                 w.rating,
                 w.reviews_count,
                 w.description,
+                w.strap,
+                w.manual_file,
                 w.in_stock,
                 w.stock,
                 c.name AS brand,
@@ -107,6 +135,8 @@ class Watch extends Model
                 w.rating,
                 w.reviews_count,
                 w.description,
+                w.strap,
+                w.manual_file,
                 w.in_stock,
                 w.stock,
                 c.name AS brand,
@@ -141,6 +171,8 @@ class Watch extends Model
                     w.rating,
                     w.reviews_count,
                     w.description,
+                    w.strap,
+                    w.manual_file,
                     w.in_stock,
                     w.stock,
                     c.name AS brand,

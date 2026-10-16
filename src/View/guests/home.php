@@ -270,7 +270,7 @@ use App\Helpers\View;
 
 
         .wishlist-heart:hover {
-            background: #f68b1e;
+            background: black;
             color: white;
 
             transform: scale(1.08);
@@ -749,8 +749,75 @@ use App\Helpers\View;
             position: relative;
             width: 100%;
             height: 380px;
-            background: #f4f0eb;
+            /* background: #f4f0eb; */
             overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .watch-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            position: relative;
+            z-index: 0;
+        }
+
+        .watch-image-container::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 23%;
+            background: linear-gradient(to bottom,
+                    rgba(0, 0, 0, 0) 0%,
+                    rgba(0, 0, 0, 0.025) 30%,
+                    rgba(0, 0, 0, 0.12) 65%,
+                    rgba(0, 0, 0, 0.48) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .watch-image-container .watch-price-overlay {
+            position: absolute;
+            right: 16px;
+            bottom: 16px;
+            z-index: 2;
+            color: #fff;
+            font-weight: 800;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+        }
+
+        .image-price-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 65px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding: 0 15px 12px 15px;
+            z-index: 3;
+            pointer-events: none;
+            /* Lets clicks pass through to container/dots */
+        }
+
+        /* Price text styling inside the image overlay */
+        .image-price-overlay .price {
+            color: #ffffff !important;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+        }
+
+        .price {
+            position: absolute;
+            right: 15px;
+            bottom: 20px;
         }
 
         /* Top Right Actions (Badge + Heart) */
@@ -771,6 +838,7 @@ use App\Helpers\View;
             padding: 5px 10px;
             letter-spacing: 1px;
             border-radius: 20px;
+            margin-top: 5px;
         }
 
         .stock-badge.available {
@@ -787,7 +855,7 @@ use App\Helpers\View;
         .wishlist-btn.active svg {
             fill: #e67e22;
             /* Matches your accent/button orange */
-            stroke: #e67e22;
+            stroke: #ffff;
         }
 
         .wishlist-btn {
@@ -846,6 +914,9 @@ use App\Helpers\View;
             opacity: 0;
             transition: opacity 0.3s ease, background 0.2s ease;
             z-index: 5;
+        }
+        .slider-arrow.active {
+            background: white;
         }
 
         .watch-image-container:hover .slider-arrow {
@@ -914,11 +985,26 @@ use App\Helpers\View;
             overflow: hidden;
         }
 
-        .watch-info .price {
+        .watch-info {
             font-size: 1rem;
             font-weight: 600;
             color: #111;
             margin-top: 4px;
+        }
+
+        .view-details-link {
+            display: inline-block;
+            font-size: 0.8rem;
+            color: #e67e22;
+            /* Matches accent orange */
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 10px;
+            transition: color 0.2s ease;
+        }
+
+        .view-details-link:hover {
+            text-decoration: underline;
         }
     </style>
 
@@ -1056,6 +1142,10 @@ use App\Helpers\View;
                             <button class="slider-arrow prev-arrow">&#10094;</button>
                             <button class="slider-arrow next-arrow">&#10095;</button>
 
+                            <div class="image-price-overlay">
+                                <span class="price">$<?= number_format($watch['price']) ?></span>
+                            </div>
+
                             <!-- Bottom Segmented Slide Indicator Bar -->
                             <div class="slider-pagination">
                                 <span class="dot active" data-index="0"></span>
@@ -1069,7 +1159,10 @@ use App\Helpers\View;
                         <div class="watch-info">
                             <h3><?= htmlspecialchars($watch['name']) ?></h3>
                             <p><?= htmlspecialchars($watch['description']) ?></p>
-                            <span class="price">$<?= number_format($watch['price']) ?></span>
+
+                            <a href="/Watch_Collection/watch/details/<?= $watch['id'] ?>" class="view-details-link">
+                                View details &rarr;
+                            </a>
 
                             <!-- Add to Cart Button -->
                             <button type="button" class="add-button">Add</button>
@@ -2102,6 +2195,40 @@ use App\Helpers\View;
 
                 localStorage.setItem('wishlist', JSON.stringify(wishlist));
             }
+
+            // Sync Heart Highlight States with localStorage on Page Load & Window Focus
+            function syncHomeWishlistHearts() {
+                const savedWishlist = JSON.parse(localStorage.getItem('zeith_wishlist')) || [];
+
+                // Select all cards across New Arrivals / Product grids
+                const allCards = document.querySelectorAll('.watch-card, .arrivals, .product-card');
+
+                allCards.forEach(card => {
+                    const watchId = String(card.getAttribute('data-id'));
+                    const heartBtn = card.querySelector('.wishlist-heart, .wishlist-circle');
+
+                    if (heartBtn) {
+                        if (savedWishlist.includes(watchId)) {
+                            heartBtn.classList.add('active');
+                        } else {
+                            heartBtn.classList.remove('active');
+                        }
+                    }
+                });
+            }
+
+            // 1. Sync on initial DOM load
+            document.addEventListener('DOMContentLoaded', syncHomeWishlistHearts);
+
+            // 2. Sync whenever user switches back to the Home tab/window
+            window.addEventListener('focus', syncHomeWishlistHearts);
+
+            // 3. Sync if local storage changes across tabs simultaneously
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'zeith_wishlist') {
+                    syncHomeWishlistHearts();
+                }
+            });
         });
     </script>
 
