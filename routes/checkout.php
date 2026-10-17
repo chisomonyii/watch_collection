@@ -20,17 +20,27 @@ $router->get('/payment', function() use ($checkoutController) {
     $checkoutController->paymentPage();
 });
 
-// 4. Process Payment Form Submission
+// 4. Process Payment Form Submission (Legacy/Transfer fallback)
 $router->post('/payment/process', function() use ($checkoutController) {
     $checkoutController->processPayment();
 });
 
-// 5. Verify Paystack Payment Callback
+// 5. Handle Post-Payment Receipt Upload (Saves receipt to DB and redirects to success)
+$router->post('/payment/upload-receipt', function() use ($checkoutController) {
+    $checkoutController->uploadPostPaymentReceipt();
+});
+
+// 6. Verify Paystack Payment Callback
 $router->get('/payment/verify', function() use ($checkoutController) {
     $checkoutController->verifyPayment();
 });
 
-// 6. Order Success View (Delegated cleanly to CheckoutController)
+// 7. Order Success View (Delegated cleanly to CheckoutController)
 $router->get('/user/order-success', function() use ($checkoutController) {
     $checkoutController->orderSuccess();
+});
+
+// Order Tracking Lookup Route
+$router->get('/track', function() use ($checkoutController) {
+    $checkoutController->trackOrder();
 });

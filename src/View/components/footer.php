@@ -211,7 +211,7 @@
             <h3>SUPPORT</h3>
             <ul class="zeith-footer-links">
                 <li><a href="#">Contact Us</a></li>
-                <li><a href="#">FAQ</a></li>
+                <li><a href="/Watch_Collection/track">Track Your Order</a></li>
                 <li><a href="#">Shipping</a></li>
                 <li><a href="#">Returns</a></li>
             </ul>

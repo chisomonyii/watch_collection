@@ -946,6 +946,39 @@ $shippingMethods = $shippingMethods ?? [];
         openShippingBtn.addEventListener('click', openShippingPanel);
         closeShippingBtn.addEventListener('click', closeShippingPanel);
         shippingBackdrop.addEventListener('click', closeShippingPanel);
+
+        // Purchase Button Direct Checkout Handler
+        document.getElementById('purchaseBtn').addEventListener('click', function() {
+            // 1. Prepare item object
+            const directItem = {
+                id: watchId,
+                name: <?= json_encode($watch['name'] ?? 'Watch') ?>,
+                price: basePrice,
+                image: <?= json_encode($watch['image_url_1'] ?? '') ?>,
+                quantity: 1,
+                shippingCost: selectedShippingCost,
+                shippingId: selectedShippingId
+            };
+
+            // 2. Add to localStorage cart if not already present
+            let cart = JSON.parse(localStorage.getItem('zeith_cart')) || [];
+            const existingIndex = cart.findIndex(item => String(item.id) === String(watchId));
+
+            if (existingIndex > -1) {
+                cart[existingIndex].quantity = (cart[existingIndex].quantity || 1);
+            } else {
+                cart.push(directItem);
+            }
+
+            localStorage.setItem('zeith_cart', JSON.stringify(cart));
+
+            // 3. Redirect smoothly to checkout
+            let checkoutUrl = `http://localhost/Watch_Collection/checkout?watch_id=${watchId}`;
+            if (selectedShippingId) {
+                checkoutUrl += `&shipping_id=${selectedShippingId}`;
+            }
+            window.location.href = checkoutUrl;
+        });
     </script>
 
 </body>

@@ -181,9 +181,66 @@ class CheckoutController
         }
     }
 
+    // Handle Upload Receipt after successful Paystack payment
+    public function uploadPostPaymentReceipt()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $orderId = $_POST['order_id'] ?? $_SESSION['active_order_id'] ?? null;
+            $reference = $_POST['reference'] ?? null;
+
+            if ($orderId && isset($_FILES['payment_receipt']) && $_FILES['payment_receipt']['error'] === UPLOAD_ERR_OK) {
+                $fileTmpPath = $_FILES['payment_receipt']['tmp_name'];
+                $fileName = $_FILES['payment_receipt']['name'];
+                $uploadFileDir = './uploads/receipts/';
+
+                if (!is_dir($uploadFileDir)) {
+                    mkdir($uploadFileDir, 0755, true);
+                }
+
+                $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+                $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+                $dest_path = $uploadFileDir . $newFileName;
+
+                if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                    // Save path into database receipt column
+                    $this->orderModel->updateOrderReceipt($orderId, $dest_path);
+                }
+            }
+
+            // Clear checkout session data now that everything is fully completed
+            unset($_SESSION['active_order_id']);
+            unset($_SESSION['order_number']);
+            unset($_SESSION['order_subtotal']);
+
+            // Redirect to final success page with reference
+            header('Location: /Watch_Collection/user/order-success?ref=' . ($reference ?? ''));
+            exit;
+        }
+
+        header('Location: /Watch_Collection/payment');
+        exit;
+    }
+
     // Display Order Success View
     public function orderSuccess()
     {
         require_once __DIR__ . '/../View/checkout/order-success.php';
+    }
+
+    // Display Order Tracking Lookup Page
+    public function trackOrder()
+    {
+        $ref = trim($_GET['ref'] ?? '');
+        $order = null;
+
+        if (!empty($ref)) {
+            $order = $this->orderModel->getOrderByReference($ref);
+        }
+
+        require_once __DIR__ . '/../View/checkout/track-order.php';
     }
 }

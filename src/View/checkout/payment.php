@@ -1,14 +1,12 @@
 <?php
-
 /** @var array $shippingMethods */
-// ... rest of your code
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$orderNumber = $_SESSION['order_number'] ?? 'ZEITH-UNKNOWN';
+$orderNumber =$_SESSION['order_number'] ?? 'ZEITH-UNKNOWN';
 $subtotal = floatval($_SESSION['order_subtotal'] ?? 0);
-$activeOrderId = $_SESSION['active_order_id'] ?? null;
+$activeOrderId =$_SESSION['active_order_id'] ?? null;
 
 if (!$activeOrderId) {
     header('Location: /Watch_Collection/');
@@ -70,6 +68,7 @@ if (!$activeOrderId) {
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
+            transition: opacity 0.3s ease;
         }
 
         .back-link {
@@ -217,6 +216,7 @@ if (!$activeOrderId) {
             padding: 50px 60px;
             display: flex;
             justify-content: center;
+            align-items: center;
         }
 
         .form-inner {
@@ -282,184 +282,6 @@ if (!$activeOrderId) {
             letter-spacing: 0.5px;
         }
 
-        .section-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-control,
-        .form-select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            outline: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-            background-color: #fff;
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(246, 139, 30, 0.15);
-        }
-
-        .card-input-box {
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .card-header-tab {
-            background-color: #fafafa;
-            padding: 12px 16px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-fields-wrapper {
-            padding: 16px;
-            background-color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .card-number-wrapper {
-            position: relative;
-        }
-
-        .card-icons {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            display: flex;
-            gap: 6px;
-        }
-
-        .split-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .transfer-header-row {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .transfer-user-email {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .bank-transfer-box {
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            background-color: #f8fafc;
-            padding: 24px;
-            text-align: center;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 20px;
-        }
-
-        .bank-transfer-title {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-        }
-
-        .bank-name {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 4px;
-        }
-
-        .bank-account-num {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary-color);
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-        }
-
-        .bank-transfer-note {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .btn-sent-money {
-            width: 100%;
-            background-color: #ffffff;
-            color: var(--text-dark);
-            border: 1px solid var(--border-color);
-            padding: 14px 20px;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-            transition: background-color 0.2s ease;
-            margin-bottom: 20px;
-        }
-
-        .btn-sent-money:hover {
-            background-color: #f1f5f9;
-        }
-
-        .save-info-card {
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 14px 16px;
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
-
-        .save-info-card input[type="checkbox"] {
-            margin-top: 3px;
-            accent-color: var(--primary-color);
-            width: 18px;
-            height: 18px;
-        }
-
-        .save-info-text {
-            font-size: 0.85rem;
-        }
-
-        .save-info-title {
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .save-info-sub {
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
         .btn-pay {
             width: 100%;
             background-color: var(--primary-color);
@@ -476,6 +298,113 @@ if (!$activeOrderId) {
 
         .btn-pay:hover {
             background-color: var(--primary-hover);
+        }
+
+        /* Post-Payment Receipt Upload Styles */
+        .proof-card {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            background-color: #ffffff;
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .proof-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .success-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 14px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            color: #166534;
+            font-size: 0.9rem;
+        }
+
+        .success-banner i {
+            font-size: 1.5rem;
+            color: #22c55e;
+        }
+
+        .success-banner strong {
+            display: block;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .success-banner p {
+            font-size: 0.8rem;
+            color: #15803d;
+            margin-top: 2px;
+        }
+
+        .dropzone-box {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px 16px;
+            text-align: center;
+            background-color: #fafafa;
+            margin-bottom: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+
+        .dropzone-box:hover {
+            border-color: var(--primary-color);
+        }
+
+        .dropzone-icon {
+            font-size: 2rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .dropzone-box p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .dropzone-box input[type="file"] {
+            display: block;
+            margin: 0 auto;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .file-format-note {
+            display: block;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+
+        .btn-submit-proof {
+            width: 100%;
+            background-color: var(--text-dark);
+            color: #ffffff;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-submit-proof:hover {
+            background-color: #222222;
         }
 
         .checkout-footer {
@@ -571,101 +500,6 @@ if (!$activeOrderId) {
             color: var(--text-muted, #555555);
             line-height: 1.6;
         }
-
-        /* Transfer Section Styling */
-        #transferFieldsSection {
-            background: #fdfdfd;
-            border: 1px solid #eaeaea;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-        }
-
-        .bank-transfer-box {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-            border: 1px dashed #d1d5db;
-        }
-
-        .bank-transfer-title {
-            font-size: 13px;
-            color: #6b7280;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .bank-name {
-            font-size: 18px;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 5px;
-        }
-
-        .bank-account-num {
-            font-size: 22px;
-            font-weight: 800;
-            color: #f97316;
-            /* ZEITH Orange accent */
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .bank-transfer-note {
-            font-size: 12px;
-            color: #4b5563;
-        }
-
-        /* File Input Styling */
-        #transferFieldsSection .form-label {
-            font-weight: 600;
-            font-size: 14px;
-            color: #374151;
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        #transferFieldsSection input[type="file"] {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            color: #4b5563;
-            background: #fff;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: border-color 0.2s ease;
-        }
-
-        #transferFieldsSection input[type="file"]:focus {
-            border-color: #f97316;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
-        }
-
-        /* Optional secondary button style if needed */
-        .btn-sent-money {
-            display: block;
-            width: 100%;
-            background-color: #111827;
-            color: #fff;
-            font-weight: 600;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: background 0.2s;
-        }
-
-        .btn-sent-money:hover {
-            background-color: #1f2937;
-        }
     </style>
 </head>
 
@@ -673,7 +507,8 @@ if (!$activeOrderId) {
 
     <div class="checkout-wrapper">
 
-        <div class="summary-section">
+        <!-- LEFT SIDE: SUMMARY SECTION -->
+        <div class="summary-section" id="summarySection">
             <a href="/Watch_Collection/checkout" class="back-link">
                 <i class="fa-solid fa-arrow-left"></i> Back to Review
             </a>
@@ -704,7 +539,7 @@ if (!$activeOrderId) {
 
                     <?php
                     $isFirst = true;
-                    foreach ($shippingMethods as $method):
+                    foreach ($shippingMethods as$method):
                     ?>
                         <label class="shipping-option <?= $isFirst ? 'selected' : '' ?>">
                             <input type="radio" name="shipping_method" value="<?= htmlspecialchars($method['price']) ?>" <?= $isFirst ? 'checked' : '' ?>>
@@ -728,13 +563,12 @@ if (!$activeOrderId) {
 
         </div>
 
+        <!-- RIGHT SIDE: PAYMENT & RECEIPT SECTION -->
         <div class="payment-section">
             <div class="form-inner">
-                <form action="/Watch_Collection/payment/process" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="order_id" value="<?= htmlspecialchars($activeOrderId) ?>">
-                    <input type="hidden" name="subtotal" value="<?= $subtotal ?>">
-                    <input type="hidden" name="shipping_fee" id="hiddenShippingInput" value="4000">
 
+                <!-- STEP 1: INITIAL PAYSTACK PAYMENT VIEW -->
+                <div id="paystackCheckoutContainer">
                     <div class="express-buttons">
                         <button type="button" class="btn-express btn-apple">
                             <i class="fa-brands fa-apple"></i> Pay
@@ -748,116 +582,82 @@ if (!$activeOrderId) {
                         <span>OR</span>
                     </div>
 
-                    <div class="form-group">
-                        <select name="gateway" id="paymentMethodSelect" class="form-select" required>
-                            <option value="card" selected>Credit / Debit Card</option>
-                            <option value="transfer">Bank Transfer</option>
-                        </select>
-                    </div>
+                    <input type="hidden" id="hiddenShippingInput" value="4000">
 
-                    <!-- CONTAINER FOR TOGGLING PAYMENT METHODS -->
-                    <div id="paymentFieldsContainer">
-
-                        <!-- CREDIT CARD FORM -->
-                        <div class="form-group" id="cardFieldsSection">
-                            <label class="section-label">Payment details</label>
-
-                            <div class="card-input-box">
-                                <div class="card-header-tab">
-                                    <i class="fa-regular fa-credit-card"></i> Card
-                                </div>
-
-                                <div class="card-fields-wrapper">
-                                    <div>
-                                        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Card information</label>
-                                        <div class="card-number-wrapper" style="margin-top: 4px;">
-                                            <input type="text" name="card_number" class="form-control" placeholder="1234 1234 1234 1234" maxlength="19">
-                                            <span class="card-icons">
-                                                <i class="fa-brands fa-cc-visa"></i>
-                                                <i class="fa-brands fa-cc-mastercard"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div class="split-row">
-                                        <input type="text" name="card_exp" class="form-control" placeholder="MM / YY" maxlength="5">
-                                        <input type="text" name="card_cvc" class="form-control" placeholder="CVC" maxlength="4">
-                                    </div>
-
-                                    <div>
-                                        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Cardholder name</label>
-                                        <input type="text" name="card_name" class="form-control" placeholder="Full name on card" style="margin-top: 4px;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- BANK TRANSFER VIEW -->
-                        <div class="form-group" id="transferFieldsSection" style="display: none;">
-                            <div class="transfer-header-row">
-                                <span class="transfer-user-email">Secure Zeith Pay Transfer</span>
-                            </div>
-                            <div class="bank-transfer-box">
-                                <div class="bank-transfer-title">Transfer to ZEITH Checkout</div>
-                                <div class="bank-name">Moniepoint</div>
-                                <div class="bank-account-num">9161426400</div>
-                                <div class="bank-transfer-note">Use this account for this transaction only. Account expires in 30 minutes.</div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="payment_receipt" class="form-label">Upload Transfer Receipt</label>
-                                <input type="file" class="form-control" name="payment_receipt" id="payment_receipt" accept="image/*,.pdf" required>
-                            </div>
-
-                            <button type="submit" class="btn-sent-money">
-                                I've sent the money
-                            </button>
-                        </div>
-
-                    </div>
-
-                    <button type="submit" class="btn-pay" id="btnPay">
+                    <!-- MAIN PAYSTACK TRIGGER BUTTON -->
+                    <button type="button" class="btn-pay" id="btnPay">
                         Pay ₦<?= number_format($subtotal + 4000, 2) ?>
                     </button>
+                </div>
 
-                    <div class="checkout-footer">
-                        <span>Powered by <strong>ZEITH Pay</strong></span>
-                        <span>|</span>
-                        <a href="#" id="termsTrigger">Terms</a>
-                        <span>|</span>
-                        <a href="#" id="privacyTrigger">Privacy</a>
-                    </div>
+                <!-- STEP 2: POST-PAYMENT RECEIPT UPLOAD VIEW (Hidden until Paystack succeeds) -->
+                <div id="postPaymentReceiptSection" style="display: none;">
+                    <form action="/Watch_Collection/payment/upload-receipt" method="POST" enctype="multipart/form-data" id="receiptForm">
+                        <input type="hidden" name="order_id" value="<?= htmlspecialchars($activeOrderId) ?>">
+                        <input type="hidden" name="reference" id="paystackTransactionRef" value="">
 
-                    <!-- Modals -->
-                    <div class="terms-modal-overlay" id="termsModal">
-                        <div class="terms-modal-card">
-                            <button type="button" class="terms-modal-close" id="closeTermsBtn" aria-label="Close modal">
-                                <i class="fa-solid fa-xmark"></i>
+                        <div class="proof-card">
+                            <h3 class="proof-title">Final Step: Provide Proof of Payment</h3>
+                            
+                            <div class="success-banner">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <div>
+                                    <strong>PAYMENT SUCCESSFUL!</strong>
+                                    <p>Finalizing Reconciliation.</p>
+                                </div>
+                            </div>
+
+                            <div class="dropzone-box">
+                                <i class="fa-solid fa-cloud-arrow-up dropzone-icon"></i>
+                                <p>Click to attach bank transfer receipt image</p>
+                                <input type="file" name="payment_receipt" id="payment_receipt" accept="image/*,.pdf" required>
+                                <span class="file-format-note">File format (.jpg, .png, .pdf)</span>
+                            </div>
+
+                            <button type="submit" class="btn-submit-proof">
+                                Submit Proof & View Order Success
                             </button>
-                            <div class="terms-modal-header">
-                                <h3>Terms of Service</h3>
-                            </div>
-                            <div class="terms-modal-body">
-                                <p>Welcome to ZEITH. All transactions processed via ZEITH Pay are encrypted and authorized securely before order dispatch.</p>
-                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="checkout-footer">
+                    <span>Powered by <strong>ZEITH Pay</strong></span>
+                    <span>|</span>
+                    <a href="#" id="termsTrigger">Terms</a>
+                    <span>|</span>
+                    <a href="#" id="privacyTrigger">Privacy</a>
+                </div>
+
+                <!-- Modals -->
+                <div class="terms-modal-overlay" id="termsModal">
+                    <div class="terms-modal-card">
+                        <button type="button" class="terms-modal-close" id="closeTermsBtn" aria-label="Close modal">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <div class="terms-modal-header">
+                            <h3>Terms of Service</h3>
+                        </div>
+                        <div class="terms-modal-body">
+                            <p>Welcome to ZEITH. All transactions processed via ZEITH Pay are encrypted and authorized securely before order dispatch.</p>
                         </div>
                     </div>
+                </div>
 
-                    <div class="terms-modal-overlay" id="privacyModal">
-                        <div class="terms-modal-card">
-                            <button type="button" class="terms-modal-close" id="closePrivacyBtn" aria-label="Close modal">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                            <div class="terms-modal-header">
-                                <h3>Privacy Policy</h3>
-                            </div>
-                            <div class="terms-modal-body">
-                                <p>At ZEITH, we value your privacy and protect your personal checkout information rigorously.</p>
-                            </div>
+                <div class="terms-modal-overlay" id="privacyModal">
+                    <div class="terms-modal-card">
+                        <button type="button" class="terms-modal-close" id="closePrivacyBtn" aria-label="Close modal">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <div class="terms-modal-header">
+                            <h3>Privacy Policy</h3>
+                        </div>
+                        <div class="terms-modal-body">
+                            <p>At ZEITH, we value your privacy and protect your personal checkout information rigorously.</p>
                         </div>
                     </div>
+                </div>
 
-                </form>
             </div>
         </div>
 
@@ -870,18 +670,13 @@ if (!$activeOrderId) {
             const shippingOptions = document.querySelectorAll('.shipping-option');
             const totalPriceDisplay = document.getElementById('totalPriceDisplay');
             const shippingSummaryPrice = document.getElementById('shippingSummaryPrice');
-            const paymentForm = document.querySelector('form');
-
-            // 1. Create or reference hidden shipping input
-            let hiddenShippingInput = document.getElementById('hiddenShippingInput');
-            if (!hiddenShippingInput) {
-                hiddenShippingInput = document.createElement('input');
-                hiddenShippingInput.type = 'hidden';
-                hiddenShippingInput.name = 'shipping_fee';
-                hiddenShippingInput.id = 'hiddenShippingInput';
-                hiddenShippingInput.value = '4000'; // Default first option
-                paymentForm.appendChild(hiddenShippingInput);
-            }
+            const hiddenShippingInput = document.getElementById('hiddenShippingInput');
+            const btnPay = document.getElementById('btnPay');
+            
+            const paystackCheckoutContainer = document.getElementById('paystackCheckoutContainer');
+            const postPaymentReceiptSection = document.getElementById('postPaymentReceiptSection');
+            const paystackTransactionRef = document.getElementById('paystackTransactionRef');
+            const summarySection = document.getElementById('summarySection');
 
             function formatCurrency(amount) {
                 return '₦' + amount.toLocaleString('en-US', {
@@ -890,7 +685,7 @@ if (!$activeOrderId) {
                 });
             }
 
-            // 2. Shipping option click handlers
+            // 1. Shipping option click handlers
             shippingOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     shippingOptions.forEach(opt => opt.classList.remove('selected'));
@@ -912,39 +707,14 @@ if (!$activeOrderId) {
                 });
             });
 
-            // 3. Payment Method Switch (Card vs Transfer)
-            // 3. Payment Method Switch (Card vs Transfer)
-            const paymentMethodSelect = document.getElementById('paymentMethodSelect');
-            const cardFieldsSection = document.getElementById('cardFieldsSection');
-            const transferFieldsSection = document.getElementById('transferFieldsSection');
-
-            if (paymentMethodSelect) {
-                paymentMethodSelect.addEventListener('change', function() {
-                    if (this.value === 'transfer') {
-                        cardFieldsSection.style.display = 'none';
-                        transferFieldsSection.style.display = 'block';
-                        if (btnPay) btnPay.style.display = 'none'; // Hide bottom Pay button
-                    } else {
-                        cardFieldsSection.style.display = 'block';
-                        transferFieldsSection.style.display = 'none';
-                        if (btnPay) btnPay.style.display = 'block'; // Show bottom Pay button
-                    }
-                });
-            }
-
-            // 4. Paystack Popup Trigger on Form Submit
+            // 2. Paystack Inline Payment Trigger
             const paystackPublicKey = 'pk_test_46537c2e2608da34a412e77a7baec683a5097391';
 
-            paymentForm.addEventListener('submit', function(e) {
-                // If they chose bank transfer, let the form submit normally to handle the file upload
-                if (paymentMethodSelect && paymentMethodSelect.value === 'transfer') {
-                    return;
-                }
-
+            btnPay.addEventListener('click', function(e) {
                 e.preventDefault();
 
                 const userEmail = "<?= htmlspecialchars($_SESSION['customer_email'] ?? 'customer@zeith.com') ?>";
-                const orderId = "<?= $_SESSION['active_order_id'] ?? '' ?>";
+                const orderId = "<?= $activeOrderId ?>";
                 const totalAmountInKobo = Math.round((productPrice + Number(hiddenShippingInput.value)) * 100);
 
                 if (typeof PaystackPop === 'undefined') {
@@ -960,7 +730,15 @@ if (!$activeOrderId) {
                     currency: 'NGN',
                     ref: 'ZEITH_' + Math.floor((Math.random() * 1000000000) + 1),
                     onSuccess: function(transaction) {
-                        window.location.href = `/Watch_Collection/payment/verify?reference=${transaction.reference}&order_id=${orderId}`;
+                        // Store Paystack transaction reference
+                        paystackTransactionRef.value = transaction.reference;
+
+                        // Dim summary section on the left
+                        if (summarySection) summarySection.style.opacity = '0.5';
+
+                        // Transition UI: Hide Paystack button, Show Receipt Upload form
+                        paystackCheckoutContainer.style.display = 'none';
+                        postPaymentReceiptSection.style.display = 'block';
                     },
                     onCancel: function() {
                         alert('Payment window closed.');
@@ -968,7 +746,7 @@ if (!$activeOrderId) {
                 });
             });
 
-            // 5. Modals Setup
+            // 3. Modals Setup
             function setupModal(triggerId, modalId, closeBtnId) {
                 const trigger = document.getElementById(triggerId);
                 const modal = document.getElementById(modalId);

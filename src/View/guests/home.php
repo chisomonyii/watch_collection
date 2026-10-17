@@ -276,6 +276,60 @@ use App\Helpers\View;
             transform: scale(1.08);
         }
 
+        /* Base unselected state for wishlist buttons */
+        .wishlist-heart-btn,
+        .wishlist-heart,
+        .wishlist-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border: none;
+            color: #94a3b8;
+            /* Neutral grey when NOT highlighted */
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .wishlist-heart-btn svg,
+        .wishlist-heart svg,
+        .wishlist-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Hover state */
+        .wishlist-heart-btn:hover,
+        .wishlist-heart:hover,
+        .wishlist-btn:hover {
+            color: #f68b1e;
+            transform: scale(1.08);
+        }
+
+        /* ACTIVE HIGHLIGHTED STATE ONLY */
+        .wishlist-heart-btn.active,
+        .wishlist-heart.active,
+        .wishlist-btn.active {
+            background: #f68b1e !important;
+            color: #ffffff !important;
+            transform: scale(1.05);
+        }
+
+        .wishlist-heart-btn.active svg path,
+        .wishlist-heart.active svg path,
+        .wishlist-btn.active svg path {
+            fill: #ffffff !important;
+        }
+
 
         /* =========================================
            ADD BUTTON
@@ -915,6 +969,7 @@ use App\Helpers\View;
             transition: opacity 0.3s ease, background 0.2s ease;
             z-index: 5;
         }
+
         .slider-arrow.active {
             background: white;
         }
@@ -956,7 +1011,7 @@ use App\Helpers\View;
         }
 
         .slider-pagination .dot.active {
-            background: #111;
+            background: #ffff;
         }
 
         .watch-info {
@@ -1773,7 +1828,7 @@ use App\Helpers\View;
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // ----------------------------------------------------
-            // 1. SELECTORS & VARIABLES
+            // 1. SELECTORS & HELPER ALIAS
             // ----------------------------------------------------
             const $ = (selector) => document.querySelector(selector);
 
@@ -1782,7 +1837,7 @@ use App\Helpers\View;
             const openButton = $('#open-cart');
             const closeButton = $('#close-cart');
             const continueButton = $('#continue-shopping');
-            const itemContainer = $('#cart-items');
+            const itemsContainer = $('#cart-items');
             const subtotalElement = $('#cart-subtotal');
             const badge = $('#cart-count');
             const drawerCount = $('#drawer-item-count');
@@ -1793,7 +1848,7 @@ use App\Helpers\View;
             // ----------------------------------------------------
             function readstorage(key) {
                 try {
-                    const value = JSON.parse(localStorage.getItem(key)) || [];
+                    const value = JSON.parse(localStorage.getItem(key) || '[]');
                     return Array.isArray(value) ? value : [];
                 } catch {
                     return [];
@@ -1809,18 +1864,18 @@ use App\Helpers\View;
                             price: Number(item.price) || 0,
                             quantity: Math.max(1, Number(item.quantity) || 1),
                             stock: Number(item.stock) || 10,
-                            strap: item.strap || 'steel'
+                            strap: item.strap || 'Steel'
                         };
                     }
                     return {
                         id: String(item ?? ''),
-                        name: 'watch details unavailable',
+                        name: 'Watch details unavailable',
                         brand: 'ZEITH',
                         price: 0,
                         image: '',
                         quantity: 1,
                         stock: 10,
-                        strap: 'steel'
+                        strap: 'Steel'
                     };
                 });
             }
@@ -1831,20 +1886,20 @@ use App\Helpers\View;
             }
 
             function money(value) {
-                return '$' + Number(value || 0).toLocaleString('en-US', {
+                return '₦' + Number(value || 0).toLocaleString('en-NG', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
                 });
             }
 
             function escapeHTML(value) {
-                return String(value ?? '').replace(/[&<>'"]/g, character => ({
+                return String(value ?? '').replace(/[&<>"']/g, character => ({
                     '&': '&amp;',
                     '<': '&lt;',
                     '>': '&gt;',
                     '"': '&quot;',
-                    "'": '&#039;'
-                } [character]));
+                    "'": '&#39;'
+                })[character]);
             }
 
             // ----------------------------------------------------
@@ -1856,10 +1911,10 @@ use App\Helpers\View;
 
                 const wishlist = readstorage('zeith_wishlist').map(String);
                 wishlistBadge.textContent = wishlist.length;
-                wishlistBadge.style.display = wishlist.length ? 'inline-block' : 'none';
+                wishlistBadge.style.display = wishlist.length > 0 ? 'inline-block' : 'none';
             }
 
-            function updateCartBadge(cart) {
+            function updateCartBadge(cart = readCart()) {
                 const count = cart.reduce((sum, item) => sum + item.quantity, 0);
 
                 if (badge) {
@@ -1907,16 +1962,17 @@ use App\Helpers\View;
                 updateCartBadge(cart);
 
                 if (cart.length === 0) {
-                    if (itemContainer) {
-                        itemContainer.innerHTML = `
+                    if (itemsContainer) {
+                        itemsContainer.innerHTML = `
                     <div class="cart-empty">
                         <i class="fa-solid fa-bag-shopping"></i>
                         <h3>Your bag is waiting</h3>
                         <p>Add a luxury timepiece to get started.</p>
-                    </div>`;
+                    </div>
+                `;
                     }
-                } else if (itemContainer) {
-                    itemContainer.innerHTML = cart.map((item, index) => `
+                } else if (itemsContainer) {
+                    itemsContainer.innerHTML = cart.map((item, index) => `
                 <article class="cart-item" data-index="${index}">
                     <div class="cart-item-image">
                         ${item.image ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}">` : `<i class="fa-regular fa-clock"></i>`}
@@ -1927,14 +1983,15 @@ use App\Helpers\View;
                         <div class="cart-item-price">${money(item.price)}</div>
                         <div class="cart-item-bottom">
                             <div class="cart-quantity">
-                                <button type="button" data-action="decrease" aria-label="Decrease quantity">-</button>
+                                <button type="button" data-action="decrease" aria-label="Decrease quantity">&minus;</button>
                                 <span>${item.quantity}</span>
                                 <button type="button" data-action="increase" aria-label="Increase quantity">+</button>
                             </div>
                             <button type="button" class="cart-remove" data-action="remove">Remove</button>
                         </div>
                     </div>
-                </article>`).join('');
+                </article>
+            `).join('');
                 }
 
                 if (subtotalElement) subtotalElement.textContent = money(subtotal);
@@ -1948,44 +2005,65 @@ use App\Helpers\View;
             continueButton?.addEventListener('click', closeCart);
             overlay?.addEventListener('click', closeCart);
 
-            document.addEventListener('keydown', event => {
+            document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape' && drawer?.classList.contains('open')) {
                     closeCart();
                 }
             });
 
             // ----------------------------------------------------
-            // 5. WISHLIST TOGGLE FUNCTIONALITY
+            // 5. UNIFIED WISHLIST CONTROLLER & REAL-TIME HEART SYNC
             // ----------------------------------------------------
-            document.querySelectorAll('.arrivals, .watch-card, .property-card').forEach(card => {
-                const id = String(card.dataset.id || card.getAttribute('data-id') || '');
-                const heart = card.querySelector('.wishlist-heart, .wishlist-heart-btn, .wishlist-btn');
+            window.syncHomeWishlistHearts = function() {
+                const savedWishlist = readstorage('zeith_wishlist').map(String);
+                const allCards = document.querySelectorAll('.watch-card, .arrivals, .product-card, .property-card');
 
-                if (!id || !heart) return;
+                allCards.forEach(card => {
+                    const heartBtn = card.querySelector('.wishlist-btn, .wishlist-heart, .wishlist-heart-btn');
+                    const watchId = String(heartBtn?.getAttribute('data-id') || heartBtn?.dataset.id || card.getAttribute('data-id') || card.dataset.id || '');
 
-                const wishlist = readstorage('zeith_wishlist').map(String);
-                if (wishlist.includes(id)) {
-                    heart.classList.add('active');
-                    heart.style.color = '#d48f38';
+                    if (heartBtn && watchId) {
+                        const isSaved = savedWishlist.includes(watchId);
+                        heartBtn.classList.toggle('active', isSaved);
+
+                        const svgPath = heartBtn.querySelector('svg path, path');
+                        if (isSaved) {
+                            heartBtn.style.color = '#ff5252';
+                            if (svgPath) svgPath.style.fill = '#ff5252';
+                        } else {
+                            heartBtn.style.color = '';
+                            if (svgPath) svgPath.style.fill = 'currentColor';
+                        }
+                    }
+                });
+
+                updateWishlistBadge();
+            };
+
+            // Wishlist Heart Toggle Listener
+            document.addEventListener('click', function(e) {
+                const wishlistBtn = e.target.closest('.wishlist-btn, .wishlist-heart, .wishlist-heart-btn');
+                if (!wishlistBtn) return;
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                const watchCard = wishlistBtn.closest('.watch-card, .arrivals, .product-card, .property-card');
+                const watchId = String(wishlistBtn.getAttribute('data-id') || wishlistBtn.dataset.id || watchCard?.getAttribute('data-id') || watchCard?.dataset.id || '');
+
+                if (!watchId) return;
+
+                let wishlist = readstorage('zeith_wishlist').map(String);
+
+                if (wishlist.includes(watchId)) {
+                    wishlist = wishlist.filter(id => id !== watchId);
+                } else {
+                    wishlist.push(watchId);
                 }
 
-                heart.addEventListener('click', event => {
-                    event.stopPropagation();
-                    let saved = readstorage('zeith_wishlist').map(String);
-
-                    if (saved.includes(id)) {
-                        saved = saved.filter(savedId => savedId !== id);
-                        heart.classList.remove('active');
-                        heart.style.color = '';
-                    } else {
-                        saved.push(id);
-                        heart.classList.add('active');
-                        heart.style.color = '#d48f38';
-                    }
-
-                    localStorage.setItem('zeith_wishlist', JSON.stringify(saved));
-                    updateWishlistBadge();
-                });
+                localStorage.setItem('zeith_wishlist', JSON.stringify(wishlist));
+                window.dispatchEvent(new Event('storage'));
+                window.syncHomeWishlistHearts();
             });
 
             // ----------------------------------------------------
@@ -2014,7 +2092,7 @@ use App\Helpers\View;
             }
 
             // ----------------------------------------------------
-            // 7. NEW ARRIVALS 4-IMAGE CAROUSEL CONTROLLER
+            // 7. NEW ARRIVALS CAROUSEL CONTROLLER
             // ----------------------------------------------------
             document.querySelectorAll('.watch-card').forEach(card => {
                 const slides = card.querySelectorAll('.slide');
@@ -2036,12 +2114,14 @@ use App\Helpers\View;
 
                 nextBtn?.addEventListener('click', (e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     let nextIndex = (currentIndex + 1) % slides.length;
                     updateSlide(nextIndex);
                 });
 
                 prevBtn?.addEventListener('click', (e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     let prevIndex = (currentIndex - 1 + slides.length) % slides.length;
                     updateSlide(prevIndex);
                 });
@@ -2051,26 +2131,26 @@ use App\Helpers\View;
             // 8. ADD TO CART & SOLD OUT VALIDATION
             // ----------------------------------------------------
             document.querySelectorAll('.add-button, .property-add-btn, .add-to-cart-btn').forEach(button => {
-                button.addEventListener('click', event => {
+                button.addEventListener('click', (event) => {
                     event.preventDefault();
                     event.stopPropagation();
 
-                    const card = button.closest('.watch-card, .property-card');
+                    const card = button.closest('.watch-card, .property-card, .arrivals');
                     if (!card) return;
 
-                    // CHECK 1: Prevent adding if watch is Sold Out
-                    const soldOutBadge = card.querySelector('.stock-badge.sold-out');
+                    // Sold out check
+                    const soldOutBadge = card.querySelector('.stock-badge.sold-out, .status-badge.sold-out');
                     if (soldOutBadge) {
                         alert('This watch is currently Sold Out and cannot be added to your cart.');
                         return;
                     }
 
-                    const rawPrice = card.dataset.price || card.querySelector('.price')?.textContent || '';
+                    const rawPrice = card.dataset.price || card.querySelector('.price, .price-display, .property-card-price')?.textContent || '';
                     const price = Number(String(rawPrice).replace(/[^\d.]/g, '')) || 0;
                     const id = String(card.dataset.id || card.getAttribute('data-id') || '');
                     const nameElement = card.querySelector('.property-card-title, .watch-info h3, .watch-card h3');
                     const brandElement = card.querySelector('.property-card-brand, .watch-info span, .brand');
-                    const imageElement = card.querySelector('.slide.active, img');
+                    const imageElement = card.querySelector('.slide.active img, .card-main-img, .property-card-image img');
 
                     const name = nameElement ? nameElement.textContent.trim() : 'Watch';
                     const brand = brandElement ? brandElement.textContent.trim() : 'ZEITH';
@@ -2083,7 +2163,7 @@ use App\Helpers\View;
                     const existing = cart.find(item => item.id === id);
                     const currentQty = existing ? Number(existing.quantity) : 0;
 
-                    // CHECK 2: Stock limit check
+                    // Stock Limit check
                     if (currentQty + 1 > stockLimit) {
                         alert(`Sorry, we only have ${stockLimit} of this item in stock.`);
                         return;
@@ -2109,6 +2189,7 @@ use App\Helpers\View;
                     }
 
                     saveCart(cart);
+                    openCart();
 
                     const oldText = button.textContent;
                     button.textContent = 'Added!';
@@ -2121,7 +2202,7 @@ use App\Helpers\View;
             // ----------------------------------------------------
             // 9. CART QUANTITY CONTROLS (+ / - / Remove)
             // ----------------------------------------------------
-            itemContainer?.addEventListener('click', event => {
+            itemsContainer?.addEventListener('click', (event) => {
                 const button = event.target.closest('[data-action]');
                 if (!button) return;
 
@@ -2157,78 +2238,36 @@ use App\Helpers\View;
             });
 
             // ----------------------------------------------------
-            // 10. CHECKOUT & CROSS-TAB SYNCHRONIZATION
+            // 10. CHECKOUT & REAL-TIME CROSS-TAB SYNCHRONIZATION
             // ----------------------------------------------------
             checkoutButton?.addEventListener('click', () => {
                 if (readCart().length === 0) return;
-                window.location.href = '/watch_collection/checkout';
+                window.location.href = '/Watch_Collection/checkout';
             });
 
-            window.addEventListener('storage', event => {
-                if (event.key === 'zeith_cart') renderCart();
-                if (event.key === 'zeith_wishlist') updateWishlistBadge();
-            });
-
-            // Initial setup calls
-            updateWishlistBadge();
+            // Initial Setup
+            window.syncHomeWishlistHearts();
             renderCart();
         });
-        // Wishlist Heart Toggle Logic
-        document.addEventListener('click', function(e) {
-            const wishlistBtn = e.target.closest('.wishlist-btn');
-            if (!wishlistBtn) return;
 
-            e.preventDefault();
-            wishlistBtn.classList.toggle('active');
-
-            // Optional: Get the watch card ID to save in localStorage
-            const watchCard = wishlistBtn.closest('.watch-card');
-            if (watchCard) {
-                const watchId = watchCard.getAttribute('data-id');
-                let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-
-                if (wishlistBtn.classList.contains('active')) {
-                    if (!wishlist.includes(watchId)) wishlist.push(watchId);
-                } else {
-                    wishlist = wishlist.filter(id => id !== watchId);
-                }
-
-                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        // ----------------------------------------------------
+        // 11. BCACHE & HISTORY NAVIGATION LISTENERS
+        // ----------------------------------------------------
+        window.addEventListener('storage', (event) => {
+            if (!event.key || event.key === 'zeith_cart') {
+                if (typeof renderCart === 'function') renderCart();
             }
-
-            // Sync Heart Highlight States with localStorage on Page Load & Window Focus
-            function syncHomeWishlistHearts() {
-                const savedWishlist = JSON.parse(localStorage.getItem('zeith_wishlist')) || [];
-
-                // Select all cards across New Arrivals / Product grids
-                const allCards = document.querySelectorAll('.watch-card, .arrivals, .product-card');
-
-                allCards.forEach(card => {
-                    const watchId = String(card.getAttribute('data-id'));
-                    const heartBtn = card.querySelector('.wishlist-heart, .wishlist-circle');
-
-                    if (heartBtn) {
-                        if (savedWishlist.includes(watchId)) {
-                            heartBtn.classList.add('active');
-                        } else {
-                            heartBtn.classList.remove('active');
-                        }
-                    }
-                });
+            if (!event.key || event.key === 'zeith_wishlist') {
+                if (typeof window.syncHomeWishlistHearts === 'function') window.syncHomeWishlistHearts();
             }
+        });
 
-            // 1. Sync on initial DOM load
-            document.addEventListener('DOMContentLoaded', syncHomeWishlistHearts);
+        window.addEventListener('focus', () => {
+            if (typeof window.syncHomeWishlistHearts === 'function') window.syncHomeWishlistHearts();
+        });
 
-            // 2. Sync whenever user switches back to the Home tab/window
-            window.addEventListener('focus', syncHomeWishlistHearts);
-
-            // 3. Sync if local storage changes across tabs simultaneously
-            window.addEventListener('storage', (e) => {
-                if (e.key === 'zeith_wishlist') {
-                    syncHomeWishlistHearts();
-                }
-            });
+        window.addEventListener('pageshow', (event) => {
+            if (typeof window.syncHomeWishlistHearts === 'function') window.syncHomeWishlistHearts();
         });
     </script>
 

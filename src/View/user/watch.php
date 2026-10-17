@@ -8,10 +8,1111 @@ $watches = $watches ?? \App\Models\Watch::getAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/69c405441a.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="<?php assets("css/login.css"); ?>">
     <title>Zeith - Luxury Watch Collections</title>
 
     <style>
+        /* ==========================================
+   PROPERTY PAGE STYLES
+   ========================================== */
+        .property-body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+        }
+
+        .property-container {
+            max-width: 1320px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2.5rem;
+        }
+
+        .property-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .property-sidebar-widget {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0.85rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .property-widget-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fc8b1e;
+            margin-bottom: 1.25rem;
+            border-bottom: 2px solid var(--primary, #e11d48);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .zeith-span {
+            letter-spacing: -2px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .property-category-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .property-price-range {
+            accent-color: #fc8b1e;
+        }
+
+        .property-category-list li a {
+            color: #64748b;
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            transition: color 0.2s ease;
+        }
+
+        .property-category-list li a:hover {
+            color: #e11d48;
+        }
+
+        .property-count {
+            color: #fc8b1e;
+            font-weight: 600;
+        }
+
+        .property-range-slider {
+            width: 100%;
+            accent-color: #fc8b1e;
+            margin-bottom: 1rem;
+            background-color: #ffffff;
+        }
+
+        .property-price-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .property-price-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .property-filter-btn {
+            background-color: #fc8b1e;
+            color: #ffffff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.4rem;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            align-self: flex-start;
+            transition: opacity 0.2s ease;
+        }
+
+        .property-filter-btn:hover {
+            opacity: 0.9;
+        }
+
+        .property-hero-banner {
+            position: relative;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 2.5rem 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
+            perspective: 1000px;
+            height: 320px;
+        }
+
+        .hero-3d-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            background: radial-gradient(circle at center,
+                    rgba(255, 255, 255, 0.4) 0%,
+                    rgba(241, 245, 249, 0.8) 70%,
+                    #f1f5f9 100%);
+        }
+
+        .hero-3d-bg img {
+            width: 160%;
+            height: 160%;
+            object-fit: cover;
+            position: absolute;
+            top: -30%;
+            left: -30%;
+            opacity: 1.14;
+            transform-style: preserve-3d;
+            animation: heroFullCover3D 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroFullCover3D {
+            0% {
+                transform: translate3d(0px, 0px, 0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1);
+            }
+
+            25% {
+                transform: translate3d(35px, -25px, 50px) rotateX(12deg) rotateY(-10deg) rotateZ(4deg) scale(1.05);
+            }
+
+            50% {
+                transform: translate3d(-25px, 30px, -35px) rotateX(-10deg) rotateY(14deg) rotateZ(-6deg) scale(1.08);
+            }
+
+            75% {
+                transform: translate3d(20px, -20px, 60px) rotateX(8deg) rotateY(-12deg) rotateZ(5deg) scale(1.04);
+            }
+
+            100% {
+                transform: translate3d(-30px, -30px, 15px) rotateX(-7deg) rotateY(7deg) rotateZ(-3deg) scale(1.06);
+            }
+        }
+
+        .property-hero-text,
+        .property-hero-images {
+            position: relative;
+            z-index: 2;
+        }
+
+        .property-hero-subtitle {
+            color: #fc8b1e;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        .property-hero-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #e9eaee;
+            margin: 0.2rem 0;
+            letter-spacing: -2px;
+            text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .property-hero-desc {
+            font-weight: 500;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        /* ==========================================
+   RESPONSIVE BREAKPOINTS
+   ========================================== */
+
+        /* Max Width 1100px */
+        @media (max-width: 1100px) {
+            .pg-head {
+                padding: 0 20px;
+                gap: 12px;
+            }
+
+            .logo h1 {
+                font-size: 28px;
+            }
+
+            .search-container {
+                max-width: 500px;
+            }
+
+            .search-icon {
+                font-size: 40px;
+                padding-left: 14px;
+            }
+
+            .search-btn {
+                padding: 0 20px;
+                font-size: 15px;
+            }
+
+            .nav-bar {
+                gap: 10px;
+            }
+
+            .nav-bar a {
+                font-size: 14px;
+            }
+
+            .hero {
+                padding: 60px 6%;
+                gap: 30px;
+            }
+
+            .hero-text h1 {
+                font-size: 40px;
+            }
+
+            .new {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+
+            .collection-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .collection-card {
+                height: 450px;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .review-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .story-text {
+                padding: 50px 5%;
+            }
+
+            .story-text h2 {
+                font-size: 45px;
+            }
+
+            .promo-content h2 {
+                font-size: 70px;
+            }
+        }
+
+        /* Max Width 992px */
+        @media (max-width: 992px) {
+            .property-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Max Width 800px */
+        @media (max-width: 800px) {
+            .pg-head {
+                height: auto;
+                min-height: 80px;
+                flex-wrap: wrap;
+                padding: 12px 20px;
+            }
+
+            .logo {
+                order: 1;
+            }
+
+            .nav-bar {
+                order: 2;
+                margin-left: auto;
+            }
+
+            .search-container {
+                order: 3;
+                width: 100%;
+                max-width: none;
+                height: 52px;
+            }
+
+            .search-icon {
+                font-size: 32px;
+                padding-left: 12px;
+            }
+
+            .search-btn {
+                height: 42px;
+                padding: 0 20px;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 140px 7% 60px;
+            }
+
+            .hero-image {
+                width: 80%;
+                order: 1;
+            }
+
+            .hero-text {
+                order: 2;
+            }
+
+            .hero-text h1 {
+                font-size: 38px;
+            }
+
+            .hero-text p {
+                max-width: 600px;
+                margin: 15px auto 25px;
+            }
+
+            .collections,
+            .best-sellers,
+            .why-zeith,
+            .reviews {
+                padding: 80px 6%;
+            }
+
+            .section-heading {
+                margin-bottom: 40px;
+            }
+
+            .section-heading h2 {
+                font-size: 38px;
+            }
+
+            .story {
+                flex-direction: column;
+            }
+
+            .story-image {
+                width: 100%;
+                height: 450px;
+            }
+
+            .story-text {
+                width: 100%;
+                padding: 70px 8%;
+            }
+
+            .story-text h2 {
+                font-size: 48px;
+            }
+
+            .promo {
+                padding: 80px 20px;
+            }
+
+            .promo-content h2 {
+                font-size: 65px;
+            }
+        }
+
+        /* Max Width 600px */
+        @media (max-width: 600px) {
+            .pg-head {
+                position: relative;
+                padding: 14px 15px;
+                gap: 12px;
+            }
+
+            .logo h1 {
+                font-size: 27px;
+            }
+
+            .nav-bar {
+                gap: 12px;
+            }
+
+            .nav-bar a {
+                font-size: 0;
+            }
+
+            .nav-bar .icon {
+                font-size: 18px;
+            }
+
+            .span {
+                gap: 0;
+            }
+
+            .search-container {
+                height: 50px;
+                border-radius: 25px;
+            }
+
+            .search-icon {
+                font-size: 30px;
+                padding-left: 10px;
+            }
+
+            .search-bar {
+                font-size: 14px;
+                padding: 0 8px;
+            }
+
+            .search-btn {
+                height: 40px;
+                padding: 0 17px;
+                font-size: 13px;
+            }
+
+            .hero {
+                padding: 50px 20px 60px;
+                margin-bottom: 20px;
+            }
+
+            .hero-image {
+                width: 100%;
+            }
+
+            .hero-text h1 {
+                font-size: 34px;
+                line-height: 1.1;
+            }
+
+            .hero-text p {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            .product-btn {
+                display: inline-block;
+                padding: 13px 21px;
+                font-size: 14px;
+            }
+
+            .new-arrivals {
+                padding: 20px 10px;
+            }
+
+            .new-arrhead {
+                font-size: 21px;
+                padding: 0 8px;
+            }
+
+            .new {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px 10px;
+                padding: 0 8px;
+            }
+
+            .watch-info h2 {
+                font-size: 16px;
+            }
+
+            .watch-name {
+                font-size: 11px;
+            }
+
+            .watch-price {
+                font-size: 15px;
+            }
+
+            .watch-rating {
+                font-size: 12px;
+            }
+
+            .tag {
+                font-size: 8px;
+                padding: 3px 8px;
+            }
+
+            .collections,
+            .best-sellers,
+            .why-zeith,
+            .reviews {
+                padding: 70px 20px;
+            }
+
+            .section-heading {
+                margin-bottom: 35px;
+            }
+
+            .section-heading p {
+                font-size: 10px;
+                letter-spacing: 2px;
+            }
+
+            .section-heading h2 {
+                font-size: 32px;
+                letter-spacing: -1px;
+            }
+
+            .collection-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .collection-card {
+                height: 420px;
+            }
+
+            .collection-content {
+                left: 22px;
+                bottom: 22px;
+            }
+
+            .collection-content h3 {
+                font-size: 25px;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .product-card {
+                padding: 15px;
+            }
+
+            .product-image {
+                height: 300px;
+            }
+
+            .product-image img {
+                width: 80%;
+                height: 80%;
+            }
+
+            .story-image {
+                height: 350px;
+            }
+
+            .story-text {
+                padding: 60px 20px;
+            }
+
+            .story-text h2 {
+                font-size: 40px;
+            }
+
+            .story-p {
+                font-size: 14px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .feature {
+                padding: 20px;
+            }
+
+            .promo {
+                min-height: 400px;
+                padding: 60px 20px;
+            }
+
+            .promo-content h2 {
+                font-size: 50px;
+                letter-spacing: -3px;
+            }
+
+            .promop {
+                font-size: 14px;
+            }
+
+            .review-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .review {
+                padding: 25px;
+            }
+        }
+
+        /* Max Width 400px */
+        @media (max-width: 400px) {
+            .pg-head {
+                padding: 12px;
+            }
+
+            .logo h1 {
+                font-size: 24px;
+            }
+
+            .nav-bar {
+                gap: 9px;
+            }
+
+            .nav-bar .icon {
+                font-size: 16px;
+            }
+
+            .search-container {
+                height: 46px;
+            }
+
+            .search-icon {
+                font-size: 27px;
+                padding-left: 8px;
+            }
+
+            .search-btn {
+                height: 36px;
+                padding: 0 13px;
+                font-size: 12px;
+            }
+
+            .hero {
+                padding: 40px 15px 50px;
+            }
+
+            .hero-text h1 {
+                font-size: 29px;
+            }
+
+            .new {
+                gap: 18px 8px;
+            }
+
+            .watch-info h2 {
+                font-size: 14px;
+            }
+
+            .watch-price {
+                font-size: 14px;
+            }
+
+            .collections,
+            .best-sellers,
+            .why-zeith,
+            .reviews {
+                padding: 60px 15px;
+            }
+
+            .section-heading h2 {
+                font-size: 28px;
+            }
+
+            .collection-card {
+                height: 380px;
+            }
+
+            .product-image {
+                height: 270px;
+            }
+
+            .story-text h2 {
+                font-size: 34px;
+            }
+
+            .promo-content h2 {
+                font-size: 42px;
+            }
+        }
+
+        /* ==========================================
+   RESPONSIVE LAYOUT (<= 800px)
+   ========================================== */
+        @media (max-width: 800px) {
+            .pg-head {
+                height: auto;
+                min-height: 80px;
+                flex-wrap: wrap;
+                padding: 12px 20px;
+            }
+
+            .logo {
+                order: 1;
+            }
+
+            .nav-bar {
+                order: 2;
+                margin-left: auto;
+            }
+
+            .search-container {
+                order: 3;
+                width: 100%;
+                max-width: none;
+                height: 52px;
+            }
+
+            .search-icon {
+                font-size: 32px;
+                padding-left: 12px;
+            }
+
+            .search-btn {
+                height: 42px;
+                padding: 0 20px;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 140px 7% 60px;
+            }
+
+            .hero-image {
+                width: 80%;
+                order: 1;
+            }
+
+            .hero-text {
+                order: 2;
+            }
+
+            .hero-text h1 {
+                font-size: 38px;
+            }
+
+            .hero-text p {
+                max-width: 600px;
+                margin: 15px auto 25px;
+            }
+
+            .collections,
+            .best-sellers,
+            .why-zeith,
+            .reviews {
+                padding: 80px 6%;
+            }
+
+            .section-heading {
+                margin-bottom: 40px;
+            }
+
+            .section-heading h2 {
+                font-size: 38px;
+            }
+
+            .story {
+                flex-direction: column;
+            }
+
+            .story-image {
+                width: 100%;
+                height: 450px;
+            }
+
+            .story-text {
+                width: 100%;
+                padding: 70px 8%;
+            }
+
+            .story-text h2 {
+                font-size: 48px;
+            }
+
+            .promo {
+                padding: 80px 20px;
+            }
+
+            .promo-content h2 {
+                font-size: 65px;
+            }
+        }
+
+        /* ==========================================
+   RESPONSIVE LAYOUT (<= 600px)
+   ========================================== */
+        @media (max-width: 600px) {
+            .pg-head {
+                position: relative;
+                padding: 14px 15px;
+                gap: 12px;
+            }
+
+            .logo h1 {
+                font-size: 27px;
+            }
+
+            .nav-bar {
+                gap: 12px;
+            }
+
+            .nav-bar a {
+                font-size: 0;
+            }
+
+            .nav-bar .icon {
+                font-size: 18px;
+            }
+
+            .span {
+                gap: 0;
+            }
+
+            .search-container {
+                height: 50px;
+                border-radius: 25px;
+            }
+
+            .search-icon {
+                font-size: 30px;
+                padding-left: 10px;
+            }
+
+            .search-bar {
+                font-size: 14px;
+                padding: 0 8px;
+            }
+
+            .search-btn {
+                height: 40px;
+                padding: 0 17px;
+                font-size: 13px;
+            }
+
+            .hero {
+                padding: 50px 20px 60px;
+                margin-bottom: 20px;
+            }
+
+            .hero-image {
+                width: 100%;
+            }
+
+            .hero-text h1 {
+                font-size: 34px;
+                line-height: 1.1;
+            }
+
+            .hero-text p {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            .product-btn {
+                display: inline-block;
+                padding: 13px 21px;
+                font-size: 14px;
+            }
+
+            .new-arrivals {
+                padding: 20px 10px;
+            }
+
+            .new-arrhead {
+                font-size: 21px;
+                padding: 0 8px;
+            }
+
+            .new {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px 10px;
+                padding: 0 8px;
+            }
+
+            .watch-info h2 {
+                font-size: 16px;
+            }
+
+            .watch-name {
+                font-size: 11px;
+            }
+
+            .watch-price {
+                font-size: 15px;
+            }
+
+            .watch-rating {
+                font-size: 12px;
+            }
+
+            .tag {
+                font-size: 8px;
+                padding: 3px 8px;
+            }
+
+            .collections,
+            .best-sellers,
+            .why-zeith,
+            .reviews {
+                padding: 70px 20px;
+            }
+
+            .section-heading {
+                margin-bottom: 35px;
+            }
+
+            .section-heading p {
+                font-size: 10px;
+                letter-spacing: 2px;
+            }
+
+            .section-heading h2 {
+                font-size: 32px;
+                letter-spacing: -1px;
+            }
+
+            .collection-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .collection-card {
+                height: 420px;
+            }
+
+            .collection-content {
+                left: 22px;
+                bottom: 22px;
+            }
+
+            .collection-content h3 {
+                font-size: 25px;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .product-card {
+                padding: 15px;
+            }
+
+            .product-image {
+                height: 300px;
+            }
+
+            .product-image img {
+                width: 80%;
+                height: 80%;
+            }
+
+            .story-image {
+                height: 350px;
+            }
+
+            .story-text {
+                padding: 60px 20px;
+            }
+
+            .story-text h2 {
+                font-size: 40px;
+            }
+
+            .story-p {
+                font-size: 14px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .feature {
+                padding: 20px;
+            }
+
+            .promo {
+                min-height: 400px;
+                padding: 60px 20px;
+            }
+
+            .promo-content h2 {
+                font-size: 50px;
+                letter-spacing: -3px;
+            }
+
+            .promop {
+                font-size: 14px;
+            }
+
+            .review-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .review {
+                padding: 25px;
+            }
+        }
+
+        /* ==========================================
+   RESPONSIVE LAYOUT (<= 400px)
+   ========================================== */
+        @media (max-width: 400px) {
+            .pg-head {
+                padding: 12px;
+            }
+
+            .logo h1 {
+                font-size: 24px;
+            }
+
+            .nav-bar {
+                gap: 9px;
+            }
+
+            .nav-bar .icon {
+                font-size: 16px;
+            }
+
+            .search-container {
+                height: 46px;
+            }
+
+            .search-icon {
+                font-size: 27px;
+                padding-left: 8px;
+            }
+
+            .search-btn {
+                height: 36px;
+                padding: 0 13px;
+                font-size: 12px;
+            }
+
+            .hero {
+                padding: 40px 15px 50px;
+            }
+
+            .hero-text h1 {
+                font-size: 29px;
+            }
+
+            .new {
+                gap: 18px 8px;
+            }
+
+            .watch-info h2 {
+                font-size: 14px;
+            }
+
+            .watch-price {
+                font-size: 14px;
+            }
+
+            .collections,
+            .best-sellers,
+            .why-zeith,
+            .reviews {
+                padding: 60px 15px;
+            }
+
+            .section-heading h2 {
+                font-size: 28px;
+            }
+
+            .collection-card {
+                height: 380px;
+            }
+
+            .product-image {
+                height: 270px;
+            }
+
+            .story-text h2 {
+                font-size: 34px;
+            }
+
+            .promo-content h2 {
+                font-size: 42px;
+            }
+        }
+
         /* ADD BUTTON */
         .add-button {
             position: absolute;
@@ -452,6 +1553,284 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             cursor: pointer;
         }
 
+        /* =========================================
+   WATCHES GRID & LUXURY CARD STYLING
+========================================= */
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            /* Updated to 3-column layout */
+            gap: 32px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .property-card.watch-card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .property-card.watch-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+        }
+
+        /* TOP BAR (BADGE & HEART) */
+        .card-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .status-badge {
+            background: #e2f0d9;
+            color: #2b6118;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .status-badge.sold-out {
+            background: #fde8e8 !important;
+            color: #9b1c1c !important;
+        }
+
+        .wishlist-heart,
+        .wishlist-btn {
+            width: 38px;
+            height: 38px;
+            background: #ffffff;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, background 0.2s ease;
+            color: #cccccc;
+        }
+
+        .wishlist-heart:hover,
+        .wishlist-btn.active {
+            transform: scale(1.08);
+            color: #ff5252;
+        }
+
+        .wishlist-heart svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* HERO IMAGE CONTAINER */
+        .watch-image-container {
+            width: 100%;
+            height: 270px;
+            border-radius: 22px;
+            background: linear-gradient(180deg, #ffffff 0%, #f3f3f5 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .watch-image-container img.card-main-img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        /* CAROUSEL ARROWS */
+        .carousel-arrow {
+            width: 34px;
+            height: 34px;
+            background: #ffffff;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #111111;
+            z-index: 5;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .carousel-arrow:hover {
+            background: #f8f8f8;
+            transform: translateY(-50%) scale(1.08);
+        }
+
+        .carousel-arrow.prev-arrow {
+            left: 12px;
+        }
+
+        .carousel-arrow.next-arrow {
+            right: 12px;
+        }
+
+        /* PRICE & PROGRESS OVERLAY BAR */
+        .price-overlay-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 18px 12px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.75) 100%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .price-display {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 800;
+            text-align: right;
+            letter-spacing: -0.5px;
+        }
+
+        .progress-indicators {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .progress-bar-segment {
+            height: 4px;
+            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.35);
+            border-radius: 2px;
+            transition: background-color 0.25s ease;
+        }
+
+        .progress-bar-segment.active {
+            background: #ffffff;
+        }
+
+        /* DETAILS CONTENT */
+        .watch-details-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .watch-title-text {
+            font-size: 20px;
+            font-weight: 800;
+            color: #111111;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .watch-desc-text {
+            font-size: 13px;
+            color: #999999;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            max-width: 90%;
+            font-weight: 400;
+        }
+
+        /* FOOTER ACTIONS */
+        .card-footer-actions {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .add-button {
+            background: #ff8a00;
+            color: #000000;
+            border: none;
+            border-radius: 24px;
+            padding: 10px 28px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .add-button:hover {
+            background: #e57c00;
+            transform: translateY(-2px);
+        }
+
+        .add-button.disabled,
+        .add-button:disabled {
+            background: #e0e0e0 !important;
+            color: #888888 !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+        }
+
+        .view-details-link {
+            color: #ff8a00;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            margin-left: 130px;
+        }
+
+        .view-details-link:hover {
+            color: #e57c00;
+            text-decoration: underline;
+        }
+
+        /* RESPONSIVE LAYOUT */
+        @media (max-width: 1200px) {
+            .property-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .property-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .property-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
         /* Tablet */
         @media (max-width: 768px) {
             .floating-cart {
@@ -537,55 +1916,92 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                 </div>
             </div>
 
-            <div class="property-toolbar">
-                <div class="custom-dropdown-container">
-                    <details class="custom-dropdown">
-                        <summary class="dropdown-summary">
-                            <span id="selectedCategoryText">All Collections</span>
-                            <span class="chevron">▼</span>
-                        </summary>
-                        <div class="dropdown-menu">
-                            <span class="dropdown-header">THE ZEITH ASSETS</span>
-                            <a href="#" class="dropdown-item brand-filter-link" data-brand="Hublot">Hublot</a>
-                            <a href="#" class="dropdown-item brand-filter-link" data-brand="G-Shock">G-Shock</a>
-                            <a href="#" class="dropdown-item brand-filter-link" data-brand="Rolex">Rolex</a>
-                            <a href="#" class="dropdown-item brand-filter-link" data-brand="Omega">Omega</a>
-                            <a href="#" class="dropdown-item brand-filter-link" data-brand="Daniel Klein">Daniel Klein</a>
-                            <a href="#" class="dropdown-item brand-filter-link" data-brand="Asorock">Asorock</a>
-                            <a href="#" class="dropdown-item brand-filter-link" data-brand="Bulova Watches">Bulova Watches</a>
-                            <a href="#" class="dropdown-item brand-filter-link" data-brand="Patek Philippe">Patek Philippe & Cartier</a>
-                        </div>
-                    </details>
-                </div>
-            </div>
-
             <div class="property-grid" id="watchGrid">
                 <?php if (!empty($watches)): ?>
                     <?php foreach ($watches as $watch): ?>
-                        <div class="property-card"
-                            data-id="<?= htmlspecialchars((string)$watch['id']); ?>"
-                            data-brand="<?= htmlspecialchars($watch['brand'] ?? $watch['name']); ?>"
-                            data-price="<?= htmlspecialchars((string)$watch['price']); ?>">
-                            data-stock="<?= (int)($watch['stock'] ?? 10); ?>">
+                        <?php
+                        $watchId    = htmlspecialchars((string)$watch['id']);
+                        $watchName  = htmlspecialchars($watch['name']);
+                        $watchBrand = htmlspecialchars($watch['brand'] ?? 'ZEITH');
+                        $watchPrice = "₦" . number_format((float)$watch['price']);
+                        $watchDesc  = htmlspecialchars($watch['description'] ?? 'Exclusive luxury craftsmanship with precision movement.');
 
-                            <button type="button" class="wishlist-btn"
-                                data-id="<?= htmlspecialchars((string)$watch['id']); ?>"
-                                title="Add to Wishlist" aria-label="Add to wishlist">
-                                <i class="fa-solid fa-heart"></i>
-                            </button>
+                        // 1. Stock Evaluation matching home.php ($watch['stock'] == 0)
+                        $stock = (int)($watch['stock'] ?? 10);
+                        $isSoldOut = ($stock <= 0);
 
-                            <div class="property-card-media">
-                                <img src="<?php assets($watch['image_url'] ?? 'image/pngwing.com (1).png'); ?>"
-                                    alt="<?= htmlspecialchars($watch['name']); ?>">
+                        // 2. Direct Image Resolution matching home.php
+                        $rawImg1 = trim($watch['image_url_1'] ?? $watch['image_url'] ?? 'default.png');
+                        $rawImg2 = trim($watch['image_url_2'] ?? $watch['image_url_1'] ?? 'default.png');
+                        $rawImg3 = trim($watch['image_url_3'] ?? $watch['image_url_1'] ?? 'default.png');
+                        $rawImg4 = trim($watch['image_url_4'] ?? $watch['image_url_1'] ?? 'default.png');
+
+                        $resolvePath = function ($val) {
+                            if (strpos($val, 'http://') === 0 || strpos($val, 'https://') === 0) {
+                                return $val;
+                            }
+                            return '/Watch_Collection/assets/image/' . ltrim($val, '/');
+                        };
+
+                        $img1 = $resolvePath($rawImg1);
+                        $img2 = $resolvePath($rawImg2);
+                        $img3 = $resolvePath($rawImg3);
+                        $img4 = $resolvePath($rawImg4);
+                        ?>
+
+                        <div class="property-card watch-card"
+                            data-id="<?= $watchId; ?>"
+                            data-brand="<?= $watchBrand; ?>"
+                            data-price="<?= (float)$watch['price']; ?>"
+                            data-stock="<?= $stock; ?>"
+                            data-images='["<?= $img1 ?>", "<?= $img2 ?>", "<?= $img3 ?>", "<?= $img4 ?>"]'>
+
+                            <!-- CARD TOP BAR (STATUS BADGE & WISHLIST HEART) -->
+                            <div class="card-top-bar">
+                                <?php if ($isSoldOut): ?>
+                                    <span class="status-badge sold-out">SOLD OUT</span>
+                                <?php else: ?>
+                                    <span class="status-badge available">AVAILABLE</span>
+                                <?php endif; ?>
+
+                                <button type="button" class="wishlist-btn wishlist-heart"
+                                    data-id="<?= $watchId; ?>"
+                                    title="Add to Wishlist" aria-label="Add to wishlist">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    </svg>
+                                </button>
                             </div>
 
-                            <div class="property-card-info">
-                                <span class="property-card-brand"><?= htmlspecialchars($watch['brand'] ?? 'ZEITH'); ?></span>
-                                <h4 class="property-card-name"><?= htmlspecialchars($watch['name']); ?></h4>
-                                <p class="property-card-price">₦<?= number_format((float)$watch['price'], 2); ?></p>
+                            <!-- HERO IMAGE CONTAINER WITH CAROUSEL & OVERLAY -->
+                            <div class="watch-image-container">
+                                <button class="carousel-arrow prev-arrow" type="button">&lsaquo;</button>
+                                <img class="card-main-img" src="<?= $img1; ?>" alt="<?= $watchName; ?>">
+                                <button class="carousel-arrow next-arrow" type="button">&rsaquo;</button>
+
+                                <div class="price-overlay-bar">
+                                    <div class="price-display"><?= $watchPrice; ?></div>
+                                    <div class="progress-indicators">
+                                        <div class="progress-bar-segment active"></div>
+                                        <div class="progress-bar-segment"></div>
+                                        <div class="progress-bar-segment"></div>
+                                        <div class="progress-bar-segment"></div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <button type="button" class="add-button">Add</button>
+                            <!-- CARD DETAILS CONTENT -->
+                            <div class="watch-details-content">
+                                <h2 class="watch-title-text"><?= $watchName; ?></h2>
+                                <p class="watch-desc-text"><?= $watchDesc; ?></p>
+                            </div>
+
+                            <!-- FOOTER ACTIONS (Keeps standard "Add" button visible) -->
+                            <div class="card-footer-actions">
+                                <button type="button" class="add-button">Add</button>
+                                <a href="/Watch_Collection/watch/details/<?= $watchId; ?>" class="view-details-link">View details &rarr;</a>
+                            </div>
+
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -659,6 +2075,8 @@ $watches = $watches ?? \App\Models\Watch::getAll();
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
+            // 1. SELECTORS & VARIABLES
             const priceSlider = document.getElementById('priceRangeSlider');
             const priceLabel = document.getElementById('priceRangeLabel');
             const btnFilter = document.getElementById('btnApplyFilter');
@@ -674,7 +2092,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             const openButton = document.getElementById('open-cart');
             const closeButton = document.getElementById('close-cart');
             const continueButton = document.getElementById('continue-shopping');
-            const itemsContainer = document.getElementById('cart-items');
+            const itemContainer = document.getElementById('cart-items');
             const subtotalElement = document.getElementById('cart-subtotal');
             const badge = document.getElementById('cart-count');
             const drawerCount = document.getElementById('drawer-item-count');
@@ -682,11 +2100,12 @@ $watches = $watches ?? \App\Models\Watch::getAll();
 
             let activeBrand = 'all';
 
+            // 2. HELPER & LOCALSTORAGE FUNCTIONS
             function readStorage(key) {
                 try {
-                    const value = JSON.parse(localStorage.getItem(key) || '[]');
+                    const value = JSON.parse(localStorage.getItem(key)) || [];
                     return Array.isArray(value) ? value : [];
-                } catch {
+                } catch (e) {
                     return [];
                 }
             }
@@ -696,7 +2115,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                     if (item && typeof item === 'object') {
                         return {
                             ...item,
-                            id: String(item.id ?? ''),
+                            id: String(item.id || ''),
                             price: Number(item.price) || 0,
                             quantity: Math.max(1, Number(item.quantity) || 1),
                             stock: Number(item.stock) || 10,
@@ -704,7 +2123,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                         };
                     }
                     return {
-                        id: String(item ?? ''),
+                        id: String(item || ''),
                         name: 'Watch details unavailable',
                         brand: 'ZEITH',
                         price: 0,
@@ -723,22 +2142,22 @@ $watches = $watches ?? \App\Models\Watch::getAll();
 
             function money(value) {
                 return '₦' + Number(value || 0).toLocaleString('en-NG', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
                 });
             }
 
             function escapeHTML(value) {
-                return String(value ?? '').replace(/[&<>"']/g, character => ({
+                return String(value || '').replace(/[&<>"']/g, character => ({
                     '&': '&amp;',
                     '<': '&lt;',
                     '>': '&gt;',
                     '"': '&quot;',
-                    "'": '&#39;'
-                })[character]);
+                    "'": '&#039;'
+                } [character]));
             }
 
-            // PRICE FILTER
+            // 3. PRICE & BRAND FILTERING
             function filterWatches() {
                 if (!priceSlider) return;
                 const maxPrice = parseFloat(priceSlider.value) || 0;
@@ -749,8 +2168,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                     const brand = (card.dataset.brand || '').toLowerCase();
 
                     const matchesPrice = price <= maxPrice;
-                    const matchesBrand = activeBrand === 'all' ||
-                        brand.includes(activeBrand.toLowerCase());
+                    const matchesBrand = activeBrand === 'all' || brand.includes(activeBrand.toLowerCase());
 
                     card.classList.toggle('hidden', !(matchesPrice && matchesBrand));
 
@@ -765,18 +2183,16 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             if (priceSlider && priceLabel) {
                 priceSlider.addEventListener('input', () => {
                     const value = Number(priceSlider.value);
-                    priceLabel.textContent = `PRICE: ₦3,000 — ₦${value.toLocaleString()}`;
+                    priceLabel.textContent = `PRICE: ₦3,000 – ₦${value.toLocaleString()}`;
                     filterWatches();
                 });
             }
 
             btnFilter?.addEventListener('click', filterWatches);
 
-            // BRAND FILTERING
             brandLinks.forEach(link => {
-                link.addEventListener('click', event => {
+                link.addEventListener('click', (event) => {
                     event.preventDefault();
-
                     activeBrand = link.dataset.brand || 'all';
 
                     if (selectedCategoryText) {
@@ -787,27 +2203,69 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                 });
             });
 
-            // WISHLIST
-            function syncWishlist() {
-                const wishlist = readStorage('zeith_wishlist').map(String);
+            // 4. UNIFIED WISHLIST CONTROLLER & HEART HIGHLIGHT SYNC
+            function updateWishlistBadge() {
+                const wishlistBadge = document.getElementById('wishlist-count');
+                if (!wishlistBadge) return;
 
-                document.querySelectorAll('.wishlist-btn, .wishlist-heart, .wishlist-heart-btn').forEach(button => {
-                    const id = String(button.dataset.id || button.getAttribute('data-id') || '');
+                const wishlist = readStorage('zeith_wishlist').map(String);
+                wishlistBadge.textContent = wishlist.length;
+                wishlistBadge.style.display = wishlist.length > 0 ? 'inline-block' : 'none';
+            }
+
+            function syncWishlistHearts() {
+                const wishlist = readStorage('zeith_wishlist').map(String);
+                const buttons = document.querySelectorAll('.wishlist-btn, .wishlist-heart, .wishlist-heart-btn');
+
+                buttons.forEach(button => {
+                    const card = button.closest('.property-card, .watch-card, .arrivals, .watch-detail');
+                    const id = String(button.dataset.id || button.getAttribute('data-id') || card?.dataset.id || card?.getAttribute('data-id') || '');
+
+                    if (!id) return;
+
                     const isActive = wishlist.includes(id);
                     button.classList.toggle('active', isActive);
-                    if (button.classList.contains('wishlist-heart')) {
-                        button.style.color = isActive ? '#e74c3c' : '#f68b1e';
+
+                    const svgPath = button.querySelector('svg path, path');
+                    if (isActive) {
+                        button.style.color = '#ff5252';
+                        if (svgPath) svgPath.style.fill = '#ff5252';
+                    } else {
+                        button.style.color = '';
+                        if (svgPath) svgPath.style.fill = 'currentColor';
                     }
                 });
 
-                const wishlistBadge = document.getElementById('wishlist-count');
-                if (wishlistBadge) {
-                    wishlistBadge.textContent = wishlist.length;
-                    wishlistBadge.style.display = wishlist.length ? 'inline-block' : 'none';
-                }
+                updateWishlistBadge();
             }
 
-            // CART BADGE
+            // Single unified click handler for Wishlist Hearts
+            document.addEventListener('click', (e) => {
+                const heartBtn = e.target.closest('.wishlist-btn, .wishlist-heart, .wishlist-heart-btn');
+                if (!heartBtn) return;
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                const card = heartBtn.closest('.property-card, .watch-card, .arrivals, .watch-detail');
+                const watchId = String(heartBtn.dataset.id || heartBtn.getAttribute('data-id') || card?.dataset.id || card?.getAttribute('data-id') || '');
+
+                if (!watchId) return;
+
+                let wishlist = readStorage('zeith_wishlist').map(String);
+
+                if (wishlist.includes(watchId)) {
+                    wishlist = wishlist.filter(id => id !== watchId);
+                } else {
+                    wishlist.push(watchId);
+                }
+
+                localStorage.setItem('zeith_wishlist', JSON.stringify(wishlist));
+                window.dispatchEvent(new Event('storage'));
+                syncWishlistHearts();
+            });
+
+            // 5. CART DRAWER CONTROLS
             function updateCartBadge(cart = readCart()) {
                 const count = cart.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -822,66 +2280,66 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             }
 
             function openCart() {
-                if (drawer && overlay) {
-                    drawer.classList.add('open');
-                    overlay.classList.add('open');
-                    document.body.classList.add('cart-open');
-                    drawer.setAttribute('aria-hidden', 'false');
-                    openButton?.setAttribute('aria-expanded', 'true');
-                    renderCart();
-                    closeButton?.focus();
-                }
+                if (!drawer || !overlay) return;
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.body.classList.add('cart-open');
+
+                drawer.setAttribute('aria-hidden', 'false');
+                openButton?.setAttribute('aria-expanded', 'true');
+
+                renderCart();
+                closeButton?.focus();
             }
 
             function closeCart() {
-                if (drawer && overlay) {
-                    drawer.classList.remove('open');
-                    overlay.classList.remove('open');
-                    document.body.classList.remove('cart-open');
-                    drawer.setAttribute('aria-hidden', 'true');
-                    openButton?.setAttribute('aria-expanded', 'false');
-                    openButton?.focus();
-                }
+                if (!drawer || !overlay) return;
+                drawer.classList.remove('open');
+                overlay.classList.remove('open');
+                document.body.classList.remove('cart-open');
+
+                drawer.setAttribute('aria-hidden', 'true');
+                openButton?.setAttribute('aria-expanded', 'false');
+                openButton?.focus();
             }
 
             function renderCart() {
-                if (!itemsContainer || !subtotalElement) return;
+                if (!itemContainer || !subtotalElement) return;
 
                 const cart = readCart();
                 const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-                const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
                 updateCartBadge(cart);
 
                 if (cart.length === 0) {
-                    itemsContainer.innerHTML = `
-                        <div class="cart-empty">
-                            <i class="fa-solid fa-bag-shopping"></i>
-                            <h3>Your bag is waiting</h3>
-                            <p>Add a luxury timepiece to get started.</p>
-                        </div>
-                    `;
+                    itemContainer.innerHTML = `
+                <div class="cart-empty">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <h3>Your bag is waiting</h3>
+                    <p>Add a luxury timepiece to get started.</p>
+                </div>`;
                 } else {
-                    itemsContainer.innerHTML = cart.map((item, index) => `
-                        <article class="cart-item" data-index="${index}">
-                            <div class="cart-item-image">
-                                ${item.image ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}">` : '<i class="fa-regular fa-clock"></i>'}
+                    itemContainer.innerHTML = cart.map((item, index) => `
+                <article class="cart-item" data-index="${index}">
+                    <div class="cart-item-image">
+                        ${item.image ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}">` : `<i class="fa-regular fa-clock"></i>`}
+                    </div>
+                    <div>
+                        <span class="cart-item-brand">${escapeHTML(item.brand || 'ZEITH')}</span>
+                        <h4 class="cart-item-name">${escapeHTML(item.name)}</h4>
+                        <div class="cart-item-price">${money(item.price)}</div>
+                        <div class="cart-item-bottom">
+                            <div class="cart-quantity">
+                                <button type="button" data-action="decrease" aria-label="Decrease quantity">-</button>
+                                <span>${item.quantity}</span>
+                                <button type="button" data-action="increase" aria-label="Increase quantity">+</button>
                             </div>
-                            <div>
-                                <span class="cart-item-brand">${escapeHTML(item.brand || 'ZEITH')}</span>
-                                <h3 class="cart-item-name">${escapeHTML(item.name)}</h3>
-                                <div class="cart-item-price">${money(item.price)}</div>
-                                <div class="cart-item-bottom">
-                                    <div class="cart-quantity">
-                                        <button type="button" data-action="decrease" aria-label="Decrease quantity">−</button>
-                                        <span>${item.quantity}</span>
-                                        <button type="button" data-action="increase" aria-label="Increase quantity">+</button>
-                                    </div>
-                                    <button type="button" class="cart-remove" data-action="remove">Remove</button>
-                                </div>
-                            </div>
-                        </article>
-                    `).join('');
+                            <button type="button" class="cart-remove" data-action="remove">Remove</button>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
                 }
 
                 subtotalElement.textContent = money(subtotal);
@@ -889,20 +2347,129 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                 if (checkoutButton) checkoutButton.disabled = cart.length === 0;
             }
 
-            // Drawer listeners
             openButton?.addEventListener('click', openCart);
             closeButton?.addEventListener('click', closeCart);
             continueButton?.addEventListener('click', closeCart);
             overlay?.addEventListener('click', closeCart);
 
-            document.addEventListener('keydown', event => {
+            document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape' && drawer?.classList.contains('open')) {
                     closeCart();
                 }
             });
 
-            // CART QUANTITY & REMOVE ACTIONS
-            itemsContainer?.addEventListener('click', event => {
+            // 6. CAROUSEL SLIDE ARROWS LOGIC
+            document.addEventListener('click', (e) => {
+                const arrow = e.target.closest('.carousel-arrow');
+                if (!arrow) return;
+
+                e.stopPropagation();
+
+                const card = arrow.closest('.watch-card, .property-card');
+                if (!card) return;
+
+                const imgEl = card.querySelector('.card-main-img');
+                const bars = card.querySelectorAll('.progress-bar-segment');
+                const images = JSON.parse(card.getAttribute('data-images') || '[]');
+
+                if (!images.length) return;
+
+                let currentIndex = parseInt(card.getAttribute('data-current-index') || '0', 10);
+
+                if (arrow.classList.contains('next-arrow')) {
+                    currentIndex = (currentIndex + 1) % images.length;
+                } else if (arrow.classList.contains('prev-arrow')) {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                }
+
+                card.setAttribute('data-current-index', currentIndex);
+
+                if (imgEl) {
+                    imgEl.style.opacity = '0';
+                    setTimeout(() => {
+                        imgEl.src = images[currentIndex];
+                        imgEl.style.opacity = '1';
+                    }, 150);
+                }
+
+                bars.forEach((bar, idx) => {
+                    bar.classList.toggle('active', idx === currentIndex);
+                });
+            });
+
+            // 7. ADD TO CART & SOLD OUT ALERT
+            document.addEventListener('click', (event) => {
+                const addButton = event.target.closest('.add-button, .property-add-btn');
+                if (!addButton) return;
+
+                const card = addButton.closest('.property-card, .watch-card, .arrivals, .watch-detail');
+                if (!card) return;
+
+                const stock = Number(card.dataset.stock);
+                const statusBadge = card.querySelector('.status-badge');
+                const isSoldOut = (stock <= 0) || (statusBadge && statusBadge.textContent.trim().toUpperCase() === 'SOLD OUT');
+
+                // Trigger alert and stop adding to cart if Sold Out
+                if (isSoldOut) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    alert('This watch is currently Sold Out and cannot be added to your cart.');
+                    return;
+                }
+
+                const id = String(card.dataset.id || card.getAttribute('data-id') || addButton.getAttribute('data-id') || '');
+                if (!id || id === 'null' || id === 'undefined') return;
+
+                const nameElement = card.querySelector('.property-card-title, .property-card-name, .watch-name, .watch-title-text, h2, h3, h1');
+                const brandElement = card.querySelector('.property-card-brand, .watch-brand');
+                const priceElement = card.querySelector('.property-card-price, .price-display, .watch-price, .price');
+                const imgElement = card.querySelector('.card-main-img, .property-card-image img, img');
+
+                const rawPrice = card.dataset.price || priceElement?.textContent || '';
+                const price = Number(String(rawPrice).replace(/[^\d.]/g, '')) || 0;
+
+                const watch = {
+                    id,
+                    name: nameElement ? nameElement.textContent.trim() : 'Watch',
+                    brand: brandElement ? brandElement.textContent.trim() : card.dataset.brand || 'ZEITH',
+                    price,
+                    image: imgElement ? imgElement.getAttribute('src') : '',
+                    stock: stock || 10,
+                    quantity: 1
+                };
+
+                let cart = readCart();
+                const existingIndex = cart.findIndex(item => item.id === watch.id);
+                const currentQty = existingIndex !== -1 ? Number(cart[existingIndex].quantity) : 0;
+
+                if (currentQty + 1 > watch.stock) {
+                    alert(`Sorry, we only have ${watch.stock} of this item in stock.`);
+                    return;
+                }
+
+                if (existingIndex !== -1) {
+                    cart[existingIndex].quantity = currentQty + 1;
+                    cart[existingIndex].name = watch.name;
+                    cart[existingIndex].brand = watch.brand;
+                    cart[existingIndex].price = watch.price;
+                    cart[existingIndex].image = watch.image;
+                    cart[existingIndex].stock = watch.stock;
+                } else {
+                    cart.push(watch);
+                }
+
+                saveCart(cart);
+                openCart();
+
+                const oldText = addButton.textContent;
+                addButton.textContent = 'Added!';
+                setTimeout(() => {
+                    addButton.textContent = oldText;
+                }, 900);
+            });
+
+            // 8. CART QUANTITY CONTROLS
+            itemContainer?.addEventListener('click', (event) => {
                 const button = event.target.closest('[data-action]');
                 if (!button) return;
 
@@ -917,21 +2484,16 @@ $watches = $watches ?? \App\Models\Watch::getAll();
 
                 switch (button.dataset.action) {
                     case 'increase':
-                        const maxStock = Number(item.stock) || 10;
-                        if (item.quantity + 1 > maxStock) {
-                            alert(`Sorry, we only have ${maxStock} of this item in stock.`);
+                        if (item.quantity + 1 > item.stock) {
+                            alert(`Sorry, only ${item.stock} available in stock.`);
                             return;
                         }
                         item.quantity++;
                         break;
-
                     case 'decrease':
                         item.quantity--;
-                        if (item.quantity <= 0) {
-                            cart.splice(index, 1);
-                        }
+                        if (item.quantity <= 0) cart.splice(index, 1);
                         break;
-
                     case 'remove':
                         cart.splice(index, 1);
                         break;
@@ -945,84 +2507,18 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                 window.location.href = '/Watch_Collection/checkout';
             });
 
-            // WISHLIST AND ADD-TO-CART HANDLERS
-            document.addEventListener('click', event => {
-                const wishlistButton = event.target.closest('.wishlist-btn, .wishlist-heart, .wishlist-heart-btn');
-                const addButton = event.target.closest('.add-button, .property-add-btn');
-
-                if (wishlistButton) {
-                    const id = String(wishlistButton.dataset.id || wishlistButton.getAttribute('data-id') || '');
-                    if (!id) return;
-
-                    let wishlist = readStorage('zeith_wishlist').map(String);
-
-                    wishlist = wishlist.includes(id) ?
-                        wishlist.filter(savedId => savedId !== id) : [...wishlist, id];
-
-                    localStorage.setItem('zeith_wishlist', JSON.stringify(wishlist));
-                    syncWishlist();
-                    return;
-                }
-
-                if (addButton) {
-                    const card = addButton.closest('.property-card, .watch-card, .arrivals, .watch-detail');
-                    if (!card) return;
-
-                    const stock = Number(card.dataset.stock) || 10;
-                    const id = String(card.dataset.id || card.getAttribute('data-id') || addButton.getAttribute('data-id') || '');
-
-                    const watch = {
-                        id,
-                        name: card.querySelector('.property-card-title, .property-card-name, .watch-name, h3, h1')?.textContent.trim() || 'Watch',
-                        brand: card.dataset.brand || card.querySelector('.property-card-brand, .watch-brand')?.textContent.trim() || 'ZEITH',
-                        price: Number(card.dataset.price || String(card.querySelector('.property-card-price, .watch-price, .price')?.textContent || '').replace(/[^\d.]/g, '')) || 0,
-                        image: card.querySelector('.property-card-image img, img')?.getAttribute('src') || '',
-                        stock,
-                        quantity: 1
-                    };
-
-                    if (!id || id === 'null' || id === 'undefined') return;
-
-                    let cart = readCart();
-                    const existingIndex = cart.findIndex(item => item.id === watch.id);
-                    const currentQty = existingIndex !== -1 ? (Number(cart[existingIndex].quantity) || 1) : 0;
-
-                    if (currentQty + 1 > stock) {
-                        alert(`Sorry, we only have ${stock} of this item in stock.`);
-                        return;
-                    }
-
-                    if (existingIndex !== -1) {
-                        cart[existingIndex].quantity = currentQty + 1;
-                        cart[existingIndex].name = watch.name;
-                        cart[existingIndex].brand = watch.brand;
-                        cart[existingIndex].price = watch.price;
-                        cart[existingIndex].image = watch.image;
-                        cart[existingIndex].stock = stock;
-                    } else {
-                        cart.push(watch);
-                    }
-
-                    saveCart(cart);
-
-                    const oldText = addButton.textContent;
-                    addButton.textContent = 'Added!';
-                    window.setTimeout(() => {
-                        addButton.textContent = oldText;
-                    }, 900);
-                }
+            // 9. LISTENERS & CROSS-TAB SYNC
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'zeith_cart') renderCart();
+                if (event.key === 'zeith_wishlist') syncWishlistHearts();
             });
 
-            // INITIALIZE
-            syncWishlist();
+            window.addEventListener('focus', syncWishlistHearts);
+
+            // Initial load setup
+            syncWishlistHearts();
             filterWatches();
             renderCart();
-
-            // Cross-tab synchronization
-            window.addEventListener('storage', event => {
-                if (event.key === 'zeith_cart') renderCart();
-                if (event.key === 'zeith_wishlist') syncWishlist();
-            });
         });
     </script>
 </body>
