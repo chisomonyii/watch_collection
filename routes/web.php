@@ -4,19 +4,20 @@ use App\Controller\ProductController;
 
 $productController = new ProductController();
 
-// Support both local server path variations to prevent 404s
-$router->get('/search', function() use ($productController) {
-    $productController->search();
-});
-
-$router->get('/Watch_Collection/search', function() use ($productController) {
-    $productController->search();
-});
-
+// API Search route (for the live dropdown)
 $router->get('/api/search', function() use ($productController) {
     $productController->liveSearchApi();
 });
 
 $router->get('/Watch_Collection/api/search', function() use ($productController) {
     $productController->liveSearchApi();
+});
+
+// Full Search Results Page route (when clicking enter or "View all")
+$router->get('/product/search', function() use ($productController) {
+    $productController->search();
+});
+
+$router->get('/Watch_Collection/product/search', function() use ($productController) {
+    $productController->search();
 });

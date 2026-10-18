@@ -51,4 +51,12 @@ $router->get('/user/watch/collection/{name}', 'Collection@showByPath');
 // API route to get watch details for saved items
 $router->post('/api/watch-items', 'Watch@getCartItems');
 
+// Live Search API Route for Autocomplete Dropdown
+$router->get('/api/search', 'ProductController@liveSearchApi');
+
+// Full Search Results Page Route (Frame 2 / View All)
+$router->get('/product/search', 'ProductController@search');
+
+$router->run();
+
 $router->run();

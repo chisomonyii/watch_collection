@@ -27,6 +27,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             display: grid;
             grid-template-columns: 280px 1fr;
             gap: 2.5rem;
+            margin-top: 2.9rem;
         }
 
         .property-sidebar {
@@ -1875,6 +1876,10 @@ $watches = $watches ?? \App\Models\Watch::getAll();
 </head>
 
 <body class="property-body">
+
+    <?php require_once __DIR__ . '/../components/header.php'; ?>
+
+
     <div class="property-container">
 
         <aside class="property-sidebar">

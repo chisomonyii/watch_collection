@@ -33,11 +33,12 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 3.5rem;
+            margin-top: 2.2rem;
         }
 
         .property-title {
             border: 1px solid #e2e8f0;
-            padding: 0.55rem 2.0rem;
+            padding: 0.45rem 1.7rem;
             border-radius: 999px;
             background-color: #ffffff;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
@@ -733,6 +734,8 @@
 </head>
 
 <body class="property-details-body">
+
+    <?php require_once __DIR__ . '/../components/header.php'; ?>
 
     <div class="bg-animated-watch">
         <img src="<?php assets("image/pat-taylor-12V36G17IbQ-unsplash (1).jpg"); ?>" alt="Watch Background">

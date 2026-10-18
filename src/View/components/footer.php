@@ -190,8 +190,8 @@
         <div class="zeith-footer-col">
             <h2 class="zeith-logo">ZEITH</h2>
             <ul class="zeith-footer-links">
-                <li><a href="/Watch_Collection/collection">Collections</a></li>
-                <li><a href="/Watch_Collection/home#new-arrivals">New Arrivals</a></li>
+                <li><a href="/Watch_Collection/user/watch">Collections</a></li>
+                <li><a href="/Watch_Collection/user/watch">New Arrivals</a></li>
                 <li><a href="/Watch_Collection/home#best-sellers">Best Sellers</a></li>
             </ul>
         </div>
@@ -210,7 +210,7 @@
         <div class="zeith-footer-col">
             <h3>SUPPORT</h3>
             <ul class="zeith-footer-links">
-                <li><a href="#">Contact Us</a></li>
+                <li><a href="/Watch_Collection/user/contact">Contact Us</a></li>
                 <li><a href="/Watch_Collection/track">Track Your Order</a></li>
                 <li><a href="#">Shipping</a></li>
                 <li><a href="#">Returns</a></li>

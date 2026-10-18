@@ -10,7 +10,7 @@ class Product
 
     public function __construct() {
         $host = 'localhost';
-        $db   = 'Watch_Collection';
+        $db   = 'watch_collection';
         $user = 'root';
         $pass = '';
 
@@ -18,25 +18,28 @@ class Product
             $this->pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {
-            die("Database Connection Error: " . $e->getMessage());
+            die(json_encode(["error" => "Database connection failed: " . $e->getMessage()]));
         }
     }
 
-    /**
-     * Search for products based on a keyword across name, brand, and description
-     */
-   public function searchProducts(string $keyword) {
+    public function searchProducts(string $keyword) {
+        if (!$this->pdo) return [];
+
         $searchTerm = "%" . trim($keyword) . "%";
 
-        $stmt = $this->pdo->prepare("
-            SELECT * FROM watches 
-            WHERE name LIKE ? 
-               OR brand LIKE ? 
-               OR description LIKE ?
-            ORDER BY id DESC
-        ");
-        
-        $stmt->execute([$searchTerm, $searchTerm, $searchTerm]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            // Removed 'brand' column since your watches table uses collection_id
+            $stmt = $this->pdo->prepare("
+                SELECT * FROM watches 
+                WHERE name LIKE ? 
+                   OR description LIKE ?
+                ORDER BY id DESC
+            ");
+            
+            $stmt->execute([$searchTerm, $searchTerm]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            return [];
+        }
     }
 }

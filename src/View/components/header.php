@@ -14,9 +14,10 @@
         padding: 0 80px;
         box-sizing: border-box;
         pointer-events: none;
+        overflow: visible !important;
+        /* Ensures dropdown isn't clipped */
     }
 
-    /* Floating Off-White Pill Container */
     .zeith-header-container {
         pointer-events: auto;
         max-width: 1120px;
@@ -32,6 +33,8 @@
         border: 1px solid rgba(255, 255, 255, 0.5);
         backdrop-filter: blur(10px);
         transition: all 0.3s ease;
+        overflow: visible !important;
+        /* Crucial so dropdown can hang outside the pill */
     }
 
     /* Left Group: Logo & Search Bar together */
@@ -63,7 +66,9 @@
     .zeith-search-container {
         flex: 1;
         display: flex;
-        max-width: 260px;
+        max-width: 280px;
+        position: relative;
+        overflow: visible !important;
     }
 
     .zeith-search-box {
@@ -100,6 +105,108 @@
 
     .zeith-search-box input::placeholder {
         color: #888888;
+    }
+
+    /* SEARCH DROPDOWN STYLING (Matching Nixon Template Exactly) */
+    .zeith-dropdown-box {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 320px;
+        /* Expands to give watch names ample breathing room */
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        margin-top: 12px;
+        display: none;
+        z-index: 2000;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+    }
+
+    .zeith-dropdown-header {
+        padding: 14px 18px;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 0.85rem;
+        color: #64748b;
+        font-weight: 500;
+        background: #ffffff;
+    }
+
+    .zeith-dropdown-list {
+        max-height: 380px;
+        overflow-y: auto;
+    }
+
+    .zeith-dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 18px;
+        text-decoration: none;
+        border-bottom: 1px solid #f1f5f9;
+        transition: background 0.2s ease;
+    }
+
+    .zeith-dropdown-item:hover {
+        background: #f8fafc;
+    }
+
+    .zeith-dropdown-img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+        /* Keeps the entire watch nicely centered without cropping */
+        border-radius: 8px;
+        background: #f8fafc;
+        /* Clean light background for transparent watch PNGs */
+        padding: 4px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .zeith-dropdown-info {
+        flex: 1;
+    }
+
+    .zeith-dropdown-title {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 3px;
+        line-height: 1.2;
+    }
+
+    .zeith-dropdown-price {
+        font-size: 0.82rem;
+        color: #1a1a1a;
+        font-weight: 700;
+    }
+
+    .zeith-dropdown-footer {
+        padding: 14px;
+        text-align: center;
+        background: #ffffff;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .zeith-dropdown-viewall {
+        color: #1a1a1a;
+        font-size: 0.9rem;
+        font-weight: 700;
+        text-decoration: underline;
+        transition: color 0.2s ease;
+    }
+
+    .zeith-dropdown-viewall:hover {
+        color: #8c857b;
+    }
+
+    .zeith-no-results {
+        padding: 30px 20px;
+        text-align: center;
+        color: #64748b;
+        font-size: 0.9rem;
+        background: #ffffff;
     }
 
     /* Right Group: Nav Links & Action Icons */
@@ -172,9 +279,7 @@
         padding: 4px;
     }
 
-    /* =========================================
-   MOBILE / IPAD DRAWER MENU
-   ========================================= */
+    /* Mobile / iPad Drawer Menu */
     .zeith-mobile-menu {
         pointer-events: auto;
         max-width: 1120px;
@@ -252,7 +357,10 @@
 
         .zeith-search-container {
             max-width: 140px;
-            /* Shrinks slightly on very small phones to fit alongside logo */
+        }
+
+        .zeith-dropdown-box {
+            width: 260px;
         }
     }
 </style>
@@ -260,18 +368,19 @@
 <div class="zeith-header-wrapper">
     <header class="zeith-header-container">
 
-        <!-- Left Group: Logo & Search Bar always visible -->
+        <!-- Left Group: Logo & Search Bar -->
         <div class="zeith-left-group">
             <a href="/Watch_Collection/home" class="zeith-brand-logo">ZEITH</a>
 
-            <div class="zeith-search-container" style="position: relative;">
-                <!-- Change action to /Watch_Collection/search and input name to q -->
-                <form action="/Watch_Collection/search" method="GET" class="zeith-search-box">
+            <div class="zeith-search-container">
+                <form action="/Watch_Collection/product/search" method="GET" class="zeith-search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="liveSearchInput" name="q" placeholder="Search watches..." autocomplete="off">
+                    <button type="button" id="clearSearchBtn" style="display: none; background: none; border: none; cursor: pointer; color: #555555; padding: 0 4px;"><i class="fa-solid fa-xmark"></i></button>
                 </form>
 
-                <div id="searchResultsDropdown" style="position: absolute; top: 100%; left: 0; right: 0; background: #131b2e; border: 1px solid #1e293b; border-radius: 8px; margin-top: 6px; display: none; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.5);"></div>
+                <!-- Live Results Dropdown Container (Slides DOWN underneath search bar) -->
+                <div id="searchResultsDropdown" class="zeith-dropdown-box"></div>
             </div>
         </div>
 
@@ -300,7 +409,7 @@
 
     </header>
 
-    <!-- Slide-Down Mobile/Tablet Navigation Drawer (Links Only) -->
+    <!-- Mobile Drawer -->
     <div class="zeith-mobile-menu" id="zeith-mobile-dropdown">
         <ul class="zeith-mobile-nav-list">
             <li><a href="/Watch_Collection/collection" class="zeith-mobile-nav-link">Watches</a></li>
@@ -312,16 +421,17 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // 1. Mobile Menu Toggle Logic
         const toggleBtn = document.getElementById('zeith-mobile-toggle-btn');
-        const dropdown = document.getElementById('zeith-mobile-dropdown');
+        const mobileDropdown = document.getElementById('zeith-mobile-dropdown');
         const toggleIcon = document.getElementById('zeith-toggle-icon');
 
-        if (toggleBtn && dropdown) {
+        if (toggleBtn && mobileDropdown) {
             toggleBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                dropdown.classList.toggle('active');
+                mobileDropdown.classList.toggle('active');
 
-                if (dropdown.classList.contains('active')) {
+                if (mobileDropdown.classList.contains('active')) {
                     toggleIcon.classList.remove('fa-bars');
                     toggleIcon.classList.add('fa-xmark');
                 } else {
@@ -331,8 +441,8 @@
             });
 
             document.addEventListener('click', function(e) {
-                if (!dropdown.contains(e.target) && !toggleBtn.contains(e.target)) {
-                    dropdown.classList.remove('active');
+                if (!mobileDropdown.contains(e.target) && !toggleBtn.contains(e.target)) {
+                    mobileDropdown.classList.remove('active');
                     if (toggleIcon) {
                         toggleIcon.classList.remove('fa-xmark');
                         toggleIcon.classList.add('fa-bars');
@@ -340,47 +450,96 @@
                 }
             });
         }
-    });
 
-    document.getElementById('liveSearchInput').addEventListener('input', function() {
-        let query = this.value.trim();
-        let dropdown = document.getElementById('searchResultsDropdown');
+        // 2. Live Search Dropdown Logic
+        const searchInput = document.getElementById('liveSearchInput');
+        const searchDropdown = document.getElementById('searchResultsDropdown');
+        const clearBtn = document.getElementById('clearSearchBtn');
 
-        if (query.length < 2) {
-            dropdown.style.display = 'none';
-            dropdown.innerHTML = '';
-            return;
-        }
+        if (searchInput && searchDropdown) {
+            searchInput.addEventListener('input', function() {
+                let query = this.value.trim();
 
-        fetch(`/Watch_Collection/api/search?q=${encodeURIComponent(query)}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    let html = '';
-                    data.forEach(product => {
-                        html += `
-                        <a href="/Watch_Collection/product?id=${product.id}" style="display: flex; align-items: center; gap: 12px; padding: 10px 14px; text-decoration: none; color: #f8fafc; border-bottom: 1px solid #1e293b; transition: background 0.2s;">
-                            <img src="${product.image || 'assets/images/placeholder.jpg'}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
-                            <div>
-                                <div style="font-size: 0.9rem; font-weight: 600;">${product.name}</div>
-                                <div style="font-size: 0.75rem; color: #f68b1e;">₦${parseFloat(product.price).toLocaleString()}</div>
-                            </div>
-                        </a>
+                if (clearBtn) {
+                    clearBtn.style.display = query.length > 0 ? 'block' : 'none';
+                }
+
+                if (query.length === 0) {
+                    searchDropdown.style.display = 'none';
+                    searchDropdown.innerHTML = '';
+                    return;
+                }
+
+                // FIXED: Absolute path so it never breaks on sub-pages
+                fetch(`/Watch_Collection/api/search?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let html = `
+                        <div class="zeith-dropdown-header">
+                            Results for: "${escapeHtml(query)}"
+                        </div>
                     `;
+
+                        if (data.length > 0) {
+                            html += `<div class="zeith-dropdown-list">`;
+                            data.forEach(product => {
+                                let formattedPrice = '₦' + parseFloat(product.price).toLocaleString();
+
+                                // Add your actual image folder path here (e.g., 'assets/images/' or 'uploads/')
+                                let imgSrc = product.image_url_1 ? `/Watch_Collection/assets/image/${product.image_url_1}` : '/Watch_Collection/assets/images/placeholder.jpg';
+                                html += `
+                               <a href="/Watch_Collection/watch/details/${product.id}" class="zeith-dropdown-item">
+                                   <img src="${imgSrc}" alt="${escapeHtml(product.name)}" class="zeith-dropdown-img">
+                                   <div class="zeith-dropdown-info">
+                                       <div class="zeith-dropdown-title">${escapeHtml(product.name)}</div>
+                                       <div class="zeith-dropdown-price">${formattedPrice}</div>
+                                   </div>
+                               </a>
+                           `;
+                            });
+                            html += `</div>`;
+
+                            // FIXED: Point to /product/search instead of /search
+                            html += `
+                                <div class="zeith-dropdown-footer">
+                                    <a href="/Watch_Collection/product/search?q=${encodeURIComponent(query)}" class="zeith-dropdown-viewall">View all</a>
+                                </div>
+                            `;
+                        } else {
+                            html += `
+                            <div class="zeith-no-results">
+                                No products found.
+                            </div>
+                        `;
+                        }
+
+                        searchDropdown.innerHTML = html;
+                        searchDropdown.style.display = 'block';
+                    })
+                    .catch(err => {
+                        console.error("Search API Error:", err);
                     });
-                    dropdown.innerHTML = html;
-                    dropdown.style.display = 'block';
-                } else {
-                    dropdown.innerHTML = `<div style="padding: 12px; color: #94a3b8; font-size: 0.85rem; text-align: center;">No watches found</div>`;
-                    dropdown.style.display = 'block';
+            });
+
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function() {
+                    searchInput.value = '';
+                    clearBtn.style.display = 'none';
+                    searchDropdown.style.display = 'none';
+                    searchDropdown.innerHTML = '';
+                    searchInput.focus();
+                });
+            }
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.zeith-search-container')) {
+                    searchDropdown.style.display = 'none';
                 }
             });
-    });
+        }
 
-    // Hide dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.zeith-search-container')) {
-            document.getElementById('searchResultsDropdown').style.display = 'none';
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
     });
 </script>

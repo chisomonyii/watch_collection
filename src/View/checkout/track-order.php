@@ -22,6 +22,12 @@
             --success-color: #10b981;
         }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-light);
@@ -32,6 +38,7 @@
         .tracking-container {
             max-width: 800px;
             margin: 0 auto;
+            margin-top: 80px;
         }
 
         /* SEARCH BOX */
@@ -66,6 +73,7 @@
             border-radius: 8px;
             font-size: 0.95rem;
             outline: none;
+            width: 100%;
         }
 
         .search-btn {
@@ -76,6 +84,7 @@
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         /* STATUS TRACKER BAR */
@@ -85,6 +94,15 @@
             border-radius: 16px;
             padding: 40px 32px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .status-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .progress-tracker {
@@ -184,10 +202,73 @@
             font-weight: 600;
             margin-top: 10px;
         }
+
+        /* ==========================================================
+           RESPONSIVE ADAPTATIONS FOR IPADS AND MOBILE PHONES
+           ========================================================== */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            .search-card,
+            .status-card {
+                padding: 24px 16px;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            /* Convert horizontal tracker to a clean vertical list on mobile */
+            .progress-tracker {
+                flex-direction: column;
+                align-items: flex-start;
+                margin: 0;
+                padding-left: 20px;
+                position: relative;
+            }
+
+            .progress-tracker::before {
+                top: 0;
+                bottom: 0;
+                left: 39px;
+                width: 4px;
+                height: 100%;
+            }
+
+            .progress-line-active {
+                top: 0;
+                left: 39px;
+                width: 4px !important; /* Overrides inline percentage width for vertical view */
+            }
+
+            .step-item {
+                display: flex;
+                align-items: center;
+                text-align: left;
+                margin-bottom: 24px;
+                width: 100%;
+            }
+
+            .step-item:last-child {
+                margin-bottom: 0;
+            }
+
+            .step-icon {
+                margin: 0 16px 0 0;
+                flex-shrink: 0;
+            }
+        }
     </style>
 </head>
 
 <body>
+       <?php require_once __DIR__ . '/../components/header.php'; ?>
 
     <div class="tracking-container">
 
@@ -204,10 +285,10 @@
         <?php if (!empty($order)): ?>
             <!-- STATUS PROGRESS BAR -->
             <div class="status-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <div class="status-header-row">
                     <div>
                         <h3 style="font-size: 1.1rem;">Order Reference: <?= htmlspecialchars($order['order_number']) ?></h3>
-                        <p style="color: var(--text-muted); font-size: 0.85rem;">Status: <strong><?= htmlspecialchars($order['order_status']) ?></strong></p>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 2px;">Status: <strong><?= htmlspecialchars($order['order_status']) ?></strong></p>
                     </div>
                     <span style="background: #f0fdf4; color: #166534; padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 0.8rem;">
                         Verified Purchase
@@ -223,13 +304,15 @@
                     if ($status === 'Dispatched') $progressWidth = '66%';
                     if ($status === 'Delivered') $progressWidth = '100%';
                     ?>
-                    <div class="progress-line-active" style="width: <?= $progressWidth ?>;"></div>
+                    <div class="progress-line-active" style="height: <?= $progressWidth ?>;"></div>
 
                     <!-- STEP 1: ORDER PLACED -->
                     <div class="step-item completed">
                         <div class="step-icon"><i class="fa-solid fa-check"></i></div>
-                        <div class="step-label">Order Placed</div>
-                        <div class="step-date">Verified</div>
+                        <div>
+                            <div class="step-label">Order Placed</div>
+                            <div class="step-date">Verified</div>
+                        </div>
                     </div>
 
                     <!-- STEP 2: PROCESSING / VERIFICATION -->
@@ -237,8 +320,10 @@
                         <div class="step-icon">
                             <?= in_array($status, ['Processing', 'Dispatched', 'Delivered']) ? '<i class="fa-solid fa-check"></i>' : '2' ?>
                         </div>
-                        <div class="step-label">Processing</div>
-                        <div class="step-date">Inspection & Packing</div>
+                        <div>
+                            <div class="step-label">Processing</div>
+                            <div class="step-date">Inspection & Packing</div>
+                        </div>
                     </div>
 
                     <!-- STEP 3: DISPATCHED -->
@@ -246,15 +331,19 @@
                         <div class="step-icon">
                             <?= in_array($status, ['Dispatched', 'Delivered']) ? '<i class="fa-solid fa-check"></i>' : '3' ?>
                         </div>
-                        <div class="step-label">Dispatched</div>
-                        <div class="step-date">In Transit</div>
+                        <div>
+                            <div class="step-label">Dispatched</div>
+                            <div class="step-date">In Transit</div>
+                        </div>
                     </div>
 
                     <!-- STEP 4: DELIVERED -->
                     <div class="step-item <?= $status === 'Delivered' ? 'completed' : '' ?>">
                         <div class="step-icon">4</div>
-                        <div class="step-label">Delivered</div>
-                        <div class="step-date">Completed</div>
+                        <div>
+                            <div class="step-label">Delivered</div>
+                            <div class="step-date">Completed</div>
+                        </div>
                     </div>
                 </div>
             </div>

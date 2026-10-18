@@ -238,6 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-decoration: none;
             text-align: center;
             transition: background-color 0.2s ease;
+            white-space: nowrap;
         }
 
         .btn-continue:hover {
@@ -345,19 +346,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: var(--text-dark);
         }
 
-        @media (max-width: 900px) {
+        /* ==========================================================
+           RESPONSIVE MEDIA QUERIES FOR IPAD AND MOBILE DEVICES
+           ========================================================== */
+        @media (max-width: 1024px) {
+            body {
+                padding: 16px 12px;
+            }
+
             .cart-grid {
                 grid-template-columns: 1fr;
             }
+
             .order-summary-card {
                 order: -1;
+                margin-bottom: 24px;
             }
+
+            .details-card {
+                padding: 24px 16px;
+            }
+
+            .form-row-split {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .cart-actions {
+                flex-direction: column;
+            }
+
+            .btn-continue {
+                text-align: center;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
             .cart-items-wrapper {
                 display: grid;
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
             }
+
             .cart-item-card {
                 width: 100%;
+                flex-direction: row;
+                text-align: left;
+                gap: 16px;
+                justify-content: space-between;
+            }
+
+            .product-img {
+                width: 70px;
+                height: 80px;
+                margin-bottom: 0;
             }
         }
     </style>
@@ -369,7 +411,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Top Bar Navigation -->
         <div class="cart-top-bar">
-            <a href="admin-list.php" class="btn-back">
+            <a href="/Watch_Collection/user/watch" class="btn-back">
                 <i class="fa-solid fa-arrow-left"></i> Back to Watches
             </a>
         </div>
@@ -392,8 +434,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <form id="checkoutForm" action="/Watch_Collection/checkout/process" method="POST">
                         <div class="form-row-split">
-                            <input type="text" name="fullname" class="form-input" placeholder="Full name" required>
-                            <input type="email" name="email" class="form-input" placeholder="Email address" required>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <input type="text" name="fullname" class="form-input" placeholder="Full name" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <input type="email" name="email" class="form-input" placeholder="Email address" required>
+                            </div>
                         </div>
 
                         <div class="form-group">

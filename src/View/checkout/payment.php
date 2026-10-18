@@ -112,6 +112,7 @@ if (!$activeOrderId) {
             font-weight: 800;
             color: var(--text-dark);
             margin-bottom: 30px;
+            word-break: break-word;
         }
 
         .itemized-list {
@@ -127,6 +128,7 @@ if (!$activeOrderId) {
             justify-content: space-between;
             align-items: center;
             font-size: 0.95rem;
+            gap: 12px;
         }
 
         .item-name {
@@ -137,6 +139,7 @@ if (!$activeOrderId) {
         .item-price {
             font-weight: 600;
             color: var(--text-dark);
+            white-space: nowrap;
         }
 
         .shipping-section {
@@ -380,6 +383,7 @@ if (!$activeOrderId) {
             margin: 0 auto;
             font-size: 0.85rem;
             color: var(--text-muted);
+            max-width: 100%;
         }
 
         .file-format-note {
@@ -499,6 +503,45 @@ if (!$activeOrderId) {
             font-size: 0.92rem;
             color: var(--text-muted, #555555);
             line-height: 1.6;
+        }
+
+        /* ==========================================================
+           RESPONSIVE MEDIA QUERIES FOR IPAD, TABLETS, & PHONES
+           ========================================================== */
+        @media (max-width: 1024px) {
+            .checkout-wrapper {
+                flex-direction: column;
+            }
+
+            .summary-section {
+                padding: 30px 24px;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .payment-section {
+                padding: 30px 24px;
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .summary-section,
+            .payment-section {
+                padding: 20px 16px;
+            }
+
+            .total-price-display {
+                font-size: 1.8rem;
+            }
+
+            .express-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .proof-card {
+                padding: 20px 16px;
+            }
         }
     </style>
 </head>
@@ -730,13 +773,10 @@ if (!$activeOrderId) {
                     currency: 'NGN',
                     ref: 'ZEITH_' + Math.floor((Math.random() * 1000000000) + 1),
                     onSuccess: function(transaction) {
-                        // Store Paystack transaction reference
                         paystackTransactionRef.value = transaction.reference;
 
-                        // Dim summary section on the left
                         if (summarySection) summarySection.style.opacity = '0.5';
 
-                        // Transition UI: Hide Paystack button, Show Receipt Upload form
                         paystackCheckoutContainer.style.display = 'none';
                         postPaymentReceiptSection.style.display = 'block';
                     },

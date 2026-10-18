@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZEITH - Contact Us</title>
     <!-- Font Awesome CDN for Icons -->
+    <script
+        src="https://kit.fontawesome.com/69c405441a.js"
+        crossorigin="anonymous">
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
@@ -45,6 +49,7 @@
             width: 100%;
             max-width: 960px;
             margin: 0 auto;
+            margin-top: 40px;
         }
 
         /* Header Section */
@@ -305,6 +310,8 @@
 
 <body>
 
+    <?php require_once __DIR__ . '/../components/header.php'; ?>
+
     <div class="contact-container">
 
         <!-- Page Header -->
@@ -352,7 +359,7 @@
                 <div id="alertMsg" class="alert-message"></div>
 
                 <form id="contactForm" action="/Watch_Collection/api/contact" method="POST">
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label class="input-label">
@@ -411,7 +418,9 @@
             try {
                 const response = await fetch(form.action, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(payload)
                 });
 

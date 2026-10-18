@@ -3,36 +3,32 @@
 namespace App\Controller;
 
 use App\Models\Product;
+use App\Helpers\View;
 
 class ProductController 
 {
-    public function search() {
-        $keyword = trim($_GET['q'] ?? $_GET['search'] ?? '');
-        
-        $products = [];
-        if (!empty($keyword)) {
-            // Instantiate the Product model directly
-            $productModel = new Product();
-            $products = $productModel->searchProducts($keyword);
-        }
+    // 1. Handles the JSON live autocomplete fetch requests
+    public function liveSearchApi() {
+        $query = $_GET['q'] ?? '';
+        $productModel = new Product();
+        $results = $productModel->searchProducts($query);
 
-        require_once __DIR__ . '/../View/product/search-results.php';
+        header('Content-Type: application/json');
+        echo json_encode($results);
+        exit;
     }
 
-    public function liveSearchApi() {
-        header('Content-Type: application/json');
-        $keyword = trim($_GET['q'] ?? '');
-        
-        if (strlen($keyword) < 2) {
-            echo json_encode([]);
-            return;
-        }
-
-        // Instantiate the Product model directly
+    // 2. Handles the full search results page when clicking "View all" or Enter
+    public function search() {
+        $query = $_GET['q'] ?? '';
         $productModel = new Product();
-        $products = $productModel->searchProducts($keyword);
-        $limitedProducts = array_slice($products, 0, 5);
-        
-        echo json_encode($limitedProducts);
+        $results = $productModel->searchProducts($query);
+
+        // Pass results to your search-result view template
+        // Adjust the view path to match where your template lives
+        View::displayView('product/search-result.php', [
+            'query' => $query,
+            'results' => $results
+        ]);
     }
 }
