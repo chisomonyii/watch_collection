@@ -186,4 +186,47 @@ class Watch extends Model
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+   public static function getBestSellers($limit = 5)
+{
+    $db = self::connect(); // Uses your Db::connect() method
+    
+    $query = "
+        SELECT w.*, SUM(oi.quantity) as total_sold 
+        FROM watches w
+        LEFT JOIN order_items oi ON w.id = oi.watch_id
+        GROUP BY w.id
+        ORDER BY total_sold DESC, w.created_at DESC
+        LIMIT :limit
+    ";
+    
+    $stmt = $db->prepare($query);
+    $stmt->bindValue(':limit', (int) $limit, \PDO::PARAM_INT);
+    $stmt->execute();
+    $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+    // Fallback if no orders exist yet
+    if (empty($results)) {
+        $stmt = $db->query("SELECT * FROM watches ORDER BY created_at DESC LIMIT " . (int)$limit);
+        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    return $results;
+}
+
+public static function getTrending($limit = 5)
+{
+    $db = self::connect(); // Uses your Db::connect() method
+    
+    $query = "
+        SELECT * FROM watches 
+        ORDER BY likes_count DESC, rating DESC 
+        LIMIT :limit
+    ";
+    
+    $stmt = $db->prepare($query);
+    $stmt->bindValue(':limit', (int) $limit, \PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+}
 }

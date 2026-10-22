@@ -1242,260 +1242,14 @@ use App\Helpers\View;
          COLLECTIONS
     ========================================= -->
 
-    <section class="collections">
-
-        <div class="section-heading">
-
-            <p>
-                EXPLORE ZEITH
-            </p>
-
-            <h2>
-                Find Your Timepiece
-            </h2>
-
-        </div>
-
-
-        <div class="collection-grid">
-
-
-            <div class="collection-card">
-
-                <img
-                    src="<?php assets("Images/picture11.png"); ?>"
-                    alt="Classic Watch">
-
-                <div class="collection-content">
-
-                    <p>
-                        01
-                    </p>
-
-                    <h3>
-                        The Classic
-                    </h3>
-
-                    <span>
-                        Timeless elegance
-                    </span>
-
-                    <a
-                        href="#"
-                        class="search-btn exp">
-                        Explore
-                    </a>
-
-                </div>
-
-            </div>
-
-
-
-            <div class="collection-card">
-
-                <img
-                    src="<?php assets("Images/picture11.png"); ?>"
-                    alt="Chronograph Watch">
-
-                <div class="collection-content">
-
-                    <p>
-                        02
-                    </p>
-
-                    <h3>
-                        The Chrono
-                    </h3>
-
-                    <span>
-                        Built for precision
-                    </span>
-
-                    <a
-                        href="#"
-                        class="search-btn exp">
-                        Explore
-                    </a>
-
-                </div>
-
-            </div>
-
-
-
-            <div class="collection-card">
-
-                <img
-                    src="<?php assets("Images/picture1.png"); ?>"
-                    alt="Executive Watch">
-
-                <div class="collection-content">
-
-                    <p>
-                        03
-                    </p>
-
-                    <h3>
-                        The Executive
-                    </h3>
-
-                    <span>
-                        Made to impress
-                    </span>
-
-                    <a
-                        href="#"
-                        class="search-btn exp">
-                        Explore
-                    </a>
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-    </section>
+    <?php require_once __DIR__ . '/../components/collection.php'; ?>
 
 
 
     <!-- =========================================
          BEST SELLERS
     ========================================= -->
-
-    <section class="best-sellers">
-
-        <div class="section-heading">
-
-            <p>
-                MOST WANTED
-            </p>
-
-            <h2>
-                Best Sellers
-            </h2>
-
-        </div>
-
-
-        <div class="product-grid">
-
-
-            <article class="product-card">
-
-                <div class="product-image">
-
-                    <img
-                        src="<?php assets("Images/picture6.png"); ?>"
-                        alt="Zeith Classic">
-
-                </div>
-
-
-                <div class="product-info">
-
-                    <p>
-                        ZEITH
-                    </p>
-
-                    <h3>
-                        Classic Black
-                    </h3>
-
-                    <span>
-                        ₦85,000
-                    </span>
-
-                    <a
-                        href="#"
-                        class="btn-view search-btn exp">
-                        View Watch
-                    </a>
-
-                </div>
-
-            </article>
-
-
-
-            <article class="product-card">
-
-                <div class="product-image">
-
-                    <img
-                        src="<?php assets("Images/picture11.png"); ?>"
-                        alt="Zeith Chrono">
-
-                </div>
-
-
-                <div class="product-info">
-
-                    <p>
-                        ZEITH
-                    </p>
-
-                    <h3>
-                        Chrono Silver
-                    </h3>
-
-                    <span>
-                        ₦95,000
-                    </span>
-
-                    <a
-                        href="#"
-                        class="btn-view search-btn exp">
-                        View Watch
-                    </a>
-
-                </div>
-
-            </article>
-
-
-
-            <article class="product-card">
-
-                <div class="product-image">
-
-                    <img
-                        src="<?php assets("Images/picture3.png"); ?>"
-                        alt="Zeith Executive">
-
-                </div>
-
-
-                <div class="product-info">
-
-                    <p>
-                        ZEITH
-                    </p>
-
-                    <h3>
-                        Executive Gold
-                    </h3>
-
-                    <span>
-                        ₦110,000
-                    </span>
-
-                    <a
-                        href="#"
-                        class="btn-view search-btn exp">
-                        View Watch
-                    </a>
-
-                </div>
-
-            </article>
-
-
-        </div>
-
-    </section>
+    <?php require_once __DIR__ . '/../components/best-seller.php'; ?>
 
 
 
@@ -1503,260 +1257,28 @@ use App\Helpers\View;
          ZEITH STORY
     ========================================= -->
 
-    <section class="story">
-
-        <div class="story-image">
-
-            <img
-                src="<?php assets("Images/picture1.png"); ?>"
-                alt="Zeith Watch">
-
-        </div>
-
-
-        <div class="story-text">
-
-            <p class="story-pp">
-                THE ZEITH STORY
-            </p>
-
-            <h2>
-                More Than A Watch.
-                <span>
-                    A Statement.
-                </span>
-            </h2>
-
-            <p class="story-p">
-
-                At Zeith, we believe a watch should be
-                more than something that tells time.
-                It should represent your style, ambition
-                and the moments that matter.
-
-            </p>
-
-            <a
-                href="#"
-                class="btn-view exp search-btn">
-                Discover Zeith
-            </a>
-
-        </div>
-
-    </section>
-
+    <?php require_once __DIR__ . '/../components/story.php'; ?>
 
 
     <!-- =========================================
          WHY ZEITH
     ========================================= -->
 
-    <section class="why-zeith">
-
-        <div class="section-heading">
-
-            <p>
-                THE ZEITH STANDARD
-            </p>
-
-            <h2>
-                Why Choose Zeith ?
-            </h2>
-
-        </div>
-
-
-        <div class="features">
-
-
-            <div class="feature">
-
-                <i class="fa-regular fa-clock icon"></i>
-
-                <h3>
-                    Precision
-                </h3>
-
-                <p>
-                    Designed with attention to every detail.
-                </p>
-
-            </div>
-
-
-
-            <div class="feature">
-
-                <i class="fa-solid fa-shield-halved icon"></i>
-
-                <h3>
-                    Warranty
-                </h3>
-
-                <p>
-                    Confidence comes standard with every watch
-                    <span class="featuree">
-                        comes with a 2yr guarantee
-                    </span>.
-                </p>
-
-            </div>
-
-
-
-            <div class="feature">
-
-                <i class="fa-solid fa-truck-fast icon"></i>
-
-                <h3>
-                    Fast Delivery
-                </h3>
-
-                <p>
-                    Your timepiece delivered safely to you
-                    anywhere in Nigeria.
-                </p>
-
-            </div>
-
-
-
-            <div class="feature">
-
-                <i class="fa-solid fa-lock icon"></i>
-
-                <h3>
-                    Secure Payment
-                </h3>
-
-                <p>
-                    Shop with confidence through secure checkout.
-                </p>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
+    <?php require_once __DIR__ . '/../components/trust.php'; ?>
 
 
     <!-- =========================================
          PROMO
     ========================================= -->
 
-    <section class="promo">
-
-        <div class="promo-content">
-
-            <p class="story-pp">
-                THE ZEITH EXPERIENCE
-            </p>
-
-            <h2>
-                TIME
-                <span>
-                    IS YOURS.
-                </span>
-            </h2>
-
-            <p class="promp">
-                Wear every moment with confidence.
-            </p>
-
-            <a
-                href="#"
-                class="btn-shop exp search-btn">
-                Shop Now
-            </a>
-
-        </div>
-
-    </section>
+    <?php require_once __DIR__ . '/../components/promo.php'; ?>
 
 
 
     <!-- =========================================
          REVIEWS
     ========================================= -->
-
-    <section class="reviews">
-
-        <div class="section-heading">
-
-            <p>
-                FROM OUR CUSTOMERS
-            </p>
-
-            <h2>
-                What They Say
-            </h2>
-
-        </div>
-
-
-        <div class="review-grid">
-
-
-            <div class="review">
-
-                <div class="stars">
-                    ★★★★★
-                </div>
-
-                <p>
-                    "The watch looks even better in person.
-                    Really clean design."
-                </p>
-
-                <h4>
-                    — David O.
-                </h4>
-
-            </div>
-
-
-
-            <div class="review">
-
-                <div class="stars">
-                    ★★★★★
-                </div>
-
-                <p>
-                    "Simple, elegant and exactly what I wanted."
-                </p>
-
-                <h4>
-                    — Michael A.
-                </h4>
-
-            </div>
-
-
-
-            <div class="review">
-
-                <div class="stars">
-                    ★★★★★
-                </div>
-
-                <p>
-                    "The quality for the price is impressive."
-                </p>
-
-                <h4>
-                    — Daniel K.
-                </h4>
-
-            </div>
-
-
-        </div>
-
-    </section>
+    <?php require_once __DIR__ . '/../components/reviews.php'; ?>
 
 
 
@@ -1858,13 +1380,17 @@ use App\Helpers\View;
             function readCart() {
                 return readstorage('zeith_cart').map(item => {
                     if (item && typeof item === 'object') {
+                        // Grab the image from whichever property name might have been used
+                        const imgUrl = item.image_url_1 || item.image || '';
                         return {
                             ...item,
                             id: String(item.id ?? ''),
                             price: Number(item.price) || 0,
                             quantity: Math.max(1, Number(item.quantity) || 1),
                             stock: Number(item.stock) || 10,
-                            strap: item.strap || 'Steel'
+                            strap: item.strap || 'Steel',
+                            image_url_1: imgUrl, // Ensure both are populated
+                            image: imgUrl
                         };
                     }
                     return {
@@ -1873,6 +1399,7 @@ use App\Helpers\View;
                         brand: 'ZEITH',
                         price: 0,
                         image: '',
+                        image_url_1: '',
                         quantity: 1,
                         stock: 10,
                         strap: 'Steel'
@@ -1975,7 +1502,7 @@ use App\Helpers\View;
                     itemsContainer.innerHTML = cart.map((item, index) => `
                 <article class="cart-item" data-index="${index}">
                     <div class="cart-item-image">
-                        ${item.image ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}">` : `<i class="fa-regular fa-clock"></i>`}
+                        ${(item.image_url_1 || item.image) ? `<img src="${escapeHTML(item.image_url_1 || item.image)}" alt="${escapeHTML(item.name)}">` : `<i class="fa-regular fa-clock"></i>`}
                     </div>
                     <div>
                         <span class="cart-item-brand">${escapeHTML(item.brand || 'ZEITH')}</span>
@@ -2039,8 +1566,7 @@ use App\Helpers\View;
 
                 updateWishlistBadge();
             };
-
-            // Wishlist Heart Toggle Listener
+            // --- Wishlist Heart Toggle Listener ---
             document.addEventListener('click', function(e) {
                 const wishlistBtn = e.target.closest('.wishlist-btn, .wishlist-heart, .wishlist-heart-btn');
                 if (!wishlistBtn) return;
@@ -2056,9 +1582,23 @@ use App\Helpers\View;
                 let wishlist = readstorage('zeith_wishlist').map(String);
 
                 if (wishlist.includes(watchId)) {
+                    // Remove from wishlist
                     wishlist = wishlist.filter(id => id !== watchId);
                 } else {
+                    // Add to wishlist
                     wishlist.push(watchId);
+
+                    // 👉 ADD THE FETCH REQUEST HERE:
+                    // This fires only when a user likes/favorites the watch, incrementing likes_count in the DB
+                    fetch('/Watch_Collection/api/like-watch.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id: watchId
+                        })
+                    }).catch(err => console.error('Error updating likes:', err));
                 }
 
                 localStorage.setItem('zeith_wishlist', JSON.stringify(wishlist));
@@ -2150,11 +1690,12 @@ use App\Helpers\View;
                     const id = String(card.dataset.id || card.getAttribute('data-id') || '');
                     const nameElement = card.querySelector('.property-card-title, .watch-info h3, .watch-card h3');
                     const brandElement = card.querySelector('.property-card-brand, .watch-info span, .brand');
-                    const imageElement = card.querySelector('.slide.active img, .card-main-img, .property-card-image img');
+                    const imageElement = card.querySelector('.slide.active img, .slide img, .card-main-img, .property-card-image img, img');
+
 
                     const name = nameElement ? nameElement.textContent.trim() : 'Watch';
                     const brand = brandElement ? brandElement.textContent.trim() : 'ZEITH';
-                    const image = imageElement ? imageElement.getAttribute('src') : '';
+                    const image = imageElement ? (imageElement.currentSrc || imageElement.src || imageElement.getAttribute('src')) : '';
                     const stockLimit = Number(card.dataset.stock) || 10;
 
                     if (!id) return;
@@ -2175,6 +1716,7 @@ use App\Helpers\View;
                         existing.brand = brand;
                         existing.price = price;
                         existing.image = image;
+                        existing.image_url_1 = image; // <--- Ensure this is populated
                         existing.stock = stockLimit;
                     } else {
                         cart.push({
@@ -2182,7 +1724,8 @@ use App\Helpers\View;
                             name,
                             brand,
                             price,
-                            image,
+                            image: image,
+                            image_url_1: image, // <--- Ensure this is populated
                             stock: stockLimit,
                             quantity: 1
                         });
@@ -2272,6 +1815,10 @@ use App\Helpers\View;
     </script>
 
     <?php include __DIR__ . '/../components/footer.php'; ?>
+
+    <?php include_once __DIR__ . '/../components/cookie-banner.php'; ?>
+
+    <?php include_once __DIR__ . '/../components/newsletter-modal.php'; ?>
 </body>
 
 </html>

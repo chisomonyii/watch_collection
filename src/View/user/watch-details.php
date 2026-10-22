@@ -1484,7 +1484,7 @@ $stockCount = (int)($watch['stock'] ?? 0);
                         Add to Cart
                     </button>
                     <button class="btn-add-cart" id="purchaseBtn" type="button">
-                        Purchase this product
+                        Purchase only this product
                     </button>
                 <?php else: ?>
                     <button class="btn-add-cart-disabled" type="button" disabled>
@@ -1858,6 +1858,18 @@ $stockCount = (int)($watch['stock'] ?? 0);
                         stock: watchStock
                     };
                     wishlist.push(watchItem);
+
+                    // 👉 Send API fetch to update likes_count in database
+                    fetch('/Watch_Collection/api/like-watch.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id: watchId
+                        })
+                    }).catch(err => console.error('Error updating likes:', err));
+
                 } else {
                     wishlist = wishlist.filter(item => String(item.id) !== String(watchId));
                 }

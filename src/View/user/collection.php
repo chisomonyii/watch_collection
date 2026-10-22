@@ -893,6 +893,8 @@
         </div>
     </aside>
 
+     
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const drawer = document.getElementById('cart-drawer');
@@ -1176,6 +1178,17 @@
                             wishlist = wishlist.filter(id => id !== watchId);
                         } else {
                             wishlist.push(watchId);
+
+                            // 👉 Send API fetch to update likes_count in database for Trending section
+                            fetch('/Watch_Collection/api/like-watch.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    id: watchId
+                                })
+                            }).catch(err => console.error('Error updating likes:', err));
                         }
 
                         localStorage.setItem('zeith_wishlist', JSON.stringify(wishlist));

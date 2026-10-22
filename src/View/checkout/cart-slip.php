@@ -1,11 +1,14 @@
 <?php
 // PHP Backend Processing when user clicks "Proceed to Payment"
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $host = 'localhost';$db   = 'Watch_Collection'; // Update if your database name is different
-    $user = 'root';$pass = '';
+    $host = 'localhost';
+    $db   = 'Watch_Collection'; // Update if your database name is different
+    $user = 'root';
+    $pass = '';
 
     try {
-        $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Collect form data
         $fullName = trim($_POST['fullname'] ?? '');
@@ -14,41 +17,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $address = trim($_POST['address'] ?? '');
         $notes = trim($_POST['notes'] ?? '');
         $subtotal = floatval($_POST['subtotal'] ?? 0);
-        $cartItemsJson =$_POST['cart_items_json'] ?? '[]';
+        $cartItemsJson = $_POST['cart_items_json'] ?? '[]';
         $cartItems = json_decode($cartItemsJson, true);
 
         if (!empty($fullName) && !empty($email) && !empty($phone) && !empty($address) && !empty($cartItems)) {
-            
+
             // Generate unique order reference number
             $orderNumber = 'ZEITH-' . strtoupper(uniqid());
 
             // 1. Insert into orders table
-            $stmt =$pdo->prepare("INSERT INTO orders (order_number, full_name, email, phone, address, delivery_instructions, subtotal, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$orderNumber, $fullName,$email, $phone,$address, $notes, $subtotal,$subtotal]);
-            $orderId =$pdo->lastInsertId();
+            $stmt = $pdo->prepare("INSERT INTO orders (order_number, full_name, email, phone, address, delivery_instructions, subtotal, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$orderNumber, $fullName, $email, $phone, $address, $notes, $subtotal, $subtotal]);
+            $orderId = $pdo->lastInsertId();
 
             // 2. Insert each item into order_items table
-            $itemStmt =$pdo->prepare("INSERT INTO order_items (order_id, watch_id, watch_name, brand, price, quantity, strap_variant) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            
-            foreach ($cartItems as$item) {
-                $itemStmt->execute([$orderId,
-                    $item['id'] ?? '',$item['name'] ?? 'Luxury Watch',
-                    $item['brand'] ?? 'ZEITH',$item['price'] ?? 0,
-                    $item['quantity'] ?? 1,$item['strap'] ?? 'Steel'
+            $itemStmt = $pdo->prepare("INSERT INTO order_items (order_id, watch_id, watch_name, brand, price, quantity, strap_variant) VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+            foreach ($cartItems as $item) {
+                $itemStmt->execute([
+                    $orderId,
+                    $item['id'] ?? '',
+                    $item['name'] ?? 'Luxury Watch',
+                    $item['brand'] ?? 'ZEITH',
+                    $item['price'] ?? 0,
+                    $item['quantity'] ?? 1,
+                    $item['strap'] ?? 'Steel'
                 ]);
             }
 
             // Save order session for Frame 3 (payment.php)
             session_start();
-            $_SESSION['active_order_id'] =$orderId;
-            $_SESSION['order_number'] =$orderNumber;
-            $_SESSION['order_subtotal'] =$subtotal;
+            $_SESSION['active_order_id'] = $orderId;
+            $_SESSION['order_number'] = $orderNumber;
+            $_SESSION['order_subtotal'] = $subtotal;
 
             // Redirect to Frame 3: payment.php
             header('Location: payment.php');
             exit;
         }
-    } catch (PDOException $e) {$error = "Database Error: " . $e->getMessage();
+    } catch (PDOException $e) {
+        $error = "Database Error: " . $e->getMessage();
     }
 }
 ?>
@@ -402,10 +410,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 margin-bottom: 0;
             }
         }
+
+        /* ZEITH BRAND PRELOADER OVERLAY */
+        .zeith-preloader {
+            position: fixed;
+            inset: 0;
+            background-color: #0b0d10;
+            /* Obsidian dark base */
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            /* Visible by default on page load */
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .zeith-preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .zeith-preloader.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .preloader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .preloader-content .brand-logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .preloader-progress-track {
+            width: 140px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preloader-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #f68b1e, #ffaa42);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 
 <body>
+
+    <div id="zeith-preloader" class="zeith-preloader active">
+        <div class="preloader-content">
+            <h1 class="brand-logo">ZEITH</h1>
+            <div class="preloader-progress-track">
+                <div class="preloader-progress-bar"></div>
+            </div>
+        </div>
+    </div>
 
     <div class="cart-container">
 
@@ -553,6 +628,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             hiddenSubtotal.name = 'subtotal';
             hiddenSubtotal.value = subtotal;
             form.appendChild(hiddenSubtotal);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('zeith-preloader');
+            const progressBar = document.querySelector('.preloader-progress-bar');
+
+            function hidePreloader() {
+                if (!preloader) return;
+                if (progressBar) progressBar.style.width = '100%';
+                setTimeout(() => {
+                    preloader.classList.remove('active');
+                    preloader.classList.add('fade-out');
+                }, 200);
+            }
+
+            // Initial load
+            hidePreloader();
+
+            // 1. FIX FOR BACK/FORWARD BUTTON (bfcache)
+            window.addEventListener('pageshow', (event) => {
+                // If restored from back/forward cache or reloaded
+                if (event.persisted) {
+                    hidePreloader();
+                }
+            });
+
+            // 2. Intercept link clicks to show loader on navigation
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (!link) return;
+
+                const href = link.getAttribute('href');
+                const target = link.getAttribute('target');
+
+                if (
+                    !href ||
+                    href.startsWith('#') ||
+                    href.startsWith('javascript:') ||
+                    target === '_blank' ||
+                    link.hasAttribute('download')
+                ) {
+                    return;
+                }
+
+                if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) {
+                    return;
+                }
+
+                if (preloader) {
+                    preloader.classList.remove('fade-out');
+                    preloader.classList.add('active');
+                    if (progressBar) {
+                        progressBar.style.width = '60%';
+                    }
+                }
+            });
         });
     </script>
 

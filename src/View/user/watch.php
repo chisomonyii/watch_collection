@@ -11,23 +11,50 @@ $watches = $watches ?? \App\Models\Watch::getAll();
     <title>Zeith - Luxury Watch Collections</title>
 
     <style>
+        html,
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            overflow-x: hidden !important;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f8fafc;
+        }
+
         /* ==========================================
    PROPERTY PAGE STYLES
    ========================================== */
         .property-body {
             background-color: #f8fafc;
             color: #1e293b;
-            min-height: 100vh;
-            padding: 2rem 1.5rem;
+            flex: 1;
+            width: 100%;
+            padding: 2rem 1rem;
+            box-sizing: border-box;
         }
 
         .property-container {
             max-width: 1320px;
-            margin: 0 auto;
+            margin: 2.9rem auto 0 auto;
             display: grid;
             grid-template-columns: 280px 1fr;
             gap: 2.5rem;
-            margin-top: 2.9rem;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 110px;
+        }
+
+        footer.zeith-footer {
+            position: relative !important;
+            width: 100% !important;
+            margin-top: auto !important;
+            box-sizing: border-box !important;
+            clear: both !important;
         }
 
         .property-sidebar {
@@ -1872,6 +1899,46 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                 padding-right: 17px;
             }
         }
+
+        /* ======================================================
+   GRID LOADING SPINNER OVERLAY
+   ====================================================== */
+.property-grid {
+    position: relative;
+    min-height: 250px;
+}
+
+.grid-loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(245, 245, 247, 0.75);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.grid-loading-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.grid-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(246, 139, 30, 0.2);
+    border-top-color: #f68b1e; /* Zeith Accent Orange */
+    border-radius: 50%;
+    animation: gridSpinnerRotate 0.8s linear infinite;
+}
+
+@keyframes gridSpinnerRotate {
+    to { transform: rotate(360deg); }
+}
     </style>
 </head>
 
@@ -1922,6 +1989,10 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             </div>
 
             <div class="property-grid" id="watchGrid">
+
+                <div class="grid-loading-overlay" id="gridLoadingOverlay">
+                    <div class="grid-spinner"></div>
+                </div>
                 <?php if (!empty($watches)): ?>
                     <?php foreach ($watches as $watch): ?>
                         <?php
@@ -2076,6 +2147,8 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             </button>
         </div>
     </aside>
+
+
 
 
     <script>
@@ -2263,6 +2336,17 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                     wishlist = wishlist.filter(id => id !== watchId);
                 } else {
                     wishlist.push(watchId);
+
+                    // 👉 Send API fetch to update likes_count in database for Trending section
+                    fetch('/Watch_Collection/api/like-watch.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id: watchId
+                        })
+                    }).catch(err => console.error('Error updating likes:', err));
                 }
 
                 localStorage.setItem('zeith_wishlist', JSON.stringify(wishlist));
@@ -2525,7 +2609,45 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             filterWatches();
             renderCart();
         });
+
+        document.addEventListener('DOMContentLoaded', () => {
+    const gridOverlay = document.getElementById('gridLoadingOverlay');
+    const applyFilterBtn = document.getElementById('btnApplyFilter');
+    const priceSlider = document.getElementById('priceRangeSlider');
+
+    function triggerGridLoader() {
+        if (!gridOverlay) return;
+        
+        // Show loading spinner overlay
+        gridOverlay.classList.add('active');
+
+        // Simulate fetch delay or let your actual filtering script handle dismissal
+        // (Replace or adjust this timeout with your real AJAX filter completion call)
+        setTimeout(() => {
+            gridOverlay.classList.remove('active');
+        }, 600);
+    }
+
+    // Trigger on "FILTER" button click
+    if (applyFilterBtn) {
+        applyFilterBtn.addEventListener('click', () => {
+            triggerGridLoader();
+            // Put your actual filter execution code here
+        });
+    }
+
+    // Trigger when moving/sliding through the price range
+    if (priceSlider) {
+        priceSlider.addEventListener('change', () => {
+            triggerGridLoader();
+            // Put your actual price filtering code here
+        });
+    }
+});
     </script>
+
+
+
 </body>
 
 </html>

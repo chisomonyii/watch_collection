@@ -1,4 +1,5 @@
 <?php
+
 /** @var array $shippingMethods */
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -349,6 +350,7 @@ if (!$activeOrderId) {
             margin-top: 2px;
         }
 
+        /* Dropzone & Blurred Preview Styles */
         .dropzone-box {
             border: 2px dashed var(--border-color);
             border-radius: var(--radius-md);
@@ -359,6 +361,7 @@ if (!$activeOrderId) {
             position: relative;
             cursor: pointer;
             transition: border-color 0.2s ease;
+            overflow: hidden;
         }
 
         .dropzone-box:hover {
@@ -378,19 +381,72 @@ if (!$activeOrderId) {
             margin-bottom: 10px;
         }
 
-        .dropzone-box input[type="file"] {
-            display: block;
-            margin: 0 auto;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            max-width: 100%;
-        }
-
         .file-format-note {
             display: block;
             font-size: 0.75rem;
             color: #94a3b8;
             margin-top: 6px;
+        }
+
+        /* Blurred Preview Container */
+        .preview-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #0b0f19;
+        }
+
+        .blurred-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(8px) brightness(0.6);
+            transform: scale(1.05);
+            transition: filter 0.3s ease;
+        }
+
+        .preview-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            gap: 8px;
+            padding: 10px;
+        }
+
+        .preview-overlay i.fa-eye-slash {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .preview-overlay span {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            word-break: break-all;
+        }
+
+        .btn-remove-file {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: background 0.2s ease;
+            margin-top: 4px;
+        }
+
+        .btn-remove-file:hover {
+            background: rgba(239, 68, 68, 0.9);
+            border-color: transparent;
         }
 
         .btn-submit-proof {
@@ -505,9 +561,7 @@ if (!$activeOrderId) {
             line-height: 1.6;
         }
 
-        /* ==========================================================
-           RESPONSIVE MEDIA QUERIES FOR IPAD, TABLETS, & PHONES
-           ========================================================== */
+        /* Responsive Media Queries */
         @media (max-width: 1024px) {
             .checkout-wrapper {
                 flex-direction: column;
@@ -543,10 +597,75 @@ if (!$activeOrderId) {
                 padding: 20px 16px;
             }
         }
+
+        /* ZEITH BRAND PRELOADER OVERLAY */
+        .zeith-preloader {
+            position: fixed;
+            inset: 0;
+            background-color: #0b0d10;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .zeith-preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .zeith-preloader.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .preloader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .preloader-content .brand-logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .preloader-progress-track {
+            width: 140px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preloader-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #f68b1e, #ffaa42);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 
 <body>
+
+    <div id="zeith-preloader" class="zeith-preloader active">
+        <div class="preloader-content">
+            <h1 class="brand-logo">ZEITH</h1>
+            <div class="preloader-progress-track">
+                <div class="preloader-progress-bar"></div>
+            </div>
+        </div>
+    </div>
 
     <div class="checkout-wrapper">
 
@@ -641,7 +760,7 @@ if (!$activeOrderId) {
 
                         <div class="proof-card">
                             <h3 class="proof-title">Final Step: Provide Proof of Payment</h3>
-                            
+
                             <div class="success-banner">
                                 <i class="fa-solid fa-circle-check"></i>
                                 <div>
@@ -650,11 +769,29 @@ if (!$activeOrderId) {
                                 </div>
                             </div>
 
-                            <div class="dropzone-box">
-                                <i class="fa-solid fa-cloud-arrow-up dropzone-icon"></i>
-                                <p>Click to attach bank transfer receipt image</p>
-                                <input type="file" name="payment_receipt" id="payment_receipt" accept="image/*,.pdf" required>
-                                <span class="file-format-note">File format (.jpg, .png, .pdf)</span>
+                            <!-- DROPZONE WITH BLURRED IMAGE PREVIEW -->
+                            <div class="dropzone-box" id="dropzoneBox" onclick="document.getElementById('payment_receipt').click();">
+                                
+                                <!-- Hidden when file is attached -->
+                                <div id="uploadPrompt">
+                                    <i class="fa-solid fa-cloud-arrow-up dropzone-icon"></i>
+                                    <p>Click to attach bank transfer receipt image</p>
+                                    <span class="file-format-note">File format (.jpg, .png, .pdf)</span>
+                                </div>
+
+                                <!-- Visible when file is attached (Blurred Preview) -->
+                                <div class="preview-wrapper" id="previewWrapper" style="display: none;">
+                                    <img id="receiptPreview" src="" alt="Receipt Preview" class="blurred-preview">
+                                    <div class="preview-overlay">
+                                        <i class="fa-solid fa-eye-slash"></i>
+                                        <span id="previewFileName">Receipt Attached</span>
+                                        <button type="button" class="btn-remove-file" id="btnRemoveFile" onclick="event.stopPropagation();">
+                                            <i class="fa-solid fa-xmark"></i> Change File
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <input type="file" name="payment_receipt" id="payment_receipt" accept="image/*,.pdf" required style="display: none;">
                             </div>
 
                             <button type="submit" class="btn-submit-proof">
@@ -715,7 +852,7 @@ if (!$activeOrderId) {
             const shippingSummaryPrice = document.getElementById('shippingSummaryPrice');
             const hiddenShippingInput = document.getElementById('hiddenShippingInput');
             const btnPay = document.getElementById('btnPay');
-            
+
             const paystackCheckoutContainer = document.getElementById('paystackCheckoutContainer');
             const postPaymentReceiptSection = document.getElementById('postPaymentReceiptSection');
             const paystackTransactionRef = document.getElementById('paystackTransactionRef');
@@ -805,8 +942,98 @@ if (!$activeOrderId) {
 
             setupModal("termsTrigger", "termsModal", "closeTermsBtn");
             setupModal("privacyTrigger", "privacyModal", "closePrivacyBtn");
+
+            // 4. Blurred Receipt Preview Logic
+            const receiptInput = document.getElementById('payment_receipt');
+            const receiptPreview = document.getElementById('receiptPreview');
+            const previewWrapper = document.getElementById('previewWrapper');
+            const uploadPrompt = document.getElementById('uploadPrompt');
+            const previewFileName = document.getElementById('previewFileName');
+            const btnRemoveFile = document.getElementById('btnRemoveFile');
+
+            if (receiptInput) {
+                receiptInput.addEventListener('change', function () {
+                    const file = this.files[0];
+                    if (file) {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = function (evt) {
+                                receiptPreview.src = evt.target.result;
+                                previewWrapper.style.display = 'block';
+                                uploadPrompt.style.display = 'none';
+                                previewFileName.textContent = file.name;
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            receiptPreview.src = '';
+                            previewWrapper.style.display = 'block';
+                            uploadPrompt.style.display = 'none';
+                            previewFileName.textContent = `PDF: ${file.name}`;
+                        }
+                    }
+                });
+            }
+
+            if (btnRemoveFile) {
+                btnRemoveFile.addEventListener('click', () => {
+                    receiptInput.value = '';
+                    receiptPreview.src = '';
+                    previewWrapper.style.display = 'none';
+                    uploadPrompt.style.display = 'block';
+                });
+            }
+
+            // 5. Global Brand Preloader & bfcache Fix
+            const preloader = document.getElementById('zeith-preloader');
+            const progressBar = document.querySelector('.preloader-progress-bar');
+
+            function hidePreloader() {
+                if (!preloader) return;
+                if (progressBar) progressBar.style.width = '100%';
+                setTimeout(() => {
+                    preloader.classList.remove('active');
+                    preloader.classList.add('fade-out');
+                }, 200);
+            }
+
+            hidePreloader();
+
+            window.addEventListener('pageshow', (event) => {
+                if (event.persisted) {
+                    hidePreloader();
+                }
+            });
+
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (!link) return;
+
+                const href = link.getAttribute('href');
+                const target = link.getAttribute('target');
+
+                if (
+                    !href ||
+                    href.startsWith('#') ||
+                    href.startsWith('javascript:') ||
+                    target === '_blank' ||
+                    link.hasAttribute('download')
+                ) {
+                    return;
+                }
+
+                if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) {
+                    return;
+                }
+
+                if (preloader) {
+                    preloader.classList.remove('fade-out');
+                    preloader.classList.add('active');
+                    if (progressBar) {
+                        progressBar.style.width = '60%';
+                    }
+                }
+            });
         });
     </script>
 </body>
-
 </html>

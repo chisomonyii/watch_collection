@@ -15,17 +15,31 @@
                 Roboto, Helvetica, Arial, sans-serif;
         }
 
+        /* 1. Ensure Body Fills Screen and Stacks Elements Vertically */
+        html,
+        body {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
         body {
             background: #f8f8f6;
             color: #111;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* PAGE */
+        /* PAGE CONTAINER */
         .wishlist-container {
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
             padding: 35px 30px 80px;
+            flex: 1;
+            /* Pushes footer to the absolute bottom even when wishlist is empty */
         }
 
         .wishlist-title {
@@ -43,12 +57,17 @@
             gap: 24px;
         }
 
+        /* EMPTY STATE */
         .empty-wishlist {
             grid-column: 1 / -1;
             text-align: center;
             color: #888;
             padding: 80px 0;
             display: none;
+        }
+
+        .empty-wishlist.active {
+            display: block;
         }
 
         /* CARD */
@@ -256,7 +275,8 @@
             font-size: 16px;
             line-height: 1.5;
             font-weight: 300;
-            color: #c4c0c0;
+            color: #666666;
+            /* Improved contrast for light card backgrounds */
             display: -webkit-box;
             -webkit-line-clamp: 2;
             line-clamp: 2;
@@ -271,10 +291,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 100%;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: auto;
             padding: 0 14px;
             gap: 8px;
         }
@@ -300,7 +316,6 @@
             display: inline-block;
             font-size: 0.8rem;
             color: #e67e22;
-            /* Matches accent orange */
             text-decoration: none;
             font-weight: 500;
             margin-bottom: 10px;
@@ -311,14 +326,14 @@
             text-decoration: underline;
         }
 
-        /* TABLET */
+        /* TABLET (4 Columns -> 3 Columns) */
         @media (max-width: 1200px) {
             .wishlist-grid {
                 grid-template-columns: repeat(3, minmax(0, 1fr));
             }
         }
 
-        /* SMALLER TABLETS */
+        /* SMALLER TABLETS (3 Columns -> 2 Columns) */
         @media (max-width: 900px) {
             .wishlist-container {
                 padding: 28px 18px 60px;
@@ -346,7 +361,7 @@
             }
         }
 
-        /* MOBILE */
+        /* MOBILE (2 Columns -> 1 Column) */
         @media (max-width: 600px) {
             .wishlist-container {
                 padding: 20px 9px 45px;
@@ -476,6 +491,17 @@
                 height: 42px;
             }
         }
+
+        /* Full-Bleed Footer Fix */
+        footer.zeith-footer {
+            position: relative !important;
+            width: 100% !important;
+            margin-top: auto !important;
+            box-sizing: border-box !important;
+            clear: both !important;
+        }
+
+        
     </style>
 </head>
 
@@ -555,6 +581,8 @@
         </div>
 
     </main>
+
+    <?php include __DIR__ . '/../components/footer.php'; ?>
 
     <script>
         document.addEventListener('DOMContentLoaded', async () => {

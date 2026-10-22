@@ -57,6 +57,15 @@ $router->get('/api/search', 'ProductController@liveSearchApi');
 // Full Search Results Page Route (Frame 2 / View All)
 $router->get('/product/search', 'ProductController@search');
 
-$router->run();
+$router->get('/review/submit', 'Home@displayReviewForm');
+$router->post('/review/store', 'Home@storeReview');
+
+// Fixed missing semicolon & namespace notation:
+$router->get('/news', 'Home@displayNewsPage');
+
+$router->get('/news/{slug}', 'Home@displayArticle');
+
+$router->get('/about', 'Home@displayAboutPage');
+$router->post('/api/subscribe', 'Home@subscribeNewsletter');
 
 $router->run();
