@@ -27,10 +27,16 @@ class Auth
         // Catch any accidental output/warnings in an output buffer
         ob_start();
 
+        // Support both JSON payloads (from register.js) and standard form-data
         $rawData = file_get_contents("php://input");
-        $data = json_decode($rawData, true) ?? [];
+        $data = json_decode($rawData, true);
+        if (empty($data)) {
+            $data = $_POST;
+        }
 
         $errors = [];
+        // ... rest of your validation logic
+        // ... rest of your validation logic
 
         // 1. CSRF Token Verification
         if (!isset($data['csrf_token']) || !Session::checkToken($data['csrf_token'])) {
@@ -77,11 +83,14 @@ class Auth
 
         // Wipe output buffer clean before outputting JSON response
         if (ob_get_length()) ob_clean();
-
         if ($registered) {
+            if (ob_get_length()) ob_clean();
+
+            // Send back a clear JSON success response with a redirect URL
             Response::json([
                 'message' => 'User registered successfully',
-                'success' => true
+                'success' => true,
+                'redirect' => './login.php' // Tells your JS where to go next
             ], 200);
             exit;
         } else {
@@ -148,19 +157,35 @@ class Auth
             exit;
         }
 
-        if (ob_get_length()) ob_clean();
+       if (ob_get_length()) ob_clean();
 
         if (Authentication::processLogin($email, $password)) {
+            
+            // Get the user data from session to check role
+            $user = Authentication::user();
+            $role = $user['role'] ?? 'staff';
+
+            // Determine redirect destination based on database role
+            $redirectUrl = ($role === 'admin') 
+                ? '/Watch_Collection/admin/dashboard' 
+                : '/Watch_Collection/staff/dashboard';
+
             Response::json([
                 'message' => 'User has been logged in successfully',
-                'success' => true
+                'success' => true,
+                'redirect' => $redirectUrl // Send the dynamic route back to frontend JS
             ], 200);
             exit;
         } else {
+            // ... existing error handling ...
+            // Check if there's a specific session login error (e.g. pending staff approval)
+            $errorMsg = $_SESSION['login_error'] ?? 'invalid credentials';
+            unset($_SESSION['login_error']);
+
             Response::json([
-                'message' => 'invalid credentials',
+                'message' => $errorMsg,
                 'success' => false,
-                'errors' => ['invalid credentials']
+                'errors' => [$errorMsg]
             ], 422);
             exit;
         }
@@ -177,5 +202,4 @@ class Auth
 
         return;
     }
-    
 }

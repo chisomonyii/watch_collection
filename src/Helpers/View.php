@@ -37,7 +37,8 @@ class View extends Helper
 
     public static function displayComponent(string $filename, ?array $data = null)
     {
-        $filepath = (new self)->root_dir . "/src/View/component/{$filename}";
+        // Add the 's' to make it 'components'
+        $filepath = (new self)->root_dir . "/src/View/components/{$filename}";
         $root_dir = (new self)->root_dir;
 
         if (file_exists($filepath)) {

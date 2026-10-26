@@ -5,12 +5,19 @@ registerForm.addEventListener("submit", function (e) {
 
   const formData = new FormData(registerForm);
 
+  // Get the selected role from the radio inputs or active toggle
+  const selectedRoleInput =
+    document.querySelector('input[name="role"]:checked') ||
+    document.getElementById("selected-role");
+  const roleValue = selectedRoleInput ? selectedRoleInput.value : "staff";
+
   const data = {
     firstname: (formData.get("firstname") || "").trim(),
     lastname: (formData.get("lastname") || "").trim(),
     email: (formData.get("email") || "").trim(),
     password: (formData.get("password") || "").trim(),
     csrf_token: (formData.get("csrf_token") || "").trim(),
+    role: roleValue, // <--- Included role here!
   };
 
   if (data.firstname === "") {
@@ -61,62 +68,63 @@ function validatePassword(password) {
 }
 
 async function handleRegistration(data) {
-    const button = document.getElementById("register-button");
+  const button = document.getElementById("register-button");
 
-    button.disabled = true;
-    button.textContent = "Creating Account...";
+  button.disabled = true;
+  button.textContent = "Creating Account...";
 
-    let registrationSuccessful = false;
+  let registrationSuccessful = false;
+
+  try {
+    const response = await fetch("/Watch_Collection/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    // Grab the raw text first to inspect it if JSON parsing fails
+    const rawText = await response.text();
+    let result;
 
     try {
-        // Target the explicit POST route rather than window.location.href
-        const response = await fetch("/Watch_Collection/auth/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-        });
-
-        const responseText = await response.json();
-        let result;
-
-        try {
-            result = JSON.parse(responseText);
-        } catch (jsonErr) {
-            console.error("Server returned non-JSON output:", responseText);
-            showToast("Server output invalid. Check console for output.", "error");
-            return;
-        }
-
-        if (result.success === true) {
-            registrationSuccessful = true;
-            showToast("Registration successful!", "success");
-
-            setTimeout(function () {
-                window.location.href = "/Watch_Collection/auth/login";
-            }, 1500);
-
-        } else {
-            if (result.errors && Array.isArray(result.errors)) {
-                result.errors.forEach(function (error) {
-                    showToast(error, "error");
-                });
-            } else {
-                showToast(result.message || "Registration failed", "error");
-            }
-        }
-
-    } catch (error) {
-        console.error("Fetch request failed:", error);
-        showToast("Something went wrong. Please try again.", "error");
-
-    } finally {
-        if (!registrationSuccessful) {
-            button.disabled = false;
-            button.textContent = "Create Account";
-        }
+      result = JSON.parse(rawText);
+    } catch (e) {
+      console.error("Server returned non-JSON text:", rawText);
+      showToast(
+        "Server returned an invalid response. Check F12 Console.",
+        "error",
+      );
+      return;
     }
+
+    if (result.success === true) {
+      registrationSuccessful = true;
+      showToast("Registration successful!", "success");
+
+      setTimeout(function () {
+        window.location.href = "/Watch_Collection/auth/login";
+      }, 1500);
+    } else {
+      if (result.errors && Array.isArray(result.errors)) {
+        result.errors.forEach(function (error) {
+          showToast(error, "error");
+        });
+      } else {
+        showToast(result.message || "Registration failed", "error");
+      }
+    }
+  } catch (error) {
+    console.error("Fetch request failed:", error);
+    showToast("Something went wrong. Please check your connection.", "error");
+  } finally {
+    if (!registrationSuccessful) {
+      button.disabled = false;
+      button.textContent = "Create Account";
+    }
+  }
 }
 
 function showToast(message, type) {

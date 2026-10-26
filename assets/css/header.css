@@ -1,0 +1,57 @@
+/* ======================================================
+   ZEITH MINIMALIST BRAND PRELOADER
+   ====================================================== */
+.zeith-preloader {
+    position: fixed;
+    inset: 0;
+    background-color: #0b0d10; /* Obsidian dark base */
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1; /* Visible by default on initial page load */
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.zeith-preloader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.zeith-preloader.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.preloader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.preloader-content .brand-logo {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+.preloader-progress-track {
+    width: 140px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.preloader-progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #f68b1e, #ffaa42);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}

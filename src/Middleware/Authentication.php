@@ -19,8 +19,18 @@ class Authentication
             $userHashedPassword = $user['password'];
 
             if (Utilities::verifyHashpassword($password, $userHashedPassword)) {
+                
+                $role = $user['role'] ?? 'staff';
+                $status = $user['status'] ?? 'approved';
+
+                // NOTE: We removed the check that blocks pending/rejected staff here.
+                // This allows them to log in successfully and reach their dashboard,
+                // where the Staff controller will dynamically load staffApproval.php!
+
+                // SUCCESSFUL LOGIN SESSION SETUP
                 $_SESSION['user'] = $user;
                 $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_role'] = $role; // Save role for dashboard role guards
 
                 return true;
             }
@@ -42,12 +52,19 @@ class Authentication
         // Hash password securely
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
-        // Prepare user data array for insertion
+        // SECURITY OVERRIDE: Force ALL public registrations to be 'staff' and 'pending'
+        // Admins can only be promoted directly inside the database table later!
+        $role = 'staff'; 
+        $status = 'pending';
+
+        // Prepare user data array for insertion matching your database schema
         $userData = [
-            'firstname' => $data['firstname'],
-            'lastname' => $data['lastname'],
-            'email' => $data['email'],
-            'password' => $hashedPassword,
+            'firstname'  => $data['firstname'],
+            'lastname'   => $data['lastname'],
+            'email'      => $data['email'],
+            'password'   => $hashedPassword,
+            'role'       => $role,
+            'status'     => $status,
             'created_at' => date('Y-m-d H:i:s')
         ];
 
@@ -69,5 +86,20 @@ class Authentication
         }
 
         return false;
+    }
+
+    public static function isAdmin(): bool
+    {
+        Session::start();
+        $user = $_SESSION['user'] ?? null;
+        return isset($user['role']) && $user['role'] === 'admin';
+    }
+
+    public static function isStaff(): bool
+    {
+        Session::start();
+        $user = $_SESSION['user'] ?? null;
+        $role = $user['role'] ?? '';
+        return isset($user) && ($role === 'staff' || $role === 'admin');
     }
 }

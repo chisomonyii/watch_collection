@@ -5,7 +5,6 @@ namespace App\Controller;
 require_once __DIR__ . '/../Models/Order.php';
 
 use App\Models\Order;
-
 use App\Helpers\MailHelper;
 
 class CheckoutController
@@ -32,17 +31,24 @@ class CheckoutController
             $phone = trim($_POST['phone'] ?? '');
             $address = trim($_POST['address'] ?? '');
             $subtotal = floatval($_POST['subtotal'] ?? 0);
+            
+            // Capture shipping details submitted from the form
+            $shippingFee = floatval($_POST['shipping_fee'] ?? 4000);
+            $shippingMethodName = trim($_POST['shipping_method_name'] ?? 'Standard Shipping');
+            
             $cartItems = json_decode($_POST['cart_items_json'] ?? '[]', true);
 
             if (!empty($fullName) && !empty($email) && !empty($phone) && !empty($address) && !empty($cartItems)) {
 
                 $orderData = [
-                    'fullname' => $fullName,
-                    'email' => $email,
-                    'phone' => $phone,
-                    'address' => $address,
-                    'notes' => trim($_POST['notes'] ?? ''),
-                    'subtotal' => $subtotal
+                    'fullname'             => $fullName,
+                    'email'                => $email,
+                    'phone'                => $phone,
+                    'address'              => $address,
+                    'notes'                => trim($_POST['notes'] ?? ''),
+                    'subtotal'             => $subtotal,
+                    'shipping_fee'         => $shippingFee,
+                    'shipping_method_name' => $shippingMethodName
                 ];
 
                 $result = $this->orderModel->createOrder($orderData, $cartItems);
@@ -80,12 +86,18 @@ class CheckoutController
             $orderId = $_POST['order_id'] ?? null;
             $gateway = $_POST['gateway'] ?? 'card';
             $shippingFee = floatval($_POST['shipping_fee'] ?? 0);
+            $shippingMethodName = trim($_POST['shipping_method_name'] ?? '');
             $subtotal = floatval($_POST['subtotal'] ?? 0);
             $totalAmount = $subtotal + $shippingFee;
 
             if ($orderId) {
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
+                }
+
+                // Update order shipping fee and method name before processing payment
+                if (method_exists($this->orderModel, 'updateOrderShippingAndTotal')) {
+                    $this->orderModel->updateOrderShippingAndTotal($orderId, $shippingFee, $shippingMethodName, $totalAmount);
                 }
 
                 // If user selected Manual Bank Transfer, handle receipt upload
@@ -95,9 +107,8 @@ class CheckoutController
                     $fileName = $_FILES['payment_receipt']['name'];
                     $uploadFileDir = './uploads/receipts/';
 
-                    // Ensure directory exists
                     if (!is_dir($uploadFileDir)) {
-                        mkdir($uploadFileDir, 0o755, true);
+                        mkdir($uploadFileDir, 0755, true);
                     }
 
                     $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -109,7 +120,6 @@ class CheckoutController
                     }
                 }
 
-                // Update order status or record manual payment
                 // Update order status or record manual payment
                 if ($gateway === 'transfer') {
                     $this->orderModel->markOrderAsPendingTransfer($orderId, $receiptPath, $totalAmount);
@@ -181,9 +191,78 @@ class CheckoutController
         }
     }
 
+    // Handle Upload Receipt after successful Paystack payment
+    public function uploadPostPaymentReceipt()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $orderId = $_POST['order_id'] ?? $_SESSION['active_order_id'] ?? null;
+            $reference = $_POST['reference'] ?? null;
+            $shippingFee = floatval($_POST['shipping_fee'] ?? 0);
+            $shippingMethodName = trim($_POST['shipping_method_name'] ?? '');
+
+            if ($orderId) {
+                if ($shippingFee > 0 || !empty($shippingMethodName)) {
+                    if (method_exists($this->orderModel, 'updateOrderShippingAndTotal')) {
+                        $subtotal = $_SESSION['order_subtotal'] ?? 0;
+                        $totalAmount = $subtotal + $shippingFee;
+                        $this->orderModel->updateOrderShippingAndTotal($orderId, $shippingFee, $shippingMethodName, $totalAmount);
+                    }
+                }
+
+                if (isset($_FILES['payment_receipt']) && $_FILES['payment_receipt']['error'] === UPLOAD_ERR_OK) {
+                    $fileTmpPath = $_FILES['payment_receipt']['tmp_name'];
+                    $fileName = $_FILES['payment_receipt']['name'];
+                    $uploadFileDir = './uploads/receipts/';
+
+                    if (!is_dir($uploadFileDir)) {
+                        mkdir($uploadFileDir, 0755, true);
+                    }
+
+                    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+                    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+                    $dest_path = $uploadFileDir . $newFileName;
+
+                    if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                        // Save path into database receipt column
+                        $this->orderModel->updateOrderReceipt($orderId, $dest_path);
+                    }
+                }
+            }
+
+            // Clear checkout session data now that everything is fully completed
+            unset($_SESSION['active_order_id']);
+            unset($_SESSION['order_number']);
+            unset($_SESSION['order_subtotal']);
+
+            // Redirect to final success page with reference
+            header('Location: /Watch_Collection/user/order-success?ref=' . ($reference ?? ''));
+            exit;
+        }
+
+        header('Location: /Watch_Collection/payment');
+        exit;
+    }
+
     // Display Order Success View
     public function orderSuccess()
     {
         require_once __DIR__ . '/../View/checkout/order-success.php';
+    }
+
+    // Display Order Tracking Lookup Page
+    public function trackOrder()
+    {
+        $ref = trim($_GET['ref'] ?? '');
+        $order = null;
+
+        if (!empty($ref)) {
+            $order = $this->orderModel->getOrderByReference($ref);
+        }
+
+        require_once __DIR__ . '/../View/checkout/track-order.php';
     }
 }

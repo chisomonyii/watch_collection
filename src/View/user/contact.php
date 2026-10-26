@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZEITH - Contact Us</title>
     <!-- Font Awesome CDN for Icons -->
+    <script
+        src="https://kit.fontawesome.com/69c405441a.js"
+        crossorigin="anonymous">
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
@@ -29,28 +33,41 @@
             padding: 0;
         }
 
+        /* 1. Reset Body to Normal Page Flow */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-light);
             color: var(--text-dark);
             line-height: 1.5;
             min-height: 100vh;
-            padding: 50px 20px;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            /* Stacks header, content, and footer vertically */
         }
 
+        /* 2. Full-Width Footer Fix */
+        footer.zeith-footer {
+            width: 100% !important;
+            margin-top: auto;
+            /* Pushes footer to the bottom */
+            clear: both !important;
+        }
+
+        /* 3. Main Contact Page Container */
         .contact-container {
             width: 100%;
             max-width: 960px;
-            margin: 0 auto;
+            margin: 40px auto 60px;
+            padding: 0 20px;
+            flex: 1;
+            /* Allows container to fill available vertical space */
         }
 
         /* Header Section */
         .contact-header {
             text-align: center;
             margin-bottom: 40px;
+            margin-top: 40px;
         }
 
         .contact-header h1 {
@@ -266,8 +283,12 @@
             cursor: not-allowed;
         }
 
-        /* RESPONSIVE MEDIA QUERIES */
+        /* RESPONSIVE MEDIA QUERIES (Tablets & iPads) */
         @media (max-width: 900px) {
+            .contact-container {
+                margin-top: 20px;
+            }
+
             .contact-grid {
                 grid-template-columns: 1fr;
             }
@@ -278,11 +299,8 @@
             }
         }
 
+        /* RESPONSIVE MEDIA QUERIES (Mobile Phones) */
         @media (max-width: 600px) {
-            body {
-                padding: 30px 16px;
-            }
-
             .contact-header h1 {
                 font-size: 1.8rem;
             }
@@ -304,6 +322,8 @@
 </head>
 
 <body>
+
+    <?php require_once __DIR__ . '/../components/header.php'; ?>
 
     <div class="contact-container">
 
@@ -352,7 +372,7 @@
                 <div id="alertMsg" class="alert-message"></div>
 
                 <form id="contactForm" action="/Watch_Collection/api/contact" method="POST">
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label class="input-label">
@@ -389,8 +409,8 @@
 
         </div>
 
-    </div>
 
+    </div>
     <!-- AJAX HANDLER FOR CONTACT SUBMISSION -->
     <script>
         document.getElementById('contactForm').addEventListener('submit', async function(e) {
@@ -411,7 +431,9 @@
             try {
                 const response = await fetch(form.action, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(payload)
                 });
 
@@ -435,6 +457,11 @@
             }
         });
     </script>
+
+    <?php include __DIR__ . '/../components/footer.php'; ?>
+
 </body>
+
+
 
 </html>

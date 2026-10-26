@@ -1,13 +1,13 @@
 <?php
 
 // show login form
-$router->get("/login", "Auth@showLogin");
+$router->get("/auth/login", "Auth@showLogin");
 
 // store login details
-$router->post("/login", "Auth@storeLogin");
+$router->post("/auth/login", "Auth@storeLogin");
 
 // show registration form
-$router->get("/register", "User@showRegister");
+$router->get("/auth/register", "User@showRegister");
 
 // store registration details
-$router->post("/register", "User@storeRegister");
+$router->post("/auth/register", "User@storeRegister");

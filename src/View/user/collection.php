@@ -20,7 +20,7 @@
         }
 
         .property-details-wrapper {
-            max-width: 1280px;
+            max-width: 1200px;
             margin: 0 auto;
             position: relative;
             z-index: 2;
@@ -33,11 +33,12 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 3.5rem;
+            margin-top: 2.2rem;
         }
 
         .property-title {
             border: 1px solid #e2e8f0;
-            padding: 0.55rem 2.0rem;
+            padding: 0.45rem 1.7rem;
             border-radius: 999px;
             background-color: #ffffff;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
@@ -51,21 +52,27 @@
             letter-spacing: 0.02em;
         }
 
+        /* UPDATED TO 3-COLUMN GRID STANDARD */
         .property-details-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 10px 0;
         }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1024px) {
             .property-details-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
             }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 650px) {
             .property-details-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             .property-details-header {
@@ -81,7 +88,6 @@
         /* Card Component */
         .property-card {
             position: relative;
-            /* <-- Add this line */
             background: #ffffff;
             border: 1px solid #f1f5f9;
             border-radius: 1.25rem;
@@ -97,10 +103,78 @@
             box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.08);
         }
 
+        /* Top Bar inside Card */
+        .card-top-bar {
+            position: absolute;
+            top: 22px;
+            left: 22px;
+            right: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .card-top-bar>* {
+            pointer-events: auto;
+        }
+
+        .status-badge {
+            background: #e1f5fe;
+            color: #0288d1;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .status-badge.sold-out {
+            background: #fde8e8 !important;
+            color: #9b1c1c !important;
+        }
+
+        /* Wishlist Heart Button */
+        .wishlist-heart-btn,
+        .wishlist-heart {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border: none;
+            color: #f68b1e;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s ease;
+        }
+
+        .wishlist-heart-btn svg,
+        .wishlist-heart svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .wishlist-heart-btn:hover,
+        .wishlist-heart-btn.active,
+        .wishlist-heart.active {
+            background: #f68b1e;
+            color: #ffffff;
+            transform: scale(1.08);
+        }
+
+        /* Carousel Image Container */
+        .watch-image-container,
         .property-card-image {
+            position: relative;
             width: 100%;
-            height: 200px;
-            background-color: #000000;
+            height: 260px;
+            background-color: #f8fafc;
             border-radius: 0.85rem;
             overflow: hidden;
             display: flex;
@@ -108,17 +182,100 @@
             justify-content: center;
         }
 
-        .property-card-image img {
+        .card-main-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.4s ease;
+            transition: opacity 0.2s ease-in-out, transform 0.4s ease;
         }
 
-        .property-card:hover .property-card-image img {
+        .property-card:hover .card-main-img {
             transform: scale(1.05);
         }
 
+        /* Carousel Arrows */
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.85);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            color: #0f172a;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.3s ease, background 0.2s ease;
+        }
+
+        .property-card:hover .carousel-arrow {
+            opacity: 1;
+        }
+
+        .carousel-arrow:hover {
+            background: #ffffff;
+            color: #f68b1e;
+        }
+
+        .prev-arrow {
+            left: 10px;
+        }
+
+        .next-arrow {
+            right: 10px;
+        }
+
+        /* Price Overlay & Progress Bar */
+        .price-overlay-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.3) 70%, transparent 100%);
+            padding: 20px 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .price-display,
+        .property-card-price {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-align: right;
+            /* Aligns the price to the right */
+            width: 100%;
+        }
+
+        .progress-indicators {
+            display: flex;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .progress-bar-segment {
+            flex: 1;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            transition: background 0.3s ease;
+        }
+
+        .progress-bar-segment.active {
+            background: #ffffff;
+        }
+
+        /* Details Content */
+        .watch-details-content,
         .property-card-details {
             padding: 1.25rem 0.25rem 0.25rem;
             display: flex;
@@ -126,43 +283,43 @@
             flex: 1;
         }
 
+        .watch-title-text,
         .property-card-title {
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            color: #fc8b1e;
-            margin-bottom: 0.35rem;
+            color: #0f172a;
+            margin-bottom: 0.35srem;
         }
 
+        .watch-desc-text,
         .property-card-desc {
-            font-size: 0.825rem;
+            font-size: 0.85rem;
             color: #64748b;
             line-height: 1.4;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
             font-weight: 300;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .property-stars {
-            color: #fc8b1e;
-            font-size: 0.875rem;
-        }
-
+        /* Card Footer Actions */
+        .card-footer-actions,
         .property-card-footer {
             margin-top: auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
         }
 
-        .property-card-price {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
+        .add-button,
         .property-add-btn {
-            padding: 0.45rem 1.25rem;
-            background-color: #cbd5e1;
-            color: #334155;
+            padding: 0.55rem 1.45rem;
+            background-color: #f68b1e;
+            color: #ffffff;
             border: none;
             border-radius: 0.5rem;
             font-weight: 600;
@@ -171,9 +328,22 @@
             transition: all 0.2s ease;
         }
 
+        .add-button:hover,
         .property-add-btn:hover {
-            background-color: #fc8b1e;
-            color: #ffffff;
+            background-color: #003b2f;
+        }
+
+        .view-details-link {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #f68b1e;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .view-details-link:hover {
+            color: #003b2f;
+            text-decoration: underline;
         }
 
         .bg-animated-watch {
@@ -185,9 +355,7 @@
             z-index: 1;
             pointer-events: none;
             overflow: hidden;
-            /* Subtle visibility for dark or light backgrounds */
             perspective: 1000px;
-            /* Establishes depth perception */
             background: radial-gradient(circle at center,
                     rgba(15, 23, 42, 0.8) 0%,
                     rgba(5, 7, 10, 0.95) 70%,
@@ -203,10 +371,8 @@
             left: -20%;
             transform-style: preserve-3d;
             animation: float3D 22s ease-in-out infinite alternate;
-            opacity: 5.12;
+            opacity: 0.15;
         }
-
-
 
         @keyframes float3D {
             0% {
@@ -230,32 +396,6 @@
             }
         }
 
-        .wishlist-heart-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #ffffff;
-            border: none;
-            color: #f68b1e;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-            z-index: 5;
-            transition: all 0.3s ease;
-        }
-
-        .wishlist-heart-btn:hover,
-        .wishlist-heart-btn.active {
-            background: #f68b1e;
-            color: #ffffff;
-            transform: scale(1.08);
-        }
-
         .no-watches-msg {
             grid-column: 1 / -1;
             text-align: center;
@@ -270,24 +410,18 @@
             position: fixed;
             right: 30px;
             bottom: 30px;
-
             width: 65px;
             height: 65px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             background: #f68b1e;
             color: #ffffff;
-
             border-radius: 50%;
             text-decoration: none;
             font-size: 25px;
-
             box-shadow: 0 5px 18px rgba(0, 0, 0, 0.20);
             z-index: 9999;
-
             transition: 0.3s ease;
         }
 
@@ -297,8 +431,6 @@
             transform: scale(1.08);
         }
 
-        /* Quantity badge overlapping the orange circle */
-        /* Cart Quantity - Top Center */
         .cart-count {
             position: absolute;
             top: -12px;
@@ -471,17 +603,6 @@
             font-weight: 800;
         }
 
-        .cart-variant {
-            display: block;
-            width: 100%;
-            max-width: 180px;
-            margin-top: 10px;
-            padding: 7px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: white;
-        }
-
         .cart-item-bottom {
             display: flex;
             justify-content: space-between;
@@ -571,7 +692,6 @@
             cursor: pointer;
         }
 
-        /* Tablet */
         @media (max-width: 768px) {
             .floating-cart {
                 width: 58px;
@@ -582,7 +702,6 @@
             }
         }
 
-        /* Mobile */
         @media (max-width: 480px) {
             .floating-cart {
                 width: 55px;
@@ -616,6 +735,8 @@
 
 <body class="property-details-body">
 
+    <?php require_once __DIR__ . '/../components/header.php'; ?>
+
     <div class="bg-animated-watch">
         <img src="<?php assets("image/pat-taylor-12V36G17IbQ-unsplash (1).jpg"); ?>" alt="Watch Background">
     </div>
@@ -628,35 +749,86 @@
             </div>
         </div>
 
-        <div class="property-details-grid" id="collectionGrid">
+        <div class="property-details-grid property-grid" id="collectionGrid">
 
             <?php if (!empty($watches)): ?>
                 <?php foreach ($watches as $watch): ?>
-                    <div class="property-card" data-id="<?= htmlspecialchars($watch['id']); ?>" data-stock="<?= (int)($watch['stock'] ?? 10); ?>">
+                    <?php
+                    $watchId    = htmlspecialchars((string)$watch['id']);
+                    $watchName  = htmlspecialchars($watch['name']);
+                    $watchBrand = htmlspecialchars($watch['brand'] ?? 'ZEITH');
+                    $watchPrice = "₦" . number_format((float)($watch['price'] ?? 0));
+                    $watchDesc  = htmlspecialchars($watch['description'] ?? 'Exclusive luxury timepiece.');
 
+                    // 1. Stock & Sold Out Evaluation
+                    $stock = (int)($watch['stock'] ?? 10);
+                    $isSoldOut = ($stock <= 0);
+                    $tag = $isSoldOut ? 'SOLD OUT' : 'AVAILABLE';
+                    $badgeClass = $isSoldOut ? 'status-badge sold-out' : 'status-badge';
 
-                        <!-- WISHLIST BUTTON -->
-                        <button class="wishlist-heart-btn" data-id="<?= htmlspecialchars($watch['id']); ?>" title="Add to Wishlist">
-                            <i class="fa-solid fa-heart"></i>
-                        </button>
+                    // 2. Image Path Resolver matching home.php / watch.php standard
+                    // 2. Image Path Resolver matching home.php / watch.php standard
+                    $resolvePath = function ($val) {
+                        $clean = trim($val ?? '');
+                        if (empty($clean)) return '/Watch_Collection/assets/image/pngwing.com (1).png';
+                        if (strpos($clean, 'http://') === 0 || strpos($clean, 'https://') === 0) {
+                            return $clean;
+                        }
+                        return '/Watch_Collection/assets/image/' . ltrim(str_replace(['/Watch_Collection/assets/image/', 'assets/image/'], '', $clean), '/');
+                    };
 
-                        <div class="property-card-image">
-                            <img src="<?php assets($watch['image_url'] ?? $watch['image'] ?? 'image/pngwing.com (10).png'); ?>" alt="<?= htmlspecialchars($watch['name']); ?>">
+                    $img1 = $resolvePath($watch['image_url_1'] ?? $watch['image_url'] ?? $watch['image'] ?? '');
+                    $img2 = $resolvePath($watch['image_url_2'] ?? $watch['image_url_1'] ?? '');
+                    $img3 = $resolvePath($watch['image_url_3'] ?? $watch['image_url_1'] ?? '');
+                    $img4 = $resolvePath($watch['image_url_4'] ?? $watch['image_url_1'] ?? '');
+                    ?>
+
+                    <div class="property-card watch-card"
+                        data-id="<?= $watchId; ?>"
+                        data-brand="<?= $watchBrand; ?>"
+                        data-price="<?= (float)($watch['price'] ?? 0); ?>"
+                        data-stock="<?= $stock; ?>"
+                        data-images='["<?= $img1 ?>", "<?= $img2 ?>", "<?= $img3 ?>", "<?= $img4 ?>"]'>
+
+                        <!-- TOP BAR (STATUS BADGE & WISHLIST HEART) -->
+                        <div class="card-top-bar">
+                            <span class="<?= $badgeClass; ?>"><?= $tag; ?></span>
+                            <button type="button" class="wishlist-btn wishlist-heart wishlist-heart-btn"
+                                data-id="<?= $watchId; ?>"
+                                title="Add to Wishlist" aria-label="Add to wishlist">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                </svg>
+                            </button>
                         </div>
 
-                        <div class="property-card-details">
-                            <h3 class="property-card-title"><?= htmlspecialchars($watch['name']); ?></h3>
-                            <p class="property-card-desc"><?= htmlspecialchars($watch['description'] ?? 'Exclusive luxury timepiece.'); ?></p>
+                        <!-- HERO IMAGE CONTAINER WITH CAROUSEL & OVERLAY -->
+                        <div class="watch-image-container property-card-image">
+                            <button class="carousel-arrow prev-arrow" type="button">&lsaquo;</button>
+                            <img class="card-main-img" src="<?= $img1; ?>" alt="<?= $watchName; ?>">
+                            <button class="carousel-arrow next-arrow" type="button">&rsaquo;</button>
 
-                            <div class="property-card-rating">
-                                <span class="property-stars">★★★★★</span>
-                                <span class="property-rating-score">(<?= htmlspecialchars($watch['rating'] ?? '5.0'); ?>)</span>
+                            <div class="price-overlay-bar">
+                                <div class="price-display property-card-price"><?= $watchPrice; ?></div>
+                                <div class="progress-indicators">
+                                    <div class="progress-bar-segment active"></div>
+                                    <div class="progress-bar-segment"></div>
+                                    <div class="progress-bar-segment"></div>
+                                    <div class="progress-bar-segment"></div>
+                                </div>
                             </div>
+                        </div>
 
-                            <div class="property-card-footer">
-                                <span class="property-card-price">₦<?= number_format($watch['price'] ?? 0, 2); ?></span>
-                                <button class="property-add-btn" type="button">Add</button>
-                            </div>
+                        <!-- CARD DETAILS CONTENT -->
+                        <div class="watch-details-content property-card-details">
+                            <h2 class="watch-title-text property-card-title"><?= $watchName; ?></h2>
+                            <p class="watch-desc-text property-card-desc"><?= $watchDesc; ?></p>
+                        </div>
+
+                        <!-- CARD FOOTER ACTIONS -->
+                        <div class="card-footer-actions property-card-footer">
+                            <button type="button" class="add-button property-add-btn">Add</button>
+                            <a href="/Watch_Collection/watch/details/<?= $watchId; ?>" class="view-details-link">View details &rarr;</a>
                         </div>
 
                     </div>
@@ -680,7 +852,6 @@
         <i class="fa-solid fa-cart-shopping"></i>
         <span class="cart-count" id="cart-count">0</span>
     </button>
-
 
     <div class="cart-overlay" id="cart-overlay"></div>
 
@@ -721,6 +892,8 @@
             </button>
         </div>
     </aside>
+
+     
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -795,12 +968,20 @@
             // WISHLIST TOGGLE LOGIC
             function syncWishlist() {
                 const wishlist = readStorage('zeith_wishlist').map(String);
-                document.querySelectorAll('.wishlist-heart-btn').forEach(btn => {
-                    const id = String(btn.getAttribute('data-id'));
-                    if (wishlist.includes(id)) {
-                        btn.classList.add('active');
+                document.querySelectorAll('.wishlist-heart-btn, .wishlist-heart').forEach(btn => {
+                    const card = btn.closest('.watch-card, .property-card');
+                    const id = String(btn.getAttribute('data-id') || card?.getAttribute('data-id') || '');
+
+                    const isActive = wishlist.includes(id);
+                    btn.classList.toggle('active', isActive);
+
+                    const svgPath = btn.querySelector('svg path, path');
+                    if (isActive) {
+                        btn.style.color = '#ff5252';
+                        if (svgPath) svgPath.style.fill = '#ff5252';
                     } else {
-                        btn.classList.remove('active');
+                        btn.style.color = '';
+                        if (svgPath) svgPath.style.fill = 'currentColor';
                     }
                 });
             }
@@ -852,33 +1033,33 @@
 
                 if (cart.length === 0) {
                     itemsContainer.innerHTML = `
-                    <div class="cart-empty">
-                        <i class="fa-solid fa-bag-shopping"></i>
-                        <h3>Your bag is waiting</h3>
-                        <p>Add a luxury timepiece to get started.</p>
-                    </div>
-                `;
+                        <div class="cart-empty">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                            <h3>Your bag is waiting</h3>
+                            <p>Add a luxury timepiece to get started.</p>
+                        </div>
+                    `;
                 } else {
                     itemsContainer.innerHTML = cart.map((item, index) => `
-                    <article class="cart-item" data-index="${index}">
-                        <div class="cart-item-image">
-                            ${item.image ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}">` : '<i class="fa-regular fa-clock"></i>'}
-                        </div>
-                        <div>
-                            <span class="cart-item-brand">${escapeHTML(item.brand || 'ZEITH')}</span>
-                            <h3 class="cart-item-name">${escapeHTML(item.name)}</h3>
-                            <div class="cart-item-price">${money(item.price)}</div>
-                            <div class="cart-item-bottom">
-                                <div class="cart-quantity">
-                                    <button type="button" data-action="decrease" aria-label="Decrease quantity">−</button>
-                                    <span>${item.quantity}</span>
-                                    <button type="button" data-action="increase" aria-label="Increase quantity">+</button>
-                                </div>
-                                <button type="button" class="cart-remove" data-action="remove">Remove</button>
+                        <article class="cart-item" data-index="${index}">
+                            <div class="cart-item-image">
+                                ${item.image ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}">` : '<i class="fa-regular fa-clock"></i>'}
                             </div>
-                        </div>
-                    </article>
-                `).join('');
+                            <div>
+                                <span class="cart-item-brand">${escapeHTML(item.brand || 'ZEITH')}</span>
+                                <h3 class="cart-item-name">${escapeHTML(item.name)}</h3>
+                                <div class="cart-item-price">${money(item.price)}</div>
+                                <div class="cart-item-bottom">
+                                    <div class="cart-quantity">
+                                        <button type="button" data-action="decrease" aria-label="Decrease quantity">&minus;</button>
+                                        <span>${item.quantity}</span>
+                                        <button type="button" data-action="increase" aria-label="Increase quantity">+</button>
+                                    </div>
+                                    <button type="button" class="cart-remove" data-action="remove">Remove</button>
+                                </div>
+                            </div>
+                        </article>
+                    `).join('');
                 }
 
                 subtotalElement.textContent = money(subtotal);
@@ -938,41 +1119,108 @@
                 window.location.href = '/Watch_Collection/checkout';
             });
 
-            // GRID INTERACTIONS (Wishlist & Add to Cart)
+            // 1. CAROUSEL SLIDE ARROWS LOGIC
+            document.addEventListener('click', (e) => {
+                const arrow = e.target.closest('.carousel-arrow');
+                if (!arrow) return;
+
+                e.stopPropagation();
+
+                const card = arrow.closest('.watch-card, .property-card');
+                if (!card) return;
+
+                const imgEl = card.querySelector('.card-main-img');
+                const bars = card.querySelectorAll('.progress-bar-segment');
+                const images = JSON.parse(card.getAttribute('data-images') || '[]');
+
+                if (!images.length) return;
+
+                let currentIndex = parseInt(card.getAttribute('data-current-index') || '0', 10);
+
+                if (arrow.classList.contains('next-arrow')) {
+                    currentIndex = (currentIndex + 1) % images.length;
+                } else if (arrow.classList.contains('prev-arrow')) {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                }
+
+                card.setAttribute('data-current-index', currentIndex);
+
+                if (imgEl) {
+                    imgEl.style.opacity = '0';
+                    setTimeout(() => {
+                        imgEl.src = images[currentIndex];
+                        imgEl.style.opacity = '1';
+                    }, 150);
+                }
+
+                bars.forEach((bar, idx) => {
+                    bar.classList.toggle('active', idx === currentIndex);
+                });
+            });
+
+            // 2. GRID INTERACTIONS (Wishlist, Sold Out Check, & Add to Cart)
             if (grid) {
                 grid.addEventListener('click', (e) => {
-                    const wishBtn = e.target.closest('.wishlist-heart-btn');
-                    const addButton = e.target.closest('.property-add-btn');
+                    const wishBtn = e.target.closest('.wishlist-heart-btn, .wishlist-heart');
+                    const addButton = e.target.closest('.property-add-btn, .add-button');
 
                     // Wishlist toggle
                     if (wishBtn) {
-                        const watchId = String(wishBtn.getAttribute('data-id'));
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const card = wishBtn.closest('.watch-card, .property-card');
+                        const watchId = String(wishBtn.getAttribute('data-id') || card?.getAttribute('data-id') || '');
+                        if (!watchId) return;
+
                         let wishlist = readStorage('zeith_wishlist').map(String);
 
                         if (wishlist.includes(watchId)) {
                             wishlist = wishlist.filter(id => id !== watchId);
                         } else {
                             wishlist.push(watchId);
+
+                            // 👉 Send API fetch to update likes_count in database for Trending section
+                            fetch('/Watch_Collection/api/like-watch.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    id: watchId
+                                })
+                            }).catch(err => console.error('Error updating likes:', err));
                         }
 
                         localStorage.setItem('zeith_wishlist', JSON.stringify(wishlist));
+                        window.dispatchEvent(new Event('storage'));
                         syncWishlist();
                         return;
                     }
 
                     // Add to bag button
                     if (addButton) {
-                        const card = addButton.closest('.property-card');
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const card = addButton.closest('.property-card, .watch-card');
                         if (!card) return;
 
-                        const stock = Number(card.dataset.stock) || 10;
+                        const stock = Number(card.dataset.stock) || 0;
+                        const statusBadge = card.querySelector('.status-badge');
+                        const isSoldOut = (stock <= 0) || (statusBadge && statusBadge.textContent.trim().toUpperCase() === 'SOLD OUT');
+
+                        // Sold Out alert guard
+                        if (isSoldOut) {
+                            alert('This watch is currently Sold Out and cannot be added to your cart.');
+                            return;
+                        }
 
                         const watch = {
                             id: String(card.dataset.id || ''),
-                            name: card.querySelector('.property-card-title, .property-card-name')?.textContent.trim() || 'Watch',
-                            brand: 'ZEITH',
-                            price: Number(card.querySelector('.property-card-price')?.textContent.replace(/[^\d.]/g, '')) || 0,
-                            image: card.querySelector('.property-card-image img')?.getAttribute('src') || '',
+                            name: card.querySelector('.property-card-title, .watch-title-text')?.textContent.trim() || 'Watch',
+                            brand: card.dataset.brand || 'ZEITH',
+                            price: Number(card.dataset.price || card.querySelector('.property-card-price, .price-display')?.textContent.replace(/[^\d.]/g, '')) || 0,
+                            image: card.querySelector('.card-main-img, .property-card-image img')?.getAttribute('src') || '',
                             stock: stock,
                             quantity: 1
                         };
@@ -981,7 +1229,6 @@
                         const existingIndex = cart.findIndex(item => item.id === watch.id);
                         const currentQty = existingIndex !== -1 ? (Number(cart[existingIndex].quantity) || 1) : 0;
 
-                        // STOCK CHECK
                         if (currentQty + 1 > stock) {
                             alert(`Sorry, we only have ${stock} of this item in stock.`);
                             return;
@@ -990,6 +1237,7 @@
                         if (existingIndex !== -1) {
                             cart[existingIndex].quantity = currentQty + 1;
                             cart[existingIndex].name = watch.name;
+                            cart[existingIndex].brand = watch.brand;
                             cart[existingIndex].price = watch.price;
                             cart[existingIndex].image = watch.image;
                             cart[existingIndex].stock = stock;
@@ -998,6 +1246,7 @@
                         }
 
                         saveCart(cart);
+                        openCart();
 
                         const oldText = addButton.textContent;
                         addButton.textContent = 'Added!';
@@ -1018,8 +1267,8 @@
                 if (event.key === 'zeith_cart') renderCart();
                 if (event.key === 'zeith_wishlist') syncWishlist();
             });
+
+            window.addEventListener('focus', syncWishlist);
         });
     </script>
 </body>
-
-</html>
