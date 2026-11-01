@@ -546,22 +546,34 @@
                             html += `<div class="zeith-dropdown-list">`;
                             data.forEach(product => {
                                 let formattedPrice = '₦' + parseFloat(product.price).toLocaleString();
+                                
+                                // FIX: Dynamically resolve whether it's an upload or a pre-seeded asset
+                                let rawImg = product.image_url_1 || '';
+                                let imgSrc = '/Zeith/assets/images/placeholder.jpg';
+                                
+                                if (rawImg) {
+                                    if (rawImg.startsWith('http://') || rawImg.startsWith('https://') || rawImg.startsWith('/')) {
+                                        imgSrc = rawImg; // Already a full or absolute path
+                                    } else {
+                                        // Check if it's one of your device uploads stored in public/uploads/
+                                        // Device uploads on your system contain timestamps or you can check public/uploads existence,
+                                        // or fallback to uploads folder:
+                                        imgSrc = `/Zeith/public/uploads/${rawImg}`;
+                                    }
+                                }
 
-                                // Add your actual image folder path here (e.g., 'assets/images/' or 'uploads/')
-                                let imgSrc = product.image_url_1 ? `/Zeith/assets/image/${product.image_url_1}` : '/Zeith/assets/images/placeholder.jpg';
                                 html += `
                                <a href="/Zeith/watch/details/${product.id}" class="zeith-dropdown-item">
-                                   <img src="${imgSrc}" alt="${escapeHtml(product.name)}" class="zeith-dropdown-img">
+                                   <img src="${imgSrc}" alt="${escapeHtml(product.name)}" class="zeith-dropdown-img" onerror="this.onerror=null; this.src='/Zeith/assets/image/${rawImg}';">
                                    <div class="zeith-dropdown-info">
                                        <div class="zeith-dropdown-title">${escapeHtml(product.name)}</div>
                                        <div class="zeith-dropdown-price">${formattedPrice}</div>
                                    </div>
                                </a>
-                           `;
+                            `;
                             });
-                            html += `</div>`;
 
-                            // FIXED: Point to /product/search instead of /search
+                            html += `</div>`;
                             html += `
                                 <div class="zeith-dropdown-footer">
                                     <a href="/Zeith/product/search?q=${encodeURIComponent(query)}" class="zeith-dropdown-viewall">View all</a>

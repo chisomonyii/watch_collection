@@ -44,7 +44,6 @@
             font-size: 0.95rem;
         }
 
-        /* PRODUCTS GRID */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -134,12 +133,9 @@
             color: var(--text-muted);
             grid-column: 1 / -1;
         }
-
-        
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="search-header">
         <h1>Search Results</h1>
@@ -150,9 +146,11 @@
         <?php if (!empty($products)): ?>
             <?php foreach ($products as $product): ?>
                 <div class="product-card">
-                    <img src="<?= htmlspecialchars($product['image'] ?? 'assets/images/placeholder.jpg') ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="product-image">
+                    <!-- FIXED: Using image_url_1 resolved path from your model -->
+                    <img src="<?= htmlspecialchars($product['image_url_1'] ?? '/Zeith/assets/image/pngwing.com (1).png') ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="product-image">
                     <div class="product-info">
                         <span class="product-brand"><?= htmlspecialchars($product['brand'] ?? 'ZEITH') ?></span>
+                        <!-- FIXED: Updated path from /Watch_Collection/ to /Zeith/ -->
                         <a href="/Zeith/product?id=<?= $product['id'] ?>" class="product-title"><?= htmlspecialchars($product['name']) ?></a>
                         <div class="product-price">₦<?= number_format($product['price'], 2) ?></div>
                         <a href="/Zeith/product?id=<?= $product['id'] ?>" class="btn-view">View Timepiece</a>
@@ -168,6 +166,5 @@
         <?php endif; ?>
     </div>
 </div>
-
 </body>
 </html>

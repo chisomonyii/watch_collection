@@ -1970,9 +1970,9 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             <div class="property-sidebar-widget">
                 <h3 class="property-widget-title">FILTER BY PRICE</h3>
                 <div class="property-price-range">
-                    <input type="range" id="priceRangeSlider" min="3000" max="5000000" value="5000000" step="5000" class="property-range-slider">
+                    <input type="range" id="priceRangeSlider" min="3000" max="30000000" value="30000000" step="5000" class="property-range-slider">
                     <div class="property-price-controls">
-                        <span class="property-price-label" id="priceRangeLabel">PRICE: ₦3,000 — ₦5,000,000</span>
+                        <span class="property-price-label" id="priceRangeLabel">PRICE: ₦3,000 — ₦30,000,000</span>
                         <button class="property-filter-btn" id="btnApplyFilter">FILTER</button>
                     </div>
                 </div>
