@@ -52,6 +52,7 @@
         color: #555555;
         line-height: 1.5;
         margin: 0;
+        font-weight: 270;
     }
 
     .cookie-text a {
@@ -428,74 +429,61 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const banner = document.getElementById("zeithCookieBanner");
-        const settingsBtn = document.getElementById("cookieSettingsBtn");
-        const acceptBtn = document.getElementById("cookieAcceptBtn");
-        const rejectBtn = document.getElementById("cookieRejectBtn");
-        
-        const modalOverlay = document.getElementById("cookieModalOverlay");
-        const closeModal = document.getElementById("closeCookieModal");
-        const allowAllModalBtn = document.getElementById("allowAllModalBtn");
-        const confirmChoicesBtn = document.getElementById("confirmChoicesBtn");
+document.addEventListener("DOMContentLoaded", function () {
+    const banner = document.getElementById("zeithCookieBanner");
+    const settingsBtn = document.getElementById("cookieSettingsBtn");
+    const acceptBtn = document.getElementById("cookieAcceptBtn");
+    const rejectBtn = document.getElementById("cookieRejectBtn");
+    const modalOverlay = document.getElementById("cookieModalOverlay");
+    const closeModal = document.getElementById("closeCookieModal");
+    const allowAllModalBtn = document.getElementById("allowAllModalBtn");
+    const confirmChoicesBtn = document.getElementById("confirmChoicesBtn");
 
-        // 1. Show banner if choice is not saved in localStorage
-        if (!localStorage.getItem("zeith_cookie_consent")) {
-            setTimeout(() => {
-                banner.classList.add("show");
-            }, 800);
-        }
+    const ONE_DAY_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    const lastConsentTime = localStorage.getItem("zeith_cookie_consent_time");
+    const now = Date.now();
 
-        // 2. Accept All Action
-        function saveAcceptAll() {
-            localStorage.setItem("zeith_cookie_consent", JSON.stringify({
-                performance: true,
-                functional: true,
-                advertisement: true
-            }));
-            banner.classList.remove("show");
-            modalOverlay.classList.remove("active");
-        }
+    // Show banner if 24 hours have passed or if the user has never given consent
+    if (!lastConsentTime || (now - Number(lastConsentTime)) > ONE_DAY_MS) {
+        setTimeout(() => {
+            banner.classList.add("show");
+        }, 800);
+    }
 
-        // 3. Reject All Action
-        function saveRejectAll() {
-            localStorage.setItem("zeith_cookie_consent", JSON.stringify({
-                performance: false,
-                functional: false,
-                advertisement: false
-            }));
-            banner.classList.remove("show");
-            modalOverlay.classList.remove("active");
-        }
+    function saveConsent(preferences) {
+        localStorage.setItem("zeith_cookie_consent", JSON.stringify(preferences));
+        localStorage.setItem("zeith_cookie_consent_time", Date.now().toString());
+        banner.classList.remove("show");
+        modalOverlay.classList.remove("active");
+    }
 
-        // Event Listeners for Bottom Banner
-        acceptBtn.addEventListener("click", saveAcceptAll);
-        rejectBtn.addEventListener("click", saveRejectAll);
-
-        // Open Preferences Modal Panel
-        settingsBtn.addEventListener("click", function () {
-            modalOverlay.classList.add("active");
-        });
-
-        // Close Preferences Modal Panel
-        closeModal.addEventListener("click", function () {
-            modalOverlay.classList.remove("active");
-        });
-
-        // Allow All inside Modal
-        allowAllModalBtn.addEventListener("click", saveAcceptAll);
-
-        // Save Custom Switch Preferences
-        confirmChoicesBtn.addEventListener("click", function () {
-            const preferences = {
-                performance: document.getElementById("cookiePerf").checked,
-                functional: document.getElementById("cookieFunc").checked,
-                advertisement: document.getElementById("cookieAdv").checked
-            };
-            localStorage.setItem("zeith_cookie_consent", JSON.stringify(preferences));
-            
-            modalOverlay.classList.remove("active");
-            banner.classList.remove("show");
-        });
+    acceptBtn.addEventListener("click", function () {
+        saveConsent({ performance: true, functional: true, advertisement: true });
     });
+
+    rejectBtn.addEventListener("click", function () {
+        saveConsent({ performance: false, functional: false, advertisement: false });
+    });
+
+    settingsBtn.addEventListener("click", function () {
+        modalOverlay.classList.add("active");
+    });
+
+    closeModal.addEventListener("click", function () {
+        modalOverlay.classList.remove("active");
+    });
+
+    allowAllModalBtn.addEventListener("click", function () {
+        saveConsent({ performance: true, functional: true, advertisement: true });
+    });
+
+    confirmChoicesBtn.addEventListener("click", function () {
+        const preferences = {
+            performance: document.getElementById("cookiePerf").checked,
+            functional: document.getElementById("cookieFunc").checked,
+            advertisement: document.getElementById("cookieAdv").checked
+        };
+        saveConsent(preferences);
+    });
+});
 </script>

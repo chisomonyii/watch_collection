@@ -20,6 +20,7 @@ class Authentication
 
             if (Utilities::verifyHashpassword($password, $userHashedPassword)) {
                 
+                
                 $role = $user['role'] ?? 'staff';
                 $status = $user['status'] ?? 'approved';
 

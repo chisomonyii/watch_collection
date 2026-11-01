@@ -6,28 +6,30 @@ use Phinx\Migration\AbstractMigration;
 
 final class MyNewMigration extends AbstractMigration
 {
-    /**
-     * Change Method.
-     *
-     * Write your reversible migrations using this method.
-     *
-     * More information on writing migrations is available here:
-     * https://book.cakephp.org/phinx/0/en/migrations.html#the-change-method
-     *
-     * Remember to call "create()" or "update()" and NOT "save()" when working
-     * with the Table class.
-     */
     public function change(): void
     {
-        $this->table('users')
-             ->addColumn('firstname', 'string', ['limit' => 255])
-             ->addColumn('lastname', 'string', ['limit' => 255])
-             ->addColumn('email', 'string', ['limit' => 255])
-             ->addColumn('password', 'string', ['limit' => 255])
-             ->addColumn('user_type', 'enum', ['values' => ['admin', 'user']])
-             ->addIndex('email', ['unique' => true])
-             ->addTimestamps()
-             ->create();
+        // Check if the users table already exists to prevent duplicate creation errors
+        if (!$this->hasTable('users')) {
+            $table = $this->table('users');
 
+            $table->addColumn('firstname', 'string', ['limit' => 255, 'null' => true, 'default' => null])
+                  ->addColumn('lastname', 'string', ['limit' => 255, 'null' => true, 'default' => null])
+                  ->addColumn('email', 'string', ['limit' => 255, 'null' => true, 'default' => null])
+                  ->addColumn('password', 'string', ['limit' => 255, 'null' => true, 'default' => null])
+                  ->addColumn('role', 'enum', [
+                      'values' => ['admin', 'staff'],
+                      'null' => false,
+                      'default' => 'staff'
+                  ])
+                  ->addColumn('status', 'enum', [
+                      'values' => ['pending', 'approved', 'active', 'suspended'],
+                      'null' => false,
+                      'default' => 'pending'
+                  ])
+                  ->addColumn('created_at', 'timestamp', ['null' => false, 'default' => 'CURRENT_TIMESTAMP'])
+                  ->addColumn('updated_at', 'timestamp', ['null' => true, 'default' => null, 'update' => 'CURRENT_TIMESTAMP'])
+                  ->addIndex(['email'], ['unique' => true])
+                  ->create();
+        }
     }
 }

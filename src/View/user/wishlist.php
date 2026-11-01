@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -500,8 +502,6 @@
             box-sizing: border-box !important;
             clear: both !important;
         }
-
-        
     </style>
 </head>
 
@@ -518,10 +518,49 @@
             <?php if (!empty($wishlistItems)): ?>
                 <?php foreach ($wishlistItems as $item): ?>
                     <?php
-                    $img1 = "/Watch_Collection/assets/image/" . ($item['image_url_1'] ?? $item['image_url'] ?? 'Nautilus_5711-removebg-preview.png');
-                    $img2 = "/Watch_Collection/assets/image/" . ($item['image_url_2'] ?? $item['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png');
-                    $img3 = "/Watch_Collection/assets/image/" . ($item['image_url_3'] ?? $item['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png');
-                    $img4 = "/Watch_Collection/assets/image/" . ($item['image_url_4'] ?? $item['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png');
+                    // Bulletproof Helper: Cleans pre-attached path strings before checking server
+                    $resolveImagePath = function ($imgName) {
+    $imgVal = trim($imgName ?? '');
+
+    if (empty($imgVal)) {
+        return '/Watch_Collection/assets/image/placeholder.jpg';
+    }
+
+    if (strpos($imgVal, 'http://') === 0 || strpos($imgVal, 'https://') === 0) {
+        return $imgVal;
+    }
+
+    $filename = basename($imgVal);
+
+    // 1. Check direct path inside public/uploads/ using the clean filename
+    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $filename;
+    if (file_exists($uploadPath)) {
+        return '/Watch_Collection/public/uploads/' . $filename;
+    }
+
+    // 2. Check if the raw string already points to uploads or contains uploads path
+    if (strpos($imgVal, 'uploads/') !== false || strpos($imgVal, 'public/uploads/') !== false) {
+        $fullUploadCheck = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/' . ltrim($imgVal, '/');
+        if (file_exists($fullUploadCheck)) {
+            return '/Watch_Collection/' . ltrim($imgVal, '/');
+        }
+    }
+
+    // 3. Check if the file actually exists in assets/image/ before defaulting there
+    $assetPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/assets/image/' . $filename;
+    if (file_exists($assetPath)) {
+        return '/Watch_Collection/assets/image/' . $filename;
+    }
+
+    // 4. Final safety fallback: if it's an uploaded watch, force public/uploads path anyway
+    return '/Watch_Collection/public/uploads/' . $filename;
+};
+
+                    // Resolve images dynamically
+                    $img1 = $resolveImagePath($item['image_url_1'] ?? $item['image_url'] ?? 'Nautilus_5711-removebg-preview.png');
+                    $img2 = $resolveImagePath($item['image_url_2'] ?? $item['image_url_1']);
+                    $img3 = $resolveImagePath($item['image_url_3'] ?? $item['image_url_1']);
+                    $img4 = $resolveImagePath($item['image_url_4'] ?? $item['image_url_1']);
 
                     $watchPrice = "₦" . number_format($item['price'] ?? 85000);
                     $watchId = htmlspecialchars($item['id']);
@@ -588,7 +627,6 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const grid = document.getElementById('wishlist-grid');
             const emptyMsg = document.getElementById('empty-wishlist-msg');
-
             const savedIds = JSON.parse(localStorage.getItem('zeith_wishlist')) || [];
 
             if (savedIds.length === 0) {
@@ -619,54 +657,98 @@
                     if (result.success && result.data && result.data.length > 0) {
                         if (emptyMsg) emptyMsg.style.display = 'none';
 
-                        grid.innerHTML = result.data.map(item => {
-                            const img1 = `/Watch_Collection/assets/image/${item.image_url_1 || item.image || item.image_url || 'Nautilus_5711-removebg-preview.png'}`;
-                            const img2 = `/Watch_Collection/assets/image/${item.image_url_2 || item.image_url_1 || 'Nautilus_5711-removebg-preview.png'}`;
-                            const img3 = `/Watch_Collection/assets/image/${item.image_url_3 || item.image_url_1 || 'Nautilus_5711-removebg-preview.png'}`;
-                            const img4 = `/Watch_Collection/assets/image/${item.image_url_4 || item.image_url_1 || 'Nautilus_5711-removebg-preview.png'}`;
+                        // Client-side image resolver supporting public/uploads/ and assets/image/
+                        const resolveJsImage = (imgName) => {
+                            const clean = (imgName || '').trim();
+                            if (!clean) return '/Watch_Collection/assets/image/Nautilus_5711-removebg-preview.png';
+                            if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('/')) {
+                                return clean;
+                            }
 
-                            const watchPrice = `₦${Number(item.price || 0).toLocaleString()}`;
+                            // If the database string already references uploads
+                            if (clean.includes('public/uploads/') || clean.includes('uploads/')) {
+                                const filename = clean.split('/').pop();
+                                return `/Watch_Collection/public/uploads/${filename}`;
+                            }
+
+                            // Check if it's likely a device upload (custom names or hashes) or fallback to assets
+                            // You can also check if filename has typical user upload patterns or fallback to uploads if assets fail
+                            // For safety with your setup, if it's not a known default asset, check uploads or default to uploads if stored via admin form:
+                            const filename = clean.split('/').pop();
+
+                            // Let's check if it exists or treat as upload if it doesn't match default asset names
+                            return `/Watch_Collection/public/uploads/${filename}`;
+                        };
+
+                        grid.innerHTML = result.data.map(item => {
+                        const rawImg1 = item.image_url_1 || item.image || item.image_url || 'Nautilus_5711-removebg-preview.png';
+                        const rawImg2 = item.image_url_2 || rawImg1;
+                        const rawImg3 = item.image_url_3 || rawImg1;
+                        const rawImg4 = item.image_url_4 || rawImg1;
+
+                       const formatPath = (p) => {
+    const clean = (p || '').trim();
+
+    if (!clean) return '/Watch_Collection/assets/image/Nautilus_5711-removebg-preview.png';
+
+    if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('/')) {
+        return encodeURI(clean);
+    }
+
+    const fname = clean.split('/').pop();
+    const defaults = ['Nautilus_5711-removebg-preview.png', 'banner1.jpg', 'placeholder.jpg'];
+
+    if (defaults.includes(fname)) {
+        return encodeURI(`/Watch_Collection/assets/image/${fname}`);
+    }
+
+    return encodeURI(`/Watch_Collection/public/uploads/${fname}`);
+};
+
+                        const img1 = formatPath(rawImg1);
+                        const img2 = formatPath(rawImg2);
+                        const img3 = formatPath(rawImg3);
+                        const img4 = formatPath(rawImg4);
+                        const watchPrice = `₦${Number(item.price || 0).toLocaleString()}`;
 
                             return `
-                                <div class="watch-card" data-id="${item.id}" 
-                                     data-images='["${img1}", "${img2}", "${img3}", "${img4}"]'>
-                                     
-                                    <div class="card-top-bar">
-                                        <span class="status-badge">${item.tag || 'AVAILABLE'}</span>
-                                        <div class="wishlist-heart" title="Remove from wishlist">
-                                            <svg viewBox="0 0 24 24">
-                                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                            </svg>
-                                        </div>
-                                    </div>
+                        <div class="watch-card" data-id="${item.id}" data-images='["${img1}", "${img2}", "${img3}", "${img4}"]'>
+                            <div class="card-top-bar">
+                                <span class="status-badge">${item.tag || 'AVAILABLE'}</span>
+                                <div class="wishlist-heart" title="Remove from wishlist">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    </svg>
+                                </div>
+                            </div>
 
-                                    <div class="watch-image-container">
-                                        <button class="carousel-arrow prev" type="button">&lsaquo;</button>
-                                        <img class="card-main-img" src="${img1}" alt="${item.name}">
-                                        <button class="carousel-arrow next" type="button">&rsaquo;</button>
+                            <div class="watch-image-container">
+                                <button class="carousel-arrow prev" type="button">&lsaquo;</button>
+                                <img class="card-main-img" src="${img1}" alt="${item.name}">
+                                <button class="carousel-arrow next" type="button">&rsaquo;</button>
 
-                                        <div class="price-overlay-bar">
-                                            <div class="price-display">${watchPrice}</div>
-                                            <div class="progress-indicators">
-                                                <div class="progress-bar-segment active"></div>
-                                                <div class="progress-bar-segment"></div>
-                                                <div class="progress-bar-segment"></div>
-                                                <div class="progress-bar-segment"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="watch-details-content">
-                                        <h2 class="watch-title-text">${item.name || ''}</h2>
-                                        <p class="watch-desc-text">${item.description || 'Exclusive luxury craftsmanship with precision movement.'}</p>
-                                    </div>
-
-                                    <div class="card-footer-actions">
-                                        <button class="btn-add-cart-orange" type="button">Add</button>
-                                        <a href="/Watch_Collection/watch/details/${item.id}" class="view-details-link">View details &rarr;</a>
+                                <div class="price-overlay-bar">
+                                    <div class="price-display">${watchPrice}</div>
+                                    <div class="progress-indicators">
+                                        <div class="progress-bar-segment active"></div>
+                                        <div class="progress-bar-segment"></div>
+                                        <div class="progress-bar-segment"></div>
+                                        <div class="progress-bar-segment"></div>
                                     </div>
                                 </div>
-                            `;
+                            </div>
+
+                            <div class="watch-details-content">
+                                <h2 class="watch-title-text">${item.name || ''}</h2>
+                                <p class="watch-desc-text">${item.description || 'Exclusive luxury craftsmanship with precision movement.'}</p>
+                            </div>
+
+                            <div class="card-footer-actions">
+                                <button class="btn-add-cart-orange" type="button">Add</button>
+                                <a href="/Watch_Collection/watch/details/${item.id}" class="view-details-link">View details &rarr;</a>
+                            </div>
+                        </div>
+                    `;
                         }).join('');
                     } else {
                         if (emptyMsg) emptyMsg.style.display = 'block';
@@ -679,6 +761,8 @@
 
             updateWishlistBadge();
         });
+
+        // Carousel & Wishlist interaction listeners remain identical...
 
         /* --- CAROUSEL SLIDE ARROWS LOGIC --- */
         document.addEventListener('click', (e) => {

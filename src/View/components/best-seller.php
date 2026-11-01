@@ -749,18 +749,33 @@ $trendingWatches = $trendingWatches ?? [];
         <div class="best-sellers-carousel">
             <div class="best-sellers-track">
                 <?php
+                // Image path resolver helper function
+                $resolveImagePath = function ($imgName) {
+                    $imgVal = trim($imgName ?? '');
+                    if (empty($imgVal)) {
+                        return '/Watch_Collection/assets/image/banner/banner1.jpg';
+                    }
+                    if (strpos($imgVal, 'http://') === 0 || strpos($imgVal, 'https://') === 0 || strpos($imgVal, '/') === 0) {
+                        return $imgVal;
+                    }
+
+                    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $imgVal;
+                    if (file_exists($uploadPath)) {
+                        return '/Watch_Collection/public/uploads/' . $imgVal;
+                    }
+                    return '/Watch_Collection/assets/image/' . $imgVal;
+                };
+
                 for ($i = 0; $i < 2; $i++):
                     foreach ($bestSellers as $watch):
-                        $imagePath = !empty($watch['image_url_1'])
-                            ? "/Watch_Collection/assets/image/" . htmlspecialchars($watch['image_url_1'])
-                            : "assets/image/banner/banner1.jpg";
+                        $imagePath = $resolveImagePath($watch['image_url_1'] ?? '');
                 ?>
                         <article class="best-product-card" data-id="<?= $watch['id'] ?>" data-price="<?= $watch['price'] ?>" data-stock="<?= $watch['stock'] ?? 10 ?>">
                             <div class="best-product-image">
                                 <div class="best-product-badge">
                                     <span>♛</span> BEST SELLER
                                 </div>
-                                <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($watch['name']) ?>">
+                                <img src="<?= htmlspecialchars($imagePath) ?>" alt="<?= htmlspecialchars($watch['name']) ?>">
                             </div>
                             <div class="best-product-info">
                                 <p class="best-product-brand">ZEITH</p>
@@ -791,16 +806,14 @@ $trendingWatches = $trendingWatches ?? [];
                 <?php
                 for ($i = 0; $i < 2; $i++):
                     foreach ($trendingWatches as $watch):
-                        $imagePath = !empty($watch['image_url_1'])
-                            ? "/Watch_Collection/assets/image/" . htmlspecialchars($watch['image_url_1'])
-                            : "assets/image/banner/banner1.jpg";
+                        $imagePath = $resolveImagePath($watch['image_url_1'] ?? '');
                 ?>
                         <article class="best-product-card" data-id="<?= $watch['id'] ?>" data-price="<?= $watch['price'] ?>" data-stock="<?= $watch['stock'] ?? 10 ?>">
                             <div class="best-product-image">
                                 <div class="best-product-badge trending">
                                     <span>🔥</span> TRENDING
                                 </div>
-                                <img src="<?= $imagePath ?>" alt="<?= htmlspecialchars($watch['name']) ?>">
+                                <img src="<?= htmlspecialchars($imagePath) ?>" alt="<?= htmlspecialchars($watch['name']) ?>">
                             </div>
                             <div class="best-product-info">
                                 <p class="best-product-brand">ZEITH</p>
@@ -810,7 +823,7 @@ $trendingWatches = $trendingWatches ?? [];
                                     <span class="best-product-stars">★★★★★</span>
                                     <span class="best-product-count">(<?= htmlspecialchars($watch['rating'] ?? '5.0') ?>)</span>
                                 </div>
-                               <a href="/Watch_Collection/watch/details/<?= $watch['id'] ?>" class="best-product-button">VIEW DETAILS</a>
+                                <a href="/Watch_Collection/watch/details/<?= $watch['id'] ?>" class="best-product-button">VIEW DETAILS</a>
                             </div>
                         </article>
                 <?php endforeach;

@@ -23,9 +23,9 @@ return
         'development' => [
             'adapter' => 'mysql',
             'host' => 'localhost',
-            'name' => $_ENV ['DB_NAME'],
-            'user' => $_ENV ['DB_USER'],
-            'pass' => $_ENV ['DB_PASSWORD'],
+            'name' => $_ENV['DB_NAME'] ?? 'watch_collection',
+            'user' => $_ENV['DB_USER'] ?? 'root',
+            'pass' => $_ENV['DB_PASSWORD'] ?? '',
             'port' => '3306',
             'charset' => 'utf8',
         ],

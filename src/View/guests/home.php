@@ -1061,6 +1061,10 @@ use App\Helpers\View;
         .view-details-link:hover {
             text-decoration: underline;
         }
+
+        .view-all {
+            text-decoration: none;
+        }
     </style>
 
 
@@ -1120,7 +1124,7 @@ use App\Helpers\View;
             <div class="hero-text-column">
                 <h1 class="hero-title">Watch<br>Collection</h1>
                 <p class="hero-description">Discover precision timepieces crafted with exceptional luxury, sophisticated engineering, and timeless style.</p>
-                <a href="/Watch_Collection/collection" class="hero-btn">See Products</a>
+                <a href="/Watch_Collection/user/watch" class="hero-btn">See Products</a>
             </div>
 
             <!-- Right Column: Watch Showcase Card -->
@@ -1147,24 +1151,31 @@ use App\Helpers\View;
 
         <div class="new">
             <?php if (!empty($newArrivals)): ?>
-
                 <?php foreach ($newArrivals as $watch): ?>
-
                     <?php
-                    // 1. Fetch image string from database
-                    $imgVal = trim($watch['image_url_1'] ?? '');
+                    // Helper function to resolve whether image is in uploads/ or assets/image/
+                    $resolveImagePath = function ($imgName) {
+                        $imgVal = trim($imgName ?? '');
+                        if (empty($imgVal)) {
+                            return '/Watch_Collection/assets/image/placeholder.jpg';
+                        }
+                        if (strpos($imgVal, 'http://') === 0 || strpos($imgVal, 'https://') === 0 || strpos($imgVal, '/') === 0) {
+                            return $imgVal;
+                        }
 
-                    // 2. Dual Option Logic (Option A: Web URL | Option B: Local VS Code Assets)
-                    if (strpos($imgVal, 'http://') === 0 || strpos($imgVal, 'https://') === 0) {
-                        // OPTION A: Online Web Link
-                        $imagePath = $imgVal;
-                    } elseif (!empty($imgVal)) {
-                        // OPTION B: Downloaded Image in Watch_Collection/assets/image
-                        $imagePath = '/Watch_Collection/assets/image/' . ltrim($imgVal, '/');
-                    } else {
-                        // Fallback default placeholder
-                        $imagePath = '/Watch_Collection/assets/image/placeholder.jpg';
-                    }
+                        // Check if file exists in public/uploads, otherwise fallback to assets/image
+                        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $imgVal;
+                        if (file_exists($uploadPath)) {
+                            return '/Watch_Collection/public/uploads/' . $imgVal;
+                        }
+                        return '/Watch_Collection/assets/image/' . $imgVal;
+                    };
+
+                    // Resolve all 4 images dynamically
+                    $img1 = $resolveImagePath($watch['image_url_1'] ?? '');
+                    $img2 = $resolveImagePath($watch['image_url_2'] ?? $watch['image_url_1']);
+                    $img3 = $resolveImagePath($watch['image_url_3'] ?? $watch['image_url_1']);
+                    $img4 = $resolveImagePath($watch['image_url_4'] ?? $watch['image_url_1']);
                     ?>
 
                     <!-- data-stock added here so JavaScript can read the stock limit -->
@@ -1185,12 +1196,12 @@ use App\Helpers\View;
                                 </button>
                             </div>
 
-                            <!-- Images Carousel Slides -->
+                            <!-- Images Carousel Slides using dynamically resolved paths -->
                             <div class="slider-track">
-                                <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_1'] ?? 'default.png') ?>" class="slide active" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="0">
-                                <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_2'] ?? $watch['image_url_1']) ?>" class="slide" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="1">
-                                <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_3'] ?? $watch['image_url_1']) ?>" class="slide" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="2">
-                                <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_4'] ?? $watch['image_url_1']) ?>" class="slide" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="3">
+                                <img src="<?= htmlspecialchars($img1) ?>" class="slide active" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="0">
+                                <img src="<?= htmlspecialchars($img2) ?>" class="slide" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="1">
+                                <img src="<?= htmlspecialchars($img3) ?>" class="slide" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="2">
+                                <img src="<?= htmlspecialchars($img4) ?>" class="slide" alt="<?= htmlspecialchars($watch['name']) ?>" data-index="3">
                             </div>
 
                             <!-- Navigation Arrows -->
@@ -1223,16 +1234,14 @@ use App\Helpers\View;
                             <button type="button" class="add-button">Add</button>
                         </div>
                     </div>
-
                 <?php endforeach; ?>
-
             <?php endif; ?>
         </div>
 
-
-        <button class="arrive-btn search-btn">
-            View all
-        </button>
+        <a href="/Watch_Collection/user/watch" class="view-all"> <button class="arrive-btn search-btn">
+                View all
+            </button>
+        </a>
 
     </section>
 
@@ -1289,57 +1298,7 @@ use App\Helpers\View;
     ========================================= -->
 
 
-    <button type="button"
-        class="floating-cart"
-        id="open-cart"
-        title="Shopping Cart"
-        aria-label="Open shopping cart"
-        aria-controls="cart-drawer"
-        aria-expanded="false">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span class="cart-count" id="cart-count">0</span>
-    </button>
-
-
-    <div class="cart-overlay" id="cart-overlay"></div>
-
-    <aside class="cart-drawer"
-        id="cart-drawer"
-        aria-hidden="true"
-        aria-label="Shopping cart">
-
-        <div class="cart-drawer-header">
-            <div>
-                <small>THE ZEITH EXPERIENCE</small>
-                <h2>Shopping Bag <span id="drawer-item-count">(0)</span></h2>
-            </div>
-
-            <button type="button" id="close-cart" class="cart-close"
-                aria-label="Close cart">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-
-        <div class="cart-items" id="cart-items"></div>
-
-        <div class="cart-drawer-footer">
-            <div class="cart-subtotal-row">
-                <span>Subtotal</span>
-                <strong id="cart-subtotal">₦0.00</strong>
-            </div>
-
-            <p>Shipping and applicable fees are calculated at checkout.</p>
-
-            <button type="button" id="checkout-button" class="checkout-button">
-                Proceed to Checkout
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-
-            <button type="button" id="continue-shopping" class="continue-shopping">
-                Continue Shopping
-            </button>
-        </div>
-    </aside>
+    
 
 
 
@@ -1814,11 +1773,14 @@ use App\Helpers\View;
         });
     </script>
 
+    <?php include_once __DIR__ . '/../components/cart-drawer.php'; ?>
+
     <?php include __DIR__ . '/../components/footer.php'; ?>
 
     <?php include_once __DIR__ . '/../components/cookie-banner.php'; ?>
 
     <?php include_once __DIR__ . '/../components/newsletter-modal.php'; ?>
+    
 </body>
 
 </html>

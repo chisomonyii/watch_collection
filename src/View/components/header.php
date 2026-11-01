@@ -474,9 +474,9 @@
     <!-- Mobile Drawer -->
     <div class="zeith-mobile-menu" id="zeith-mobile-dropdown">
         <ul class="zeith-mobile-nav-list">
-            <li><a href="/Watch_Collection/collection" class="zeith-mobile-nav-link">Watches</a></li>
-            <li><a href="/Watch_Collection/home#news" class="zeith-mobile-nav-link">News</a></li>
-            <li><a href="/Watch_Collection/home#contact" class="zeith-mobile-nav-link">Contact</a></li>
+            <li><a href="/Watch_Collection/user/watch" class="zeith-mobile-nav-link">Watches</a></li>
+            <li><a href="/Watch_Collection/news" class="zeith-mobile-nav-link">News</a></li>
+            <li><a href="/Watch_Collection/contact" class="zeith-mobile-nav-link">Contact</a></li>
         </ul>
     </div>
 </div>

@@ -35,8 +35,6 @@ class Auth
         }
 
         $errors = [];
-        // ... rest of your validation logic
-        // ... rest of your validation logic
 
         // 1. CSRF Token Verification
         if (!isset($data['csrf_token']) || !Session::checkToken($data['csrf_token'])) {
@@ -84,13 +82,10 @@ class Auth
         // Wipe output buffer clean before outputting JSON response
         if (ob_get_length()) ob_clean();
         if ($registered) {
-            if (ob_get_length()) ob_clean();
-
-            // Send back a clear JSON success response with a redirect URL
             Response::json([
                 'message' => 'User registered successfully',
                 'success' => true,
-                'redirect' => './login.php' // Tells your JS where to go next
+                'redirect' => './login.php'
             ], 200);
             exit;
         } else {
@@ -157,28 +152,39 @@ class Auth
             exit;
         }
 
-       if (ob_get_length()) ob_clean();
+        if (ob_get_length()) ob_clean();
 
         if (Authentication::processLogin($email, $password)) {
-            
-            // Get the user data from session to check role
+            // Get the user data from session to check role and status
             $user = Authentication::user();
+
+            // 🛑 CHECK IF USER IS SUSPENDED
+            if (isset($user['status']) && strtolower(trim($user['status'])) === 'suspended') {
+                Session::start();
+                session_unset();
+                session_destroy();
+
+                Response::json([
+                    'message' => 'Your account has been suspended. Please contact support.',
+                    'success' => false,
+                    'errors' => ['Your account has been suspended.']
+                ], 422);
+                exit;
+            }
+
             $role = $user['role'] ?? 'staff';
 
-            // Determine redirect destination based on database role
-            $redirectUrl = ($role === 'admin') 
-                ? '/Watch_Collection/admin/dashboard' 
+            $redirectUrl = ($role === 'admin')
+                ? '/Watch_Collection/admin/dashboard'
                 : '/Watch_Collection/staff/dashboard';
 
             Response::json([
                 'message' => 'User has been logged in successfully',
                 'success' => true,
-                'redirect' => $redirectUrl // Send the dynamic route back to frontend JS
+                'redirect' => $redirectUrl
             ], 200);
             exit;
         } else {
-            // ... existing error handling ...
-            // Check if there's a specific session login error (e.g. pending staff approval)
             $errorMsg = $_SESSION['login_error'] ?? 'invalid credentials';
             unset($_SESSION['login_error']);
 
@@ -200,6 +206,166 @@ class Auth
             exit();
         }
 
+        return;
+    }
+
+    public static function logout()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        session_unset();
+        session_destroy();
+        header("Location: http://localhost/Watch_Collection/auth/login");
+        exit;
+    }
+
+    public static function sendResetLink()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = trim($_POST['email']);
+
+            // Database connection
+            $host = 'localhost';
+            $db_name = 'watch_collection';
+            $username = 'root';
+            $password = '';
+
+            try {
+                $db = new \PDO("mysql:host=$host;dbname=$db_name;charset=utf8mb4", $username, $password);
+                $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            } catch (\PDOException $e) {
+                die("Database connection failed: " . $e->getMessage());
+            }
+
+            $stmt = $db->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
+            $stmt->execute([$email]);
+            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            // If user does NOT exist in the database, redirect with error
+            if (!$user) {
+                header("Location: /Watch_Collection/auth/forgot-password?error=not_found");
+                exit;
+            }
+
+            // Generate secure token
+            $token = bin2hex(random_bytes(32));
+
+            // Save token to password_resets table
+            $stmt = $db->prepare("DELETE FROM password_resets WHERE email = ?");
+            $stmt->execute([$email]);
+
+            $stmt = $db->prepare("INSERT INTO password_resets (email, token, created_at) VALUES (?, ?, NOW())");
+            $stmt->execute([$email, $token]);
+
+            // Build the dynamic reset link
+            $resetLink = "http://localhost/Watch_Collection/auth/reset-password?token=" . $token;
+
+            // Send email via PHPMailer & Brevo SMTP
+            $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+            try {
+                $mail->isSMTP();
+                $mail->Host       = 'smtp-relay.brevo.com';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = $_ENV['SMTP_USER'] ?? getenv('SMTP_USER');
+                $mail->Password   = $_ENV['SMTP_PASS'] ?? getenv('SMTP_PASS');
+                $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port       = 587;
+
+                // Bypass local SSL certificate check on localhost
+                $mail->SMTPOptions = array(
+                    'ssl' => array(
+                        'verify_peer'       => false,
+                        'verify_peer_name'  => false,
+                        'allow_self_signed' => true
+                    )
+                );
+
+                // Sender & Recipient
+                $mail->setFrom('chibuikemnweze2020@gmail.com', 'Zeith Watch Collection');
+                $mail->addAddress($email);
+
+                $mail->isHTML(true);
+                $mail->Subject = 'Password Reset Request - Zeith';
+                $mail->Body    = "
+            <h3>Password Reset Request</h3>
+            <p>We received a request to reset your password. Click the button below to proceed:</p>
+            <p><a href='{$resetLink}' style='background:#f97316; color:white; padding:10px 20px; text-decoration:none; border-radius:5px; display:inline-block;'>Reset Password</a></p>
+            <p>If you didn't request this, you can safely ignore this email.</p>
+            ";
+
+                $mail->send();
+
+                // Redirect immediately upon successful dispatch matching view check (?success=sent)
+                header("Location: /Watch_Collection/auth/forgot-password?success=sent");
+                exit;
+            } catch (\Exception $e) {
+                echo "Mailer Error: " . $mail->ErrorInfo;
+                exit;
+            }
+        }
+    }
+
+    public static function updatePassword()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $token = $_POST['token'] ?? '';
+            $password = $_POST['password'] ?? '';
+            $confirm = $_POST['password_confirmation'] ?? '';
+
+            if ($password !== $confirm) {
+                header("Location: " . $_SERVER['HTTP_REFERER']);
+                exit;
+            }
+
+            $host = 'localhost';
+            $db_name = 'watch_collection';
+            $username = 'root';
+            $password_db = '';
+
+            try {
+                $db = new \PDO("mysql:host=$host;dbname=$db_name;charset=utf8mb4", $username, $password_db);
+                $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            } catch (\PDOException $e) {
+                die("Database connection failed: " . $e->getMessage());
+            }
+
+            // 1. Verify token exists
+            $stmt = $db->prepare("SELECT * FROM password_resets WHERE token = ? LIMIT 1");
+            $stmt->execute([$token]);
+            $resetRecord = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$resetRecord) {
+                die("Invalid or expired password reset token.");
+            }
+
+            // 2. Hash new password and update the 'users' table
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+            $updateStmt = $db->prepare("UPDATE users SET password = ? WHERE email = ?");
+            $updateStmt->execute([$hashedPassword, $resetRecord['email']]);
+
+            // 3. Delete used token
+            $deleteStmt = $db->prepare("DELETE FROM password_resets WHERE email = ?");
+            $deleteStmt->execute([$resetRecord['email']]);
+
+            // 4. Redirect to login with success message
+            Session::start();
+            $_SESSION['flash'] = "Password updated successfully. You can now login.";
+            header("Location: /Watch_Collection/auth/login");
+            exit;
+        }
+    }
+
+    public static function showForgotPassword()
+    {
+        View::displayView("forgot-password.php");
+        return;
+    }
+
+    public static function showResetPassword()
+    {
+        View::displayView("reset-password.php");
         return;
     }
 }

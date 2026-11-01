@@ -1,24 +1,17 @@
 <?php
-/**
- * ZEITH STAFF DASHBOARD
- * Staff has operational + moderation access only.
- *
- * Staff can:
- * - View and update order status
- * - View payment/order information
- * - Moderate reviews
- * - View inventory
- * - View customer inquiries
- *
- * Staff cannot:
- * - Edit/delete watches
- * - Manage customers
- * - Manage shipping
- * - Manage newsletters
- * - Manage sellers
- * - Manage financial configuration
- */
+// views/staff/overview.php
+$pendingCount        = $pendingCount ?? 0;
+$processingCount     = $processingCount ?? 0;
+$dispatchedCount     = $dispatchedCount ?? 0;
+$deliveredCount      = $deliveredCount ?? 0;
+$totalOrders         = $totalOrders ?? 0;
+$recentOrders        = $recentOrders ?? [];
+$totalWatches        = $totalWatches ?? 0;
+$availableWatches    = $availableWatches ?? 0;
+$soldOutWatches      = $soldOutWatches ?? 0;
+$availablePercentage = $availablePercentage ?? 0;
 ?>
+
 
 <?php
 // views/Staff/order.php
@@ -29,1059 +22,300 @@
 <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-
-
 <main class="zeith-staff-overview">
-
-    <!-- =====================================================
-         PAGE HEADER
-    ====================================================== -->
-
     <header class="staff-overview-header">
-
         <div class="staff-header-content">
-
             <div class="staff-header-title">
-
-                <span class="staff-eyebrow">
-                    ZEITH STAFF PORTAL
-                </span>
-
-                <h1>
-                    Staff Overview
-                </h1>
-
-                <p>
-                    Monitor daily operations, orders, reviews and inventory.
-                </p>
-
+                <span class="staff-eyebrow">ZEITH STAFF PORTAL</span>
+                <h1>Staff Overview</h1>
+                <p>Monitor daily operations, orders, reviews and inventory.</p>
             </div>
-
             <div class="staff-header-date">
-
                 <div class="staff-date-icon">
                     <i class="fa-regular fa-calendar"></i>
                 </div>
-
                 <div>
                     <span>Today</span>
-                    <strong id="staffCurrentDate">
-                        October 23, 2026
-                    </strong>
+                    <strong id="staffCurrentDate"><?= date('F d, Y') ?></strong>
                 </div>
-
             </div>
-
         </div>
-
     </header>
 
-
-    <!-- =====================================================
-         OPERATIONAL STAT CARDS
-    ====================================================== -->
-
     <section class="staff-stat-grid">
-
-        <!-- Pending Verification -->
-
         <article class="staff-stat-card pending">
-
             <div class="staff-stat-top">
-
                 <div class="staff-stat-icon">
                     <i class="fa-solid fa-clock"></i>
                 </div>
-
-                <span class="staff-stat-label">
-                    Needs Attention
-                </span>
-
+                <span class="staff-stat-label">Needs Attention</span>
             </div>
-
-            <div class="staff-stat-number">
-                12
-            </div>
-
+            <div class="staff-stat-number"><?= $pendingCount ?></div>
             <div class="staff-stat-bottom">
-
-                <strong>
-                    Pending Verification
-                </strong>
-
-                <a href="order.php?status=pending">
+                <strong>Pending Verification</strong>
+                <a href="/Watch_Collection/staff/orders?status=pending">
                     View Orders
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
-
             </div>
-
         </article>
 
-
-        <!-- Processing -->
-
         <article class="staff-stat-card processing">
-
             <div class="staff-stat-top">
-
                 <div class="staff-stat-icon">
                     <i class="fa-solid fa-box"></i>
                 </div>
-
-                <span class="staff-stat-label">
-                    In Progress
-                </span>
-
+                <span class="staff-stat-label">In Progress</span>
             </div>
-
-            <div class="staff-stat-number">
-                24
-            </div>
-
+            <div class="staff-stat-number"><?= $processingCount ?></div>
             <div class="staff-stat-bottom">
-
-                <strong>
-                    Processing Orders
-                </strong>
-
-                <a href="order.php?status=processing">
+                <strong>Processing Orders</strong>
+                <a href="/Watch_Collection/staff/orders?status=processing">
                     View Orders
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
-
             </div>
-
         </article>
 
-
-        <!-- Dispatched -->
-
         <article class="staff-stat-card dispatched">
-
             <div class="staff-stat-top">
-
                 <div class="staff-stat-icon">
                     <i class="fa-solid fa-truck"></i>
                 </div>
-
-                <span class="staff-stat-label">
-                    On The Way
-                </span>
-
+                <span class="staff-stat-label">On The Way</span>
             </div>
-
-            <div class="staff-stat-number">
-                18
-            </div>
-
+            <div class="staff-stat-number"><?= $dispatchedCount ?></div>
             <div class="staff-stat-bottom">
-
-                <strong>
-                    Dispatched Orders
-                </strong>
-
-                <a href="order.php?status=dispatched">
+                <strong>Dispatched Orders</strong>
+                <a href="/Watch_Collection/staff/orders?status=dispatched">
                     View Orders
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
-
             </div>
-
         </article>
 
-
-        <!-- Delivered -->
-
         <article class="staff-stat-card delivered">
-
             <div class="staff-stat-top">
-
                 <div class="staff-stat-icon">
                     <i class="fa-solid fa-circle-check"></i>
                 </div>
-
-                <span class="staff-stat-label">
-                    Completed
-                </span>
-
+                <span class="staff-stat-label">Completed</span>
             </div>
-
-            <div class="staff-stat-number">
-                96
-            </div>
-
+            <div class="staff-stat-number"><?= $deliveredCount ?></div>
             <div class="staff-stat-bottom">
-
-                <strong>
-                    Delivered Orders
-                </strong>
-
-                <a href="order.php?status=delivered">
+                <strong>Delivered Orders</strong>
+                <a href="/Watch_Collection/staff/orders?status=delivered">
                     View Orders
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
-
             </div>
-
         </article>
-
     </section>
 
-
-    <!-- =====================================================
-         MAIN OPERATIONAL GRID
-    ====================================================== -->
-
     <section class="staff-main-grid">
-
-
-        <!-- =================================================
-             ORDER STATUS
-        ================================================== -->
-
         <article class="staff-panel">
-
             <div class="staff-panel-header">
-
                 <div>
-
-                    <span class="staff-panel-eyebrow">
-                        ORDERS
-                    </span>
-
-                    <h2>
-                        Order Status
-                    </h2>
-
-                    <p>
-                        Current operational order breakdown.
-                    </p>
-
+                    <span class="staff-panel-eyebrow">ORDERS</span>
+                    <h2>Order Status</h2>
+                    <p>Current operational order breakdown.</p>
                 </div>
-
-                <a
-                    href="order.php"
-                    class="staff-panel-link"
-                >
+                <a href="/Watch_Collection/staff/orders" class="staff-panel-link">
                     View All
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
-
             </div>
-
 
             <div class="order-status-list">
-
-                <!-- Pending -->
-
                 <div class="order-status-row">
-
                     <div class="order-status-name">
-
                         <span class="status-dot pending-dot"></span>
-
-                        <span>
-                            Pending Verification
-                        </span>
-
+                        <span>Pending Verification</span>
                     </div>
-
-                    <strong>
-                        12
-                    </strong>
-
+                    <strong><?= $pendingCount ?></strong>
                 </div>
-
-
-                <!-- Processing -->
-
                 <div class="order-status-row">
-
                     <div class="order-status-name">
-
                         <span class="status-dot processing-dot"></span>
-
-                        <span>
-                            Processing
-                        </span>
-
+                        <span>Processing</span>
                     </div>
-
-                    <strong>
-                        24
-                    </strong>
-
+                    <strong><?= $processingCount ?></strong>
                 </div>
-
-
-                <!-- Dispatched -->
-
                 <div class="order-status-row">
-
                     <div class="order-status-name">
-
                         <span class="status-dot dispatched-dot"></span>
-
-                        <span>
-                            Dispatched
-                        </span>
-
+                        <span>Dispatched</span>
                     </div>
-
-                    <strong>
-                        18
-                    </strong>
-
+                    <strong><?= $dispatchedCount ?></strong>
                 </div>
-
-
-                <!-- Delivered -->
-
                 <div class="order-status-row">
-
                     <div class="order-status-name">
-
                         <span class="status-dot delivered-dot"></span>
-
-                        <span>
-                            Delivered
-                        </span>
-
+                        <span>Delivered</span>
                     </div>
-
-                    <strong>
-                        96
-                    </strong>
-
+                    <strong><?= $deliveredCount ?></strong>
                 </div>
-
             </div>
-
 
             <div class="order-total-box">
-
                 <div>
-
-                    <span>
-                        Total Orders
-                    </span>
-
-                    <strong>
-                        150
-                    </strong>
-
+                    <span>Total Orders</span>
+                    <strong><?= $totalOrders ?></strong>
                 </div>
-
                 <i class="fa-solid fa-chart-simple"></i>
-
             </div>
-
         </article>
 
-
-        <!-- =================================================
-             STAFF ACTIONS
-        ================================================== -->
-
         <article class="staff-panel">
-
             <div class="staff-panel-header">
-
                 <div>
-
-                    <span class="staff-panel-eyebrow">
-                        QUICK ACCESS
-                    </span>
-
-                    <h2>
-                        Staff Actions
-                    </h2>
-
-                    <p>
-                        Access your operational tools.
-                    </p>
-
+                    <span class="staff-panel-eyebrow">QUICK ACCESS</span>
+                    <h2>Staff Actions</h2>
+                    <p>Access your operational tools.</p>
                 </div>
-
             </div>
 
-
             <div class="staff-actions-list">
-
-
-                <!-- Orders -->
-
-                <a
-                    href="order.php"
-                    class="staff-action-item"
-                >
-
+                <a href="/Watch_Collection/staff/orders" class="staff-action-item">
                     <span class="staff-action-icon blue">
                         <i class="fa-solid fa-cart-shopping"></i>
                     </span>
-
                     <span class="staff-action-text">
-
-                        <strong>
-                            Orders Management
-                        </strong>
-
-                        <small>
-                            View and update order status
-                        </small>
-
+                        <strong>Orders Management</strong>
+                        <small>View and update order status</small>
                     </span>
-
                     <i class="fa-solid fa-chevron-right"></i>
-
                 </a>
 
-
-                <!-- Reviews -->
-
-                <a
-                    href="review.php"
-                    class="staff-action-item"
-                >
-
+                <a href="/Watch_Collection/staff/reviews" class="staff-action-item">
                     <span class="staff-action-icon orange">
                         <i class="fa-solid fa-star"></i>
                     </span>
-
                     <span class="staff-action-text">
-
-                        <strong>
-                            Review Moderation
-                        </strong>
-
-                        <small>
-                            Approve or reject reviews
-                        </small>
-
+                        <strong>Review Moderation</strong>
+                        <small>Approve or reject reviews</small>
                     </span>
-
                     <i class="fa-solid fa-chevron-right"></i>
-
                 </a>
 
-
-                <!-- Inventory -->
-
-                <a
-                    href="watch.php"
-                    class="staff-action-item"
-                >
-
-                    <span class="staff-action-icon green">
-                        <i class="fa-solid fa-boxes-stacked"></i>
-                    </span>
-
-                    <span class="staff-action-text">
-
-                        <strong>
-                            Inventory Overview
-                        </strong>
-
-                        <small>
-                            View current watch inventory
-                        </small>
-
-                    </span>
-
-                    <i class="fa-solid fa-chevron-right"></i>
-
-                </a>
-
-
-                <!-- Contact -->
-
-                <a
-                    href="contact.php"
-                    class="staff-action-item"
-                >
-
+                <a href="/Watch_Collection/staff/contact" class="staff-action-item">
                     <span class="staff-action-icon purple">
                         <i class="fa-solid fa-envelope"></i>
                     </span>
-
                     <span class="staff-action-text">
-
-                        <strong>
-                            Customer Inquiries
-                        </strong>
-
-                        <small>
-                            View customer messages
-                        </small>
-
+                        <strong>Customer Inquiries</strong>
+                        <small>View customer messages</small>
                     </span>
-
                     <i class="fa-solid fa-chevron-right"></i>
-
                 </a>
-
             </div>
-
         </article>
-
     </section>
 
-
-    <!-- =====================================================
-         RECENT ORDERS
-    ====================================================== -->
-
     <section class="staff-panel staff-orders-panel">
-
         <div class="staff-panel-header">
-
             <div>
-
-                <span class="staff-panel-eyebrow">
-                    ORDER ACTIVITY
-                </span>
-
-                <h2>
-                    Recent Orders
-                </h2>
-
-                <p>
-                    Latest orders requiring operational attention.
-                </p>
-
+                <span class="staff-panel-eyebrow">ORDER ACTIVITY</span>
+                <h2>Recent Orders</h2>
+                <p>Latest orders requiring operational attention.</p>
             </div>
-
-            <a
-                href="order.php"
-                class="staff-panel-link"
-            >
+            <a href="/Watch_Collection/staff/orders" class="staff-panel-link">
                 View All Orders
                 <i class="fa-solid fa-arrow-right"></i>
             </a>
-
         </div>
-
 
         <div class="staff-table-wrapper">
-
             <table class="staff-orders-table">
-
                 <thead>
-
                     <tr>
-
-                        <th>
-                            Order
-                        </th>
-
-                        <th>
-                            Customer
-                        </th>
-
-                        <th>
-                            Amount
-                        </th>
-
-                        <th>
-                            Payment
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Payment</th>
+                        <th>Status</th>
                     </tr>
-
                 </thead>
-
-
                 <tbody>
-
-                    <tr>
-
-                        <td>
-                            <strong class="order-number">
-                                ZEITH-6ACD66CA826C
-                            </strong>
-                        </td>
-
-                        <td>
-
-                            <div class="customer-cell">
-
-                                <span class="customer-avatar">
-                                    CO
-                                </span>
-
-                                <div>
-
-                                    <strong>
-                                        Chibuikem Ogbonna
-                                    </strong>
-
-                                    <small>
-                                        chibuikem@example.com
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-                        <td>
-                            <strong>
-                                ₦95,000
-                            </strong>
-                        </td>
-
-                        <td>
-                            <span class="payment-paid">
-                                Paid
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="order-badge pending">
-                                Pending Verification
-                            </span>
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td>
-                            <strong class="order-number">
-                                ZEITH-92FBD8214A77
-                            </strong>
-                        </td>
-
-                        <td>
-
-                            <div class="customer-cell">
-
-                                <span class="customer-avatar">
-                                    DE
-                                </span>
-
-                                <div>
-
-                                    <strong>
-                                        Daniel Eze
-                                    </strong>
-
-                                    <small>
-                                        daniel@example.com
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-                        <td>
-                            <strong>
-                                ₦82,500
-                            </strong>
-                        </td>
-
-                        <td>
-                            <span class="payment-paid">
-                                Paid
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="order-badge processing">
-                                Processing
-                            </span>
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td>
-                            <strong class="order-number">
-                                ZEITH-4D8A2F91BC20
-                            </strong>
-                        </td>
-
-                        <td>
-
-                            <div class="customer-cell">
-
-                                <span class="customer-avatar">
-                                    AN
-                                </span>
-
-                                <div>
-
-                                    <strong>
-                                        Amaka Nwosu
-                                    </strong>
-
-                                    <small>
-                                        amaka@example.com
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-                        <td>
-                            <strong>
-                                ₦87,000
-                            </strong>
-                        </td>
-
-                        <td>
-                            <span class="payment-paid">
-                                Paid
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="order-badge dispatched">
-                                Dispatched
-                            </span>
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td>
-                            <strong class="order-number">
-                                ZEITH-B72D6E93FA12
-                            </strong>
-                        </td>
-
-                        <td>
-
-                            <div class="customer-cell">
-
-                                <span class="customer-avatar">
-                                    MO
-                                </span>
-
-                                <div>
-
-                                    <strong>
-                                        Michael Okoro
-                                    </strong>
-
-                                    <small>
-                                        michael@example.com
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-                        <td>
-                            <strong>
-                                ₦72,000
-                            </strong>
-                        </td>
-
-                        <td>
-                            <span class="payment-paid">
-                                Paid
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="order-badge delivered">
-                                Delivered
-                            </span>
-                        </td>
-
-                    </tr>
-
+                    <?php if (!empty($recentOrders)): ?>
+                        <?php foreach ($recentOrders as $ro): ?>
+                            <tr>
+                                <td>
+                                    <strong class="order-number"><?= htmlspecialchars($ro['order_number'] ?? '') ?></strong>
+                                </td>
+                                <td>
+                                    <div class="customer-cell">
+                                        <span class="customer-avatar"><?= strtoupper(substr($ro['full_name'] ?? 'U', 0, 2)) ?></span>
+                                        <div>
+                                            <strong><?= htmlspecialchars($ro['full_name'] ?? '') ?></strong>
+                                            <small><?= htmlspecialchars($ro['email'] ?? '') ?></small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><strong>₦<?= number_format((float)($ro['total_amount'] ?? 0), 2) ?></strong></td>
+                                <td><span class="payment-paid"><?= htmlspecialchars($ro['payment_status'] ?? 'Pending') ?></span></td>
+                                <td><span class="order-badge pending"><?= htmlspecialchars($ro['order_status'] ?? 'Pending') ?></span></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr><td colspan="5" style="text-align: center; padding: 20px;">No recent orders found.</td></tr>
+                    <?php endif; ?>
                 </tbody>
-
             </table>
-
         </div>
-
     </section>
 
-
-    <!-- =====================================================
-         LOWER INFORMATION GRID
-    ====================================================== -->
-
     <section class="staff-lower-grid">
-
-
-        <!-- =================================================
-             INVENTORY
-        ================================================== -->
-
         <article class="staff-panel">
-
             <div class="staff-panel-header">
-
                 <div>
-
-                    <span class="staff-panel-eyebrow">
-                        INVENTORY
-                    </span>
-
-                    <h2>
-                        Inventory Snapshot
-                    </h2>
-
-                    <p>
-                        Current watch availability.
-                    </p>
-
+                    <span class="staff-panel-eyebrow">INVENTORY</span>
+                    <h2>Inventory Snapshot</h2>
+                    <p>Current watch availability.</p>
                 </div>
-
-                <a
-                    href="watch.php"
-                    class="staff-panel-link"
-                >
+                <a href="/Watch_Collection/staff/watch" class="staff-panel-link">
                     View Inventory
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
-
             </div>
-
 
             <div class="inventory-number">
-
-                <strong>
-                    42
-                </strong>
-
-                <span>
-                    Watches in Catalog
-                </span>
-
+                <strong><?= $totalWatches ?></strong>
+                <span>Watches in Catalog</span>
             </div>
-
 
             <div class="inventory-progress">
-
                 <div class="inventory-progress-header">
-
-                    <span>
-                        Available
-                    </span>
-
-                    <strong>
-                        36 / 42
-                    </strong>
-
+                    <span>Available</span>
+                    <strong><?= $availableWatches ?> / <?= $totalWatches ?></strong>
                 </div>
-
                 <div class="inventory-progress-track">
-
-                    <span
-                        style="width:85.7%;"
-                    ></span>
-
+                    <span style="width: <?= $availablePercentage ?>%;"></span>
                 </div>
-
             </div>
 
-
             <div class="inventory-mini-grid">
-
                 <div>
-
                     <span class="inventory-mini-icon available">
                         <i class="fa-solid fa-check"></i>
                     </span>
-
                     <div>
-
-                        <strong>
-                            36
-                        </strong>
-
-                        <span>
-                            Available
-                        </span>
-
+                        <strong><?= $availableWatches ?></strong>
+                        <span>Available</span>
                     </div>
-
                 </div>
-
-
                 <div>
-
                     <span class="inventory-mini-icon sold">
                         <i class="fa-solid fa-xmark"></i>
                     </span>
-
                     <div>
-
-                        <strong>
-                            6
-                        </strong>
-
-                        <span>
-                            Sold Out
-                        </span>
-
+                        <strong><?= $soldOutWatches ?></strong>
+                        <span>Sold Out</span>
                     </div>
-
                 </div>
-
             </div>
-
         </article>
-
     </section>
-
-
-    <!-- =====================================================
-         RECENT ACTIVITY
-    ====================================================== -->
-
-    <section class="staff-panel staff-activity-panel">
-
-        <div class="staff-panel-header">
-
-            <div>
-
-                <span class="staff-panel-eyebrow">
-                    SYSTEM ACTIVITY
-                </span>
-
-                <h2>
-                    Recent Activity
-                </h2>
-
-                <p>
-                    Latest operational events across the staff portal.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="staff-activity-list">
-
-
-            <div class="staff-activity-item">
-
-                <span class="activity-icon order">
-                    <i class="fa-solid fa-cart-plus"></i>
-                </span>
-
-                <div class="activity-content">
-
-                    <strong>
-                        New order received
-                    </strong>
-
-                    <p>
-                        Order ZEITH-6ACD66CA826C was placed by Chibuikem Ogbonna.
-                    </p>
-
-                    <span>
-                        8 minutes ago
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="staff-activity-item">
-
-                <span class="activity-icon review">
-                    <i class="fa-solid fa-star"></i>
-                </span>
-
-                <div class="activity-content">
-
-                    <strong>
-                        New review awaiting approval
-                    </strong>
-
-                    <p>
-                        A customer submitted a new watch review for moderation.
-                    </p>
-
-                    <span>
-                        34 minutes ago
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="staff-activity-item">
-
-                <span class="activity-icon dispatch">
-                    <i class="fa-solid fa-truck"></i>
-                </span>
-
-                <div class="activity-content">
-
-                    <strong>
-                        Order dispatched
-                    </strong>
-
-                    <p>
-                        Order ZEITH-4D8A2F91BC20 has been marked as dispatched.
-                    </p>
-
-                    <span>
-                        1 hour ago
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="staff-activity-item">
-
-                <span class="activity-icon contact">
-                    <i class="fa-solid fa-envelope"></i>
-                </span>
-
-                <div class="activity-content">
-
-                    <strong>
-                        Customer inquiry received
-                    </strong>
-
-                    <p>
-                        A new customer message is available in Contact Queries.
-                    </p>
-
-                    <span>
-                        2 hours ago
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
 </main>
 
 

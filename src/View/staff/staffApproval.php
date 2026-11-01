@@ -67,7 +67,7 @@ $isPending = (($user['status'] ?? '') === 'pending');
             <div class="zeith-approval-actions">
 
                 <a
-                    href="/Watch_Collection/"
+                    href="/Watch_Collection/user/watch"
                     class="zeith-approval-btn zeith-approval-primary">
 
                     Browse Watches

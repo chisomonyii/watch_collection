@@ -765,16 +765,28 @@
                     $isSoldOut = ($stock <= 0);
                     $tag = $isSoldOut ? 'SOLD OUT' : 'AVAILABLE';
                     $badgeClass = $isSoldOut ? 'status-badge sold-out' : 'status-badge';
-
                     // 2. Image Path Resolver matching home.php / watch.php standard
-                    // 2. Image Path Resolver matching home.php / watch.php standard
+                    // 2. Image Path Resolver supporting both public/uploads/ and assets/image/
                     $resolvePath = function ($val) {
                         $clean = trim($val ?? '');
-                        if (empty($clean)) return '/Watch_Collection/assets/image/pngwing.com (1).png';
-                        if (strpos($clean, 'http://') === 0 || strpos($clean, 'https://') === 0) {
+                        if (empty($clean)) {
+                            return '/Watch_Collection/assets/image/pngwing.com (1).png';
+                        }
+                        if (strpos($clean, 'http://') === 0 || strpos($clean, 'https://') === 0 || strpos($clean, '/') === 0) {
                             return $clean;
                         }
-                        return '/Watch_Collection/assets/image/' . ltrim(str_replace(['/Watch_Collection/assets/image/', 'assets/image/'], '', $clean), '/');
+
+                        // Clean up file name string if paths were pre-attached
+                        $filename = ltrim(str_replace(['/Watch_Collection/assets/image/', 'assets/image/', '/Watch_Collection/public/uploads/', 'public/uploads/'], '', $clean), '/');
+
+                        // Check if the image exists in public/uploads/
+                        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $filename;
+                        if (file_exists($uploadPath)) {
+                            return '/Watch_Collection/public/uploads/' . $filename;
+                        }
+
+                        // Fallback to assets/image/ for pre-seeded items
+                        return '/Watch_Collection/assets/image/' . $filename;
                     };
 
                     $img1 = $resolvePath($watch['image_url_1'] ?? $watch['image_url'] ?? $watch['image'] ?? '');
@@ -842,58 +854,8 @@
         </div>
     </div>
 
-    <button type="button"
-        class="floating-cart"
-        id="open-cart"
-        title="Shopping Cart"
-        aria-label="Open shopping cart"
-        aria-controls="cart-drawer"
-        aria-expanded="false">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span class="cart-count" id="cart-count">0</span>
-    </button>
 
-    <div class="cart-overlay" id="cart-overlay"></div>
 
-    <aside class="cart-drawer"
-        id="cart-drawer"
-        aria-hidden="true"
-        aria-label="Shopping cart">
-
-        <div class="cart-drawer-header">
-            <div>
-                <small>THE ZEITH EXPERIENCE</small>
-                <h2>Shopping Bag <span id="drawer-item-count">(0)</span></h2>
-            </div>
-
-            <button type="button" id="close-cart" class="cart-close"
-                aria-label="Close cart">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-
-        <div class="cart-items" id="cart-items"></div>
-
-        <div class="cart-drawer-footer">
-            <div class="cart-subtotal-row">
-                <span>Subtotal</span>
-                <strong id="cart-subtotal">₦0.00</strong>
-            </div>
-
-            <p>Shipping and applicable fees are calculated at checkout.</p>
-
-            <button type="button" id="checkout-button" class="checkout-button">
-                Proceed to Checkout
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-
-            <button type="button" id="continue-shopping" class="continue-shopping">
-                Continue Shopping
-            </button>
-        </div>
-    </aside>
-
-     
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -1271,4 +1233,6 @@
             window.addEventListener('focus', syncWishlist);
         });
     </script>
+
+    <?php include_once __DIR__ . '/../components/cart-drawer.php'; ?>
 </body>

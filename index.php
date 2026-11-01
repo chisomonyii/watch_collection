@@ -70,4 +70,5 @@ $router->post('/api/subscribe', 'Home@subscribeNewsletter');
 
 $router->get('/admin/dashboard', 'AdminController@dashboard');
 
+
 $router->run();

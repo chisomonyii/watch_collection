@@ -8,17 +8,14 @@ class Utilities
 {
     public static function hashPassword(string $password)
     {
-        // Safe fallback if 'SALT' is not set in $_ENV
-        $salt = $_ENV['SALT'] ?? 'default_secure_salt_string';
-        $salted = "$salt+$password";
-        return password_hash($salted, PASSWORD_BCRYPT);
+        // Uses native PHP secure internal salting and hashing
+        return password_hash($password, PASSWORD_DEFAULT);
     }
 
     public static function verifyHashpassword(string $password, string $hashPassword)
     {
-        $salt = $_ENV['SALT'] ?? 'default_secure_salt_string';
-        $salted = "$salt+$password";
-        return password_verify($salted, $hashPassword);
+        // Safely verifies standard password hashes
+        return password_verify($password, $hashPassword);
     }
 
     public static function sieve(string $input)

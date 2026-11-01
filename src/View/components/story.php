@@ -28,7 +28,7 @@
     <div class="zeith-story__content">
 
         <p class="zeith-story__eyebrow">
-            THE ZEITH STORY
+            THE ZEITH STORY 
         </p>
 
 
@@ -46,11 +46,11 @@
 
 
         <a
-            href="#"
+            href="/Watch_Collection/user/watch"
             class="zeith-story__button">
 
             <span>
-                DISCOVER ZEITH
+                DISCOVER ZEITH 
             </span>
 
             <span class="zeith-story__arrow">
@@ -58,23 +58,6 @@
             </span>
 
         </a>
-
-    </div>
-
-
-    <!-- =====================================================
-         SCROLL INDICATOR
-         ===================================================== -->
-
-    <div class="zeith-story__scroll">
-
-        <span class="zeith-story__scroll-icon">
-            ↓
-        </span>
-
-        <span>
-            Scroll to explore collection
-        </span>
 
     </div>
 

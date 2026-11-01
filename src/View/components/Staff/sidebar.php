@@ -1,38 +1,13 @@
 <?php
-// views/Staff/sidebar.php
-
-/*
-|--------------------------------------------------------------------------
-| DETECT CURRENT STAFF PAGE
-|--------------------------------------------------------------------------
-| This keeps the active blue background on the correct link after
-| navigating to another PHP page.
-*/
-
-$currentPath = rtrim(
-    parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH),
-    '/'
-);
+$currentPath = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
 function zeithIsActive($path)
 {
     global $currentPath;
-
     $path = rtrim($path, '/');
-
     return $currentPath === $path ? 'active' : '';
 }
 ?>
-
-<?php
-// Default $isPending to false if not passed
-$isPending = $isPending ?? false;
-$disabledClass = $isPending ? 'style="opacity: 0.4; pointer-events: none; cursor: not-allowed;"' : '';
-?>
-
-<!-- =========================================
-     MOBILE / TABLET MENU BUTTON
-========================================== -->
 
 <button
     type="button"
@@ -46,25 +21,12 @@ $disabledClass = $isPending ? 'style="opacity: 0.4; pointer-events: none; cursor
     <span></span>
 </button>
 
-
-<!-- =========================================
-     SIDEBAR OVERLAY
-========================================== -->
-
 <div
     class="zeith-sidebar-overlay"
     id="zeithSidebarOverlay"
 ></div>
 
-
-<!-- =========================================
-     SIDEBAR
-========================================== -->
-
 <aside class="zeith-sidebar" id="zeithSidebar">
-
-    <!-- MOBILE CLOSE BUTTON -->
-
     <button
         type="button"
         class="zeith-sidebar-close"
@@ -75,230 +37,155 @@ $disabledClass = $isPending ? 'style="opacity: 0.4; pointer-events: none; cursor
         <span></span>
     </button>
 
-
-    <!-- =========================================
-         LOGO
-    ========================================== -->
-
     <div class="zeith-sidebar-brand">
-
         <div class="zeith-brand-mark">
             Z
         </div>
-
         <div class="zeith-brand-text">
             <strong>ZEITH</strong>
             <span>STAFF PANEL</span>
         </div>
-
     </div>
 
-
-    <!-- =========================================
-         NAVIGATION
-    ========================================== -->
-
     <nav class="zeith-sidebar-nav">
-
         <div class="zeith-nav-section-title">
             MAIN MENU
         </div>
-
-
-        <!-- =====================================
-             OVERVIEW
-        ====================================== -->
 
         <a
             href="/Watch_Collection/staff/dashboard"
             class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/staff/dashboard') ?>"
         >
-
             <span class="zeith-nav-icon">
-
                 <svg viewBox="0 0 24 24">
                     <path d="M3 10.5L12 3l9 7.5"></path>
                     <path d="M5 9.5V21h14V9.5"></path>
                     <path d="M9 21v-7h6v7"></path>
                 </svg>
-
             </span>
-
             <span class="zeith-nav-label">
                 Overview
             </span>
-
         </a>
-
-
-        <!-- =====================================
-             ORDERS
-        ====================================== -->
 
         <a
             href="/Watch_Collection/staff/orders"
             class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/staff/orders') ?>"
         >
-
             <span class="zeith-nav-icon">
-
                 <svg viewBox="0 0 24 24">
                     <rect x="5" y="3" width="14" height="18" rx="2"></rect>
                     <path d="M9 3v3h6V3"></path>
                     <path d="M8 11h8"></path>
                     <path d="M8 15h6"></path>
                 </svg>
-
             </span>
-
             <span class="zeith-nav-label">
                 Orders Management
             </span>
-
         </a>
-
-
-        <!-- =====================================
-             PAYMENT RECEIPTS
-        ====================================== -->
 
         <a
             href="/Watch_Collection/staff/watch"
             class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/staff/watch') ?>"
         >
-
             <span class="zeith-nav-icon">
-
                 <svg viewBox="0 0 24 24">
                     <rect x="3" y="5" width="18" height="14" rx="2"></rect>
                     <path d="M3 10h18"></path>
                     <path d="M7 15h4"></path>
                 </svg>
-
             </span>
-
             <span class="zeith-nav-label">
                 Watch
             </span>
-
-            <span class="zeith-nav-badge warning">
-                6
-            </span>
-
         </a>
-
-
-        <!-- =====================================
-             CONTACT QUERIES
-        ====================================== -->
 
         <a
             href="/Watch_Collection/staff/contact"
             class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/staff/contact') ?>"
         >
-
             <span class="zeith-nav-icon">
-
                 <svg viewBox="0 0 24 24">
                     <circle cx="9" cy="8" r="3"></circle>
                     <path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"></path>
                     <circle cx="17" cy="9" r="2"></circle>
                     <path d="M15 14c2.8-.2 5 1.2 5 4"></path>
                 </svg>
-
             </span>
-
             <span class="zeith-nav-label">
                 Contact Queries
             </span>
-
-            <span class="zeith-nav-badge warning">
-                2
-            </span>
-
         </a>
 
-
-        <!-- =====================================
-             INVENTORY
-        ====================================== -->
-          <a
+        <a
             href="/Watch_Collection/staff/profile"
             class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/staff/profile') ?>"
         >
-
             <span class="zeith-nav-icon">
-
                 <svg viewBox="0 0 24 24">
                     <path d="M3 7l9-4 9 4-9 4-9-4z"></path>
                     <path d="M3 7v10l9 4 9-4V7"></path>
                     <path d="M12 11v10"></path>
                 </svg>
-
             </span>
-
             <span class="zeith-nav-label">
                 Profile
             </span>
-
         </a>
 
-          <a
+        <a
             href="/Watch_Collection/staff/reviews"
             class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/staff/reviews') ?>"
         >
-
             <span class="zeith-nav-icon">
-
                 <svg viewBox="0 0 24 24">
                     <path d="M3 7l9-4 9 4-9 4-9-4z"></path>
                     <path d="M3 7v10l9 4 9-4V7"></path>
                     <path d="M12 11v10"></path>
                 </svg>
-
             </span>
-
             <span class="zeith-nav-label">
-                reviews
+                Reviews
             </span>
-
         </a>
 
+           <a
+            href="/Watch_Collection/staff/subscribers"
+            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/staff/subscribers') ?>"
+        >
+            <span class="zeith-nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 7l9-4 9 4-9 4-9-4z"></path>
+                    <path d="M3 7v10l9 4 9-4V7"></path>
+                    <path d="M12 11v10"></path>
+                </svg>
+            </span>
+            <span class="zeith-nav-label">
+                Suscribers
+            </span>
+        </a>
     </nav>
 
-
-    <!-- =========================================
-         BOTTOM NAVIGATION
-    ========================================== -->
-
     <div class="zeith-sidebar-bottom">
-
-
-
-        <!-- USER -->
-
         <div class="zeith-sidebar-user">
-
             <div class="zeith-user-avatar">
                 ZP
             </div>
-
             <div class="zeith-user-info">
-
-                <strong>
-                    ZEITH Pay
-                </strong>
-
-                <span>
-                    Staff
-                </span>
-
+                <strong>ZEITH Pay</strong>
+                <span>Staff</span>
             </div>
-
         </div>
-
+      <a href="http://localhost/Watch_Collection/auth/login" class="zeith-logout-btn">
+    <svg viewBox="0 0 24 24">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+        <polyline points="16 17 21 12 16 7"></polyline>
+        <line x1="21" y1="12" x2="9" y2="12"></line>
+    </svg>
+    <span>Logout</span>
+</a>
     </div>
-
 </aside>
 
 
@@ -307,7 +194,54 @@ $disabledClass = $isPending ? 'style="opacity: 0.4; pointer-events: none; cursor
 /* =====================================================
    ZEITH STAFF SIDEBAR
 ===================================================== */
+.zeith-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 14px;
+    margin-top: 14px;
+    border: 1px solid rgba(239, 68, 68, 0.18);
+    border-radius: 10px;
+    background: rgba(239, 68, 68, 0.08);
+    color: #FCA5A5;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
 
+.zeith-logout-btn svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.zeith-logout-btn span {
+    white-space: nowrap;
+}
+
+.zeith-logout-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.35);
+    color: #EF4444;
+    transform: translateY(-1px);
+}
+
+.zeith-logout-btn:active {
+    transform: translateY(0);
+}
+
+.zeith-logout-btn:focus-visible {
+    outline: 2px solid #EF4444;
+    outline-offset: 2px;
+}
 .zeith-sidebar {
 
     --sidebar-bg: #1E293B;

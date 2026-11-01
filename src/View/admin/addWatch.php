@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Edit Watch | ZEITH</title>
+    <title>Upload Watch | ZEITH</title>
 
     <style>
         * {
@@ -909,1084 +909,434 @@
 </head>
 
 <body>
-
-
-    <!-- =====================================================
-     EDIT PAGE
-===================================================== -->
-
+    <?php
+    \App\Helpers\View::displayComponent("admin/sidebar.php");
+    ?>
     <main class="zeith-edit-page">
-
         <div class="zeith-edit-container">
-
-
-            <!-- =================================================
-             HEADER
-        ================================================= -->
-
             <div class="zeith-edit-header">
-
-                <h1>Edit Watch</h1>
-
-                <p>
-                    Update your watch details, images and product information.
-                </p>
-
+                <h1>Upload Watch</h1>
+                <p>Upload your watch details, images and product information.</p>
             </div>
 
-
-            <!-- =================================================
-             MAIN GRID
-        ================================================= -->
-
             <div class="zeith-edit-grid">
-
-
-                <!-- =================================================
-                 LEFT — FORM
-            ================================================= -->
-
-                <form
-                    class="zeith-edit-form-card"
-                    id="zeithEditForm">
-
-
-                    <!-- =================================================
-                     IMAGES
-                ================================================= -->
-
+                <!-- Form points to the store route with multipart/form-data encoding -->
+                <form action="/Watch_Collection/admin/watch/store" method="POST" enctype="multipart/form-data" class="zeith-edit-form-card" id="zeithEditForm">
                     <section class="zeith-form-section">
-
-                        <h2 class="zeith-form-section-title">
-                            Watch Images
-                        </h2>
-
+                        <h2 class="zeith-form-section-title">Watch Images</h2>
 
                         <div class="zeith-image-upload-box">
-
                             <div class="zeith-image-upload-top">
-
                                 <div class="zeith-image-upload-info">
-
-                                    <strong>
-                                        Upload 4 Watch Images
-                                    </strong>
-
-                                    Select exactly 4 images.
-                                    These images will appear in the preview.
-
+                                    <strong>Upload 4 Watch Images</strong>
+                                    Select exactly 4 images. These images will appear in the preview.
                                 </div>
-
 
                                 <label class="zeith-image-upload-btn">
-
-                                    Choose Images
-
-                                    <input
-                                        type="file"
-                                        id="zeithImageInput"
-                                        accept="image/png,image/jpeg,image/webp"
-                                        multiple>
-
+                                    <!-- Single multiple input that captures all 4 images at once -->
+                                   <input type="file" name="watch_images[]" id="zeithImageInput" accept="image/png,image/jpeg,image/webp" multiple style="display:none;" required>
+                                    <span id="chooseImagesTrigger" style="cursor:pointer;">Choose Images</span>
                                 </label>
-
                             </div>
 
+                            <!-- Hidden fields to hold individual files if your controller reads image_url_1 to 4 -->
+                            <div id="hiddenFileInputsContainer"></div>
 
-                            <!-- THUMBNAILS -->
-
-                            <div
-                                class="zeith-uploaded-images"
-                                id="zeithUploadedImages">
-
-                                <div class="zeith-upload-thumb">
-                                    <span class="zeith-upload-number">1</span>
-                                </div>
-
-                                <div class="zeith-upload-thumb">
-                                    <span class="zeith-upload-number">2</span>
-                                </div>
-
-                                <div class="zeith-upload-thumb">
-                                    <span class="zeith-upload-number">3</span>
-                                </div>
-
-                                <div class="zeith-upload-thumb">
-                                    <span class="zeith-upload-number">4</span>
-                                </div>
-
+                            <div class="zeith-uploaded-images" id="zeithUploadedImages">
+                                <div class="zeith-upload-thumb"><span class="zeith-upload-number">1</span></div>
+                                <div class="zeith-upload-thumb"><span class="zeith-upload-number">2</span></div>
+                                <div class="zeith-upload-thumb"><span class="zeith-upload-number">3</span></div>
+                                <div class="zeith-upload-thumb"><span class="zeith-upload-number">4</span></div>
                             </div>
 
-
-                            <div
-                                class="zeith-upload-message"
-                                id="zeithUploadMessage">
+                            <div class="zeith-upload-message" id="zeithUploadMessage" style="color: #ef4444; display: none;">
                                 Please select exactly 4 images.
                             </div>
-
                         </div>
-
                     </section>
 
-
-                    <!-- =================================================
-                     WATCH INFORMATION
-                ================================================= -->
-
                     <section class="zeith-form-section">
-
-                        <h2 class="zeith-form-section-title">
-                            Watch Information
-                        </h2>
-
-
-                        <!-- NAME -->
+                        <h2 class="zeith-form-section-title">Watch Information</h2>
 
                         <div class="zeith-form-group">
-
                             <label>
                                 Watch Name
                                 <span class="zeith-required">*</span>
                             </label>
-
-                            <input
-                                type="text"
-                                class="zeith-form-input"
-                                id="zeithWatchName"
-                                value="Nautilus 5711">
-
+                            <input type="text" name="name" class="zeith-form-input" id="zeithWatchName" value="" placeholder="Enter watch name" required>
                         </div>
 
-
-                        <!-- COLLECTION -->
-
                         <div class="zeith-form-group">
-
                             <label>
                                 Collection
                                 <span class="zeith-required">*</span>
                             </label>
-
-                            <select
-                                class="zeith-form-select"
-                                id="zeithCollection">
-
-                                <option>Classic Collection</option>
-                                <option selected>Luxury Collection</option>
-                                <option>Sport Collection</option>
-                                <option>Chronograph Collection</option>
-
+                            <select name="collection_id" class="zeith-form-select" id="zeithCollection" required>
+                                <option value="" disabled selected>Select a collection</option>
+                                <?php if (!empty($collections)): ?>
+                                    <?php foreach ($collections as $col): ?>
+                                        <option value="<?= $col['id'] ?>"><?= htmlspecialchars($col['name'] ?? $col['title'] ?? 'Collection #' . $col['id']) ?></option>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <option value="1">Luxury Collection</option>
+                                    <option value="2">Classic Collection</option>
+                                    <option value="3">Sport Collection</option>
+                                <?php endif; ?>
                             </select>
-
                         </div>
 
-
-                        <!-- RATING + PRICE -->
-
                         <div class="zeith-form-row">
-
                             <div class="zeith-form-group">
-
                                 <label>
                                     Rating
                                     <span class="zeith-required">*</span>
                                 </label>
-
-                                <input
-                                    type="number"
-                                    class="zeith-form-input"
-                                    id="zeithRating"
-                                    value="4.9"
-                                    min="1"
-                                    max="5"
-                                    step="0.1">
-
+                                <input type="number" name="rating" class="zeith-form-input" id="zeithRating" value="5.0" min="1" max="5" step="0.1" required>
                             </div>
 
-
                             <div class="zeith-form-group">
-
                                 <label>
-                                    Price ($)
+                                    Price (₦)
                                     <span class="zeith-required">*</span>
                                 </label>
-
-                                <input
-                                    type="number"
-                                    class="zeith-form-input"
-                                    id="zeithPrice"
-                                    value="85000">
-
+                                <input type="number" name="price" class="zeith-form-input" id="zeithPrice" value="" placeholder="0.00" required>
                             </div>
-
                         </div>
 
-                        <!-- =================================================
-     STOCK / INVENTORY
-================================================= -->
-
                         <div class="zeith-form-row">
-
-                            <!-- STOCK QUANTITY -->
                             <div class="zeith-form-group">
-
                                 <label>
                                     Stock Quantity
                                     <span class="zeith-required">*</span>
                                 </label>
-
-                                <input
-                                    type="number"
-                                    class="zeith-form-input"
-                                    id="zeithStock"
-                                    value="12"
-                                    min="0"
-                                    step="1"
-                                    placeholder="Enter available quantity">
-
+                                <input type="number" name="stock" class="zeith-form-input" id="zeithStock" value="1" min="0" step="1" placeholder="Enter available quantity" required>
                                 <small class="zeith-field-help">
                                     Number of units currently available in inventory.
                                 </small>
-
                             </div>
 
-
-                            <!-- IN STOCK -->
                             <div class="zeith-form-group">
-
                                 <label>
                                     Stock Status
                                     <span class="zeith-required">*</span>
                                 </label>
-
-                                <select
-                                    class="zeith-form-select"
-                                    id="zeithInStock">
-
-                                    <option value="1" selected>
-                                        In Stock
-                                    </option>
-
-                                    <option value="0">
-                                        Out of Stock
-                                    </option>
-
+                                <select name="in_stock" class="zeith-form-select" id="zeithInStock" required>
+                                    <option value="1" selected>In Stock</option>
+                                    <option value="0">Out of Stock</option>
                                 </select>
-
                                 <small class="zeith-field-help">
                                     Controls whether this watch is available for purchase.
                                 </small>
-
                             </div>
-
                         </div>
 
-
-                        <!-- DESCRIPTION -->
-
                         <div class="zeith-form-group">
-
                             <label>
                                 Description
                                 <span class="zeith-required">*</span>
                             </label>
-
-                            <textarea
-                                class="zeith-form-textarea"
-                                id="zeithDescription">The Nautilus 5711 is one of the most coveted elite luxury sports watches in existence. A timeless piece combining refined craftsmanship, elegant design and exceptional performance.</textarea>
-
+                            <textarea name="description" class="zeith-form-textarea" id="zeithDescription" placeholder="Enter watch description..." required></textarea>
                         </div>
 
-
-                        <!-- STRAP -->
-
-                        <!-- =================================================
-     STRAP
-================================================= -->
-
                         <div class="zeith-form-group">
-
                             <label>
                                 Strap
                                 <span class="zeith-required">*</span>
                             </label>
-
-                            <textarea
-                                class="zeith-form-textarea"
-                                id="zeithStrap"
-                                placeholder="Describe the watch strap...">Stainless steel bracelet with a premium polished finish designed for comfort and durability.</textarea>
-
+                            <textarea name="strap" class="zeith-form-textarea" id="zeithStrap" placeholder="Describe the watch strap..." required></textarea>
                         </div>
 
-
-                        <!-- =================================================
-     WATCH MANUAL
-================================================= -->
-
                         <div class="zeith-form-group zeith-manual-group">
-
                             <label>
                                 Watch Manual
                                 <span class="zeith-required">*</span>
                             </label>
 
                             <div class="zeith-manual-upload">
-
-                                <div class="zeith-manual-icon">
-                                    PDF
-                                </div>
+                                <div class="zeith-manual-icon">PDF</div>
 
                                 <div class="zeith-manual-content">
-
-                                    <strong>
-                                        Upload Watch Manual
-                                    </strong>
-
-                                    <span>
-                                        Upload a PDF guide for customers to learn how to use the watch.
-                                    </span>
-
-                                    <small>
-                                        PDF only · Maximum size: 5MB
-                                    </small>
-
+                                    <strong>Upload Watch Manual</strong>
+                                    <span>Upload a PDF guide for customers to learn how to use the watch.</span>
+                                    <small>PDF only · Maximum size: 5MB</small>
                                 </div>
 
                                 <label class="zeith-manual-btn">
-
                                     Choose PDF
-
-                                    <input
-                                        type="file"
-                                        id="zeithManualInput"
-                                        accept="application/pdf,.pdf">
-
+                                    <input type="file" name="manual_file" id="zeithManualInput" accept="application/pdf,.pdf" required>
                                 </label>
-
                             </div>
 
-                            <div
-                                class="zeith-manual-selected"
-                                id="zeithManualSelected"></div>
-
+                            <div class="zeith-manual-selected" id="zeithManualSelected"></div>
                         </div>
-
                     </section>
 
-
-                    <!-- =================================================
-                     ACTIONS
-                ================================================= -->
-
                     <div class="zeith-form-actions">
-
-                        <button
-                            type="button"
-                            class="zeith-cancel-btn">
+                        <a href="/Watch_Collection/admin/watch" class="zeith-cancel-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
                             Cancel
-                        </button>
+                        </a>
 
-                        <button
-                            type="submit"
-                            class="zeith-save-btn">
-                            Save Changes
+                        <button type="submit" class="zeith-save-btn">
+                            Upload new watch
                         </button>
-
                     </div>
-
                 </form>
 
-
-                <!-- =================================================
-                 RIGHT — PREVIEW
-            ================================================= -->
-
                 <aside class="zeith-preview-card">
-
                     <div class="zeith-preview-title">
                         Watch Preview
                     </div>
 
-
-                    <!-- =================================================
-                     IMAGE SLIDER
-                ================================================= -->
-
-                    <div
-                        class="zeith-preview-slider"
-                        id="zeithPreviewSlider">
-
-
-                        <!-- IMAGE 1 -->
-
+                    <div class="zeith-preview-slider" id="zeithPreviewSlider">
                         <div class="zeith-preview-slide active">
-
-                            <img
-                                src="https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80"
-                                alt="Watch preview 1">
-
+                            <img src="/Watch_Collection/assets/images/placeholder.jpg" alt="Watch preview 1">
                         </div>
-
-
-                        <!-- IMAGE 2 -->
 
                         <div class="zeith-preview-slide">
-
-                            <img
-                                src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=80"
-                                alt="Watch preview 2">
-
+                            <img src="/Watch_Collection/assets/images/placeholder.jpg" alt="Watch preview 2">
                         </div>
-
-
-                        <!-- IMAGE 3 -->
 
                         <div class="zeith-preview-slide">
-
-                            <img
-                                src="https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=900&q=80"
-                                alt="Watch preview 3">
-
+                            <img src="/Watch_Collection/assets/images/placeholder.jpg" alt="Watch preview 3">
                         </div>
-
-
-                        <!-- IMAGE 4 -->
 
                         <div class="zeith-preview-slide">
-
-                            <img
-                                src="https://images.unsplash.com/photo-1539874754764-5a96559165b0?auto=format&fit=crop&w=900&q=80"
-                                alt="Watch preview 4">
-
+                            <img src="/Watch_Collection/assets/images/placeholder.jpg" alt="Watch preview 4">
                         </div>
 
-
-                        <!-- LEFT -->
-
-                        <button
-                            type="button"
-                            class="zeith-preview-arrow left"
-                            id="zeithPreviewPrev"
-                            aria-label="Previous image">
+                        <button type="button" class="zeith-preview-arrow left" id="zeithPreviewPrev" aria-label="Previous image">
                             ‹
                         </button>
 
-
-                        <!-- RIGHT -->
-
-                        <button
-                            type="button"
-                            class="zeith-preview-arrow right"
-                            id="zeithPreviewNext"
-                            aria-label="Next image">
+                        <button type="button" class="zeith-preview-arrow right" id="zeithPreviewNext" aria-label="Next image">
                             ›
                         </button>
 
-
-                        <!-- INDICATORS -->
-
                         <div class="zeith-image-indicators">
-
-                            <button
-                                type="button"
-                                class="zeith-image-indicator active"
-                                data-slide="0"></button>
-
-                            <button
-                                type="button"
-                                class="zeith-image-indicator"
-                                data-slide="1"></button>
-
-                            <button
-                                type="button"
-                                class="zeith-image-indicator"
-                                data-slide="2"></button>
-
-                            <button
-                                type="button"
-                                class="zeith-image-indicator"
-                                data-slide="3"></button>
-
+                            <button type="button" class="zeith-image-indicator active" data-slide="0"></button>
+                            <button type="button" class="zeith-image-indicator" data-slide="1"></button>
+                            <button type="button" class="zeith-image-indicator" data-slide="2"></button>
+                            <button type="button" class="zeith-image-indicator" data-slide="3"></button>
                         </div>
-
                     </div>
 
-
-                    <!-- =================================================
-                     PREVIEW DETAILS
-                ================================================= -->
-
                     <div class="zeith-preview-details">
-
                         <h2 id="zeithPreviewName">
-                            Nautilus 5711
+                            Watch Name
                         </h2>
 
                         <p id="zeithPreviewCollection">
-                            Collection: Luxury Collection
+                            Collection: Select a collection
                         </p>
 
-                        <p style="margin-top: 7px;">
+                        <p id="zeithPreviewDesc" style="margin-top: 7px;">
                             Watch description will appear here.
                         </p>
 
-
                         <div class="zeith-preview-price">
-
-                            <span>
-                                Price
-                            </span>
+                            <span>Price</span>
 
                             <strong id="zeithPreviewPrice">
-                                $85,000
+                                ₦0
                             </strong>
-
                         </div>
-
                     </div>
-
                 </aside>
-
             </div>
-
         </div>
-
     </main>
 
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
+    const chooseTrigger = document.getElementById("chooseImagesTrigger");
+    const imageInput = document.getElementById("zeithImageInput");
+    const uploadedImages = document.getElementById("zeithUploadedImages");
+    const uploadMessage = document.getElementById("zeithUploadMessage");
+    const manualInput = document.getElementById("zeithManualInput");
+    const manualSelected = document.getElementById("zeithManualSelected");
+    const slides = document.querySelectorAll(".zeith-preview-slide");
+    const indicators = document.querySelectorAll(".zeith-image-indicator");
+    const previousButton = document.getElementById("zeithPreviewPrev");
+    const nextButton = document.getElementById("zeithPreviewNext");
+    let currentSlide = 0;
 
+    // Trigger file selection dialog
+    if (chooseTrigger && imageInput) {
+        chooseTrigger.addEventListener("click", function() {
+            imageInput.click();
+        });
+    }
 
-            /* =====================================================
-               IMAGE SLIDER
-            ===================================================== */
+    function showSlide(index) {
+        if (!slides.length) return;
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        currentSlide = index;
+        slides.forEach((slide, i) => slide.classList.toggle("active", i === currentSlide));
+        indicators.forEach((indicator, i) => indicator.classList.toggle("active", i === currentSlide));
+    }
 
-            const slides = document.querySelectorAll(
-                ".zeith-preview-slide"
-            );
+    if (previousButton) previousButton.addEventListener("click", () => showSlide(currentSlide - 1));
+    if (nextButton) nextButton.addEventListener("click", () => showSlide(currentSlide + 1));
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener("click", () => showSlide(index));
+    });
 
-            const indicators = document.querySelectorAll(
-                ".zeith-image-indicator"
-            );
+    // Image Upload & Validation Handler (Must be exactly 4)
+    if (imageInput) {
+        imageInput.addEventListener("change", function() {
+            const files = Array.from(this.files);
 
-            const previousButton = document.getElementById(
-                "zeithPreviewPrev"
-            );
-
-            const nextButton = document.getElementById(
-                "zeithPreviewNext"
-            );
-
-            let currentSlide = 0;
-
-
-            function showSlide(index) {
-
-                if (index < 0) {
-                    index = slides.length - 1;
+            if (files.length !== 4) {
+                if (uploadMessage) {
+                    uploadMessage.style.display = "block";
+                    uploadMessage.textContent = "Please select exactly 4 images (You selected " + files.length + ").";
                 }
-
-                if (index >= slides.length) {
-                    index = 0;
-                }
-
-                currentSlide = index;
-
-
-                /* SHOW CORRECT IMAGE */
-
-                slides.forEach(function(slide, i) {
-
-                    slide.classList.toggle(
-                        "active",
-                        i === currentSlide
-                    );
-
-                });
-
-
-                /* MOVE INDICATOR */
-
-                indicators.forEach(function(indicator, i) {
-
-                    indicator.classList.toggle(
-                        "active",
-                        i === currentSlide
-                    );
-
-                });
-
+                this.value = ""; // Reset file input
+                return;
             }
 
-
-            /* PREVIOUS */
-
-            previousButton.addEventListener(
-                "click",
-                function() {
-
-                    showSlide(currentSlide - 1);
-
+            if (!files.every(file => ["image/jpeg", "image/png", "image/webp"].includes(file.type))) {
+                if (uploadMessage) {
+                    uploadMessage.style.display = "block";
+                    uploadMessage.textContent = "Please select only PNG, JPEG, or WEBP images.";
                 }
-            );
+                this.value = "";
+                return;
+            }
 
+            if (uploadMessage) uploadMessage.style.display = "none";
+            if (uploadedImages) uploadedImages.innerHTML = "";
 
-            /* NEXT */
+            files.forEach((file, index) => {
+                const reader = new FileReader();
 
-            nextButton.addEventListener(
-                "click",
-                function() {
+                reader.onload = function(event) {
+                    if (uploadedImages) {
+                        const thumbnail = document.createElement("div");
+                        thumbnail.className = "zeith-upload-thumb";
+                        thumbnail.style.backgroundImage = `url('${event.target.result}')`;
+                        thumbnail.style.backgroundSize = "cover";
+                        thumbnail.style.backgroundPosition = "center";
 
-                    showSlide(currentSlide + 1);
-
-                }
-            );
-
-
-            /* INDICATORS */
-
-            indicators.forEach(function(indicator) {
-
-                indicator.addEventListener(
-                    "click",
-                    function() {
-
-                        showSlide(
-                            Number(
-                                this.dataset.slide
-                            )
-                        );
-
+                        const number = document.createElement("span");
+                        number.className = "zeith-upload-number";
+                        number.textContent = index + 1;
+                        thumbnail.appendChild(number);
+                        uploadedImages.appendChild(thumbnail);
                     }
-                );
 
+                    const image = slides[index] ? slides[index].querySelector("img") : null;
+                    if (image) image.src = event.target.result;
+                };
+
+                reader.readAsDataURL(file);
             });
 
-
-
-            /* =====================================================
-               IMAGE UPLOAD
-            ===================================================== */
-
-            const imageInput = document.getElementById(
-                "zeithImageInput"
-            );
-
-            const uploadedImages = document.getElementById(
-                "zeithUploadedImages"
-            );
-
-            const uploadMessage = document.getElementById(
-                "zeithUploadMessage"
-            );
-
-
-            imageInput.addEventListener(
-                "change",
-                function() {
-
-                    const files = Array.from(
-                        this.files
-                    );
-
-
-                    /* MUST BE EXACTLY 4 */
-
-                    if (files.length !== 4) {
-
-                        uploadMessage.style.display = "block";
-
-                        uploadedImages.innerHTML = "";
-
-                        for (let i = 1; i <= 4; i++) {
-
-                            uploadedImages.innerHTML += `
-                        <div class="zeith-upload-thumb">
-                            <span class="zeith-upload-number">
-                                ${i}
-                            </span>
-                        </div>
-                    `;
-
-                        }
-
-                        return;
-
-                    }
-
-
-                    uploadMessage.style.display = "none";
-
-
-                    /* CLEAR THUMBNAILS */
-
-                    uploadedImages.innerHTML = "";
-
-
-                    /* CREATE THUMBNAILS */
-
-                    files.forEach(function(file, index) {
-
-                        const reader = new FileReader();
-
-
-                        reader.onload = function(event) {
-
-                            const thumbnail =
-                                document.createElement("div");
-
-                            thumbnail.className =
-                                "zeith-upload-thumb";
-
-
-                            thumbnail.innerHTML = `
-                        <img
-                            src="${event.target.result}"
-                            alt="Watch image ${index + 1}"
-                        >
-
-                        <span class="zeith-upload-number">
-                            ${index + 1}
-                        </span>
-                    `;
-
-
-                            uploadedImages.appendChild(
-                                thumbnail
-                            );
-
-                        };
-
-
-                        reader.readAsDataURL(file);
-
-                    });
-
-
-                    /*
-                     * ALSO UPDATE THE PREVIEW
-                     */
-
-                    const previewSlides =
-                        document.querySelectorAll(
-                            ".zeith-preview-slide"
-                        );
-
-
-                    files.forEach(function(file, index) {
-
-                        const reader = new FileReader();
-
-
-                        reader.onload = function(event) {
-
-                            if (
-                                previewSlides[index]
-                            ) {
-
-                                previewSlides[index]
-                                    .querySelector("img")
-                                    .src =
-                                    event.target.result;
-
-                            }
-
-                        };
-
-
-                        reader.readAsDataURL(file);
-
-                    });
-
-                }
-            );
-
-
-
-            /* =====================================================
-               LIVE WATCH NAME
-            ===================================================== */
-
-            const watchName =
-                document.getElementById(
-                    "zeithWatchName"
-                );
-
-            const previewName =
-                document.getElementById(
-                    "zeithPreviewName"
-                );
-
-
-            watchName.addEventListener(
-                "input",
-                function() {
-
-                    previewName.textContent =
-                        this.value || "Watch Name";
-
-                }
-            );
-
-
-
-            /* =====================================================
-               LIVE COLLECTION
-            ===================================================== */
-
-            const collection =
-                document.getElementById(
-                    "zeithCollection"
-                );
-
-            const previewCollection =
-                document.getElementById(
-                    "zeithPreviewCollection"
-                );
-
-
-            collection.addEventListener(
-                "change",
-                function() {
-
-                    previewCollection.textContent =
-                        "Collection: " + this.value;
-
-                }
-            );
-
-
-
-            /* =====================================================
-               LIVE PRICE
-            ===================================================== */
-
-            const price =
-                document.getElementById(
-                    "zeithPrice"
-                );
-
-            const previewPrice =
-                document.getElementById(
-                    "zeithPreviewPrice"
-                );
-
-
-            price.addEventListener(
-                "input",
-                function() {
-
-                    const number =
-                        Number(this.value) || 0;
-
-
-                    previewPrice.textContent =
-                        "$" +
-                        number.toLocaleString(
-                            "en-US", {
-                                minimumFractionDigits: 0
-                            }
-                        );
-
-                }
-            );
-
-
-
-            /* =====================================================
-               FORM DEMO
-            ===================================================== */
-
-            document.getElementById(
-                "zeithEditForm"
-            ).addEventListener(
-                "submit",
-                function(event) {
-
-                    event.preventDefault();
-
-                    alert(
-                        "Watch changes are ready to be saved."
-                    );
-
-                }
-            );
-
+            showSlide(0);
         });
+    }
 
-        /* =====================================================
-   WATCH MANUAL PDF
-===================================================== */
+    // Live Text Preview Bindings
+    const watchName = document.getElementById("zeithWatchName");
+    const previewName = document.getElementById("zeithPreviewName");
+    if (watchName && previewName) {
+        watchName.addEventListener("input", function() {
+            previewName.textContent = this.value.trim() || "Watch Name";
+        });
+    }
 
-        const manualInput = document.getElementById(
-            "zeithManualInput"
-        );
+    const collection = document.getElementById("zeithCollection");
+    const previewCollection = document.getElementById("zeithPreviewCollection");
+    if (collection && previewCollection) {
+        collection.addEventListener("change", function() {
+            const selectedText = this.options[this.selectedIndex].text;
+            previewCollection.textContent = "Collection: " + selectedText;
+        });
+    }
 
-        const manualSelected = document.getElementById(
-            "zeithManualSelected"
-        );
+    const price = document.getElementById("zeithPrice");
+    const previewPrice = document.getElementById("zeithPreviewPrice");
+    if (price && previewPrice) {
+        price.addEventListener("input", function() {
+            const number = Number(this.value) || 0;
+            previewPrice.textContent = "₦" + number.toLocaleString("en-US");
+        });
+    }
 
+    const description = document.getElementById("zeithDescription");
+    const previewDescription = document.getElementById("zeithPreviewDesc");
+    if (description && previewDescription) {
+        description.addEventListener("input", function() {
+            previewDescription.textContent = this.value.trim() || "Watch description will appear here.";
+        });
+    }
 
-        manualInput.addEventListener(
-            "change",
-            function() {
+    // Manual PDF Validation Handler
+    if (manualInput) {
+        manualInput.addEventListener("change", function() {
+            const file = this.files[0];
 
-                const file = this.files[0];
-
-                if (!file) {
-
+            if (!file) {
+                if (manualSelected) {
                     manualSelected.style.display = "none";
-
                     manualSelected.textContent = "";
-
-                    return;
                 }
+                return;
+            }
 
+            if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+                alert("Please select a PDF file.");
+                this.value = "";
+                if (manualSelected) manualSelected.style.display = "none";
+                return;
+            }
 
-                /* MAKE SURE IT IS A PDF */
+            if (file.size > 5 * 1024 * 1024) {
+                alert("The PDF must be smaller than 5MB.");
+                this.value = "";
+                if (manualSelected) manualSelected.style.display = "none";
+                return;
+            }
 
-                if (
-                    file.type !== "application/pdf" &&
-                    !file.name.toLowerCase().endsWith(".pdf")
-                ) {
-
-                    alert("Please select a PDF file.");
-
-                    this.value = "";
-
-                    manualSelected.style.display = "none";
-
-                    return;
-                }
-
-
-                /* 5MB LIMIT */
-
-                const maxSize = 5 * 1024 * 1024;
-
-                if (file.size > maxSize) {
-
-                    alert("The PDF must be smaller than 5MB.");
-
-                    this.value = "";
-
-                    manualSelected.style.display = "none";
-
-                    return;
-                }
-
-
-                /* SHOW SELECTED FILE */
-
-                const fileSize =
-                    (file.size / (1024 * 1024))
-                    .toFixed(2);
-
-
-                manualSelected.textContent =
-                    "✓ " +
-                    file.name +
-                    " (" +
-                    fileSize +
-                    " MB)";
-
-
+            if (manualSelected) {
+                manualSelected.textContent = "✓ " + file.name + " (" + (file.size / (1024 * 1024)).toFixed(2) + " MB)";
                 manualSelected.style.display = "block";
-
             }
-        );
+        });
+    }
 
-        (function() {
+    // Stock Visual State Handlers
+    const stockInput = document.getElementById("zeithStock");
+    const inStockSelect = document.getElementById("zeithInStock");
 
-            const stockInput =
-                document.getElementById("zeithStock");
+    function updateStockVisuals() {
+        if (!stockInput) return;
+        const stock = parseInt(stockInput.value, 10) || 0;
+        stockInput.classList.remove("zeith-stock-low", "zeith-stock-empty");
 
-            const inStockSelect =
-                document.getElementById("zeithInStock");
+        if (stock === 0) stockInput.classList.add("zeith-stock-empty");
+        else if (stock <= 5) stockInput.classList.add("zeith-stock-low");
+    }
 
+    function updateStockStatus() {
+        if (!inStockSelect) return;
+        inStockSelect.classList.toggle("zeith-status-out", inStockSelect.value === "0");
+    }
 
-            function updateStockVisuals() {
+    if (stockInput) {
+        stockInput.addEventListener("input", updateStockVisuals);
+        updateStockVisuals();
+    }
 
-                if (!stockInput) {
-                    return;
-                }
-
-                const stock =
-                    parseInt(stockInput.value, 10) || 0;
-
-
-                stockInput.classList.remove(
-                    "zeith-stock-low",
-                    "zeith-stock-empty"
-                );
-
-
-                if (stock === 0) {
-
-                    stockInput.classList.add(
-                        "zeith-stock-empty"
-                    );
-
-                } else if (stock <= 5) {
-
-                    stockInput.classList.add(
-                        "zeith-stock-low"
-                    );
-
-                }
-
-            }
-
-
-            function updateStockStatus() {
-
-                if (!inStockSelect) {
-                    return;
-                }
-
-                inStockSelect.classList.remove(
-                    "zeith-status-out"
-                );
-
-
-                if (inStockSelect.value === "0") {
-
-                    inStockSelect.classList.add(
-                        "zeith-status-out"
-                    );
-
-                }
-
-            }
-
-
-            if (stockInput) {
-
-                stockInput.addEventListener(
-                    "input",
-                    updateStockVisuals
-                );
-
-                updateStockVisuals();
-
-            }
-
-
-            if (inStockSelect) {
-
-                inStockSelect.addEventListener(
-                    "change",
-                    updateStockStatus
-                );
-
-                updateStockStatus();
-
-            }
-
-        })();
-    </script>
+    if (inStockSelect) {
+        inStockSelect.addEventListener("change", updateStockStatus);
+        updateStockStatus();
+    }
+});
+</script>
 
 </body>
 

@@ -13,7 +13,28 @@ $watch = $watch ?? [
     'image_url_3' => 'Nautilus_5711-removebg-preview.png',
     'image_url_4' => 'Nautilus_5711-removebg-preview.png'
 ];
+$resolveImagePath = function ($imgName) {
+    $imgVal = trim($imgName ?? '');
+    if (empty($imgVal)) {
+        return '/Watch_Collection/assets/image/placeholder.jpg';
+    }
+    if (strpos($imgVal, 'http://') === 0 || strpos($imgVal, 'https://') === 0 || strpos($imgVal, '/') === 0) {
+        return $imgVal;
+    }
 
+    // Check if file exists in public/uploads, otherwise fallback to assets/image
+    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $imgVal;
+    if (file_exists($uploadPath)) {
+        return '/Watch_Collection/public/uploads/' . $imgVal;
+    }
+    return '/Watch_Collection/assets/image/' . $imgVal;
+};
+
+// Resolve all 4 images dynamically using your original property fallbacks
+$img1 = $resolveImagePath($watch['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png');
+$img2 = $resolveImagePath($watch['image_url_2'] ?? $watch['image_url_1']);
+$img3 = $resolveImagePath($watch['image_url_3'] ?? $watch['image_url_1']);
+$img4 = $resolveImagePath($watch['image_url_4'] ?? $watch['image_url_1']);
 $shippingMethods = $shippingMethods ?? [];
 
 // Read stock count from database record (stock > 0 means available, 0 means sold out)[cite: 8]
@@ -1426,23 +1447,23 @@ $stockCount = (int)($watch['stock'] ?? 0);
         <!-- 1. Left Showcase Area -->
         <div class="showcase-column">
             <div class="main-image-box">
-                <img id="mainWatch" src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png') ?>" alt="<?= htmlspecialchars($watch['name']) ?>">
+                <img id="mainWatch" src="<?= htmlspecialchars($img1) ?>" alt="<?= htmlspecialchars($watch['name']) ?>">
             </div>
 
             <div class="carousel-wrapper">
                 <button class="arrow-btn" id="prevSlideBtn" type="button">&lsaquo;</button>
                 <div class="thumbnails-container">
                     <div class="thumb-card active" data-index="0" onclick="goToSlide(0)">
-                        <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png') ?>" alt="Watch view 1">
+                        <img src="<?= htmlspecialchars($img1) ?>" alt="Watch view 1">
                     </div>
                     <div class="thumb-card" data-index="1" onclick="goToSlide(1)">
-                        <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_2'] ?? $watch['image_url_1']) ?>" alt="Watch view 2">
+                        <img src="<?= htmlspecialchars($img2) ?>" alt="Watch view 2">
                     </div>
                     <div class="thumb-card" data-index="2" onclick="goToSlide(2)">
-                        <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_3'] ?? $watch['image_url_1']) ?>" alt="Watch view 3">
+                        <img src="<?= htmlspecialchars($img3) ?>" alt="Watch view 3">
                     </div>
                     <div class="thumb-card" data-index="3" onclick="goToSlide(3)">
-                        <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_4'] ?? $watch['image_url_1']) ?>" alt="Watch view 4">
+                        <img src="<?= htmlspecialchars($img4) ?>" alt="Watch view 4">
                     </div>
                 </div>
                 <button class="arrow-btn" id="nextSlideBtn" type="button">&rsaquo;</button>
@@ -1617,8 +1638,8 @@ $stockCount = (int)($watch['stock'] ?? 0);
         </div>
     </div>
 
-    <!-- Floating Cart Button -->
-    <button type="button"
+
+    <!-- <button type="button"
         class="floating-cart"
         id="open-cart"
         title="Shopping Cart"
@@ -1629,10 +1650,10 @@ $stockCount = (int)($watch['stock'] ?? 0);
         <span class="cart-count" id="cart-count">0</span>
     </button>
 
-    <!-- Cart Backdrop Overlay -->
+
     <div class="cart-overlay" id="cart-overlay"></div>
 
-    <!-- Shopping Bag Drawer Panel -->
+  
     <aside class="cart-drawer"
         id="cart-drawer"
         aria-hidden="true"
@@ -1667,7 +1688,7 @@ $stockCount = (int)($watch['stock'] ?? 0);
                 Continue Shopping
             </button>
         </div>
-    </aside>
+    </aside> -->
 
     <script>
         // State Variables
@@ -1880,12 +1901,12 @@ $stockCount = (int)($watch['stock'] ?? 0);
         }
 
         // --- 4. CAROUSEL SLIDER ---
-        const slides = [
-            "/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png') ?>",
-            "/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_2'] ?? $watch['image_url_1']) ?>",
-            "/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_3'] ?? $watch['image_url_1']) ?>",
-            "/Watch_Collection/assets/image/<?= htmlspecialchars($watch['image_url_4'] ?? $watch['image_url_1']) ?>"
-        ];
+       const slides = [
+        "<?= htmlspecialchars($img1) ?>",
+        "<?= htmlspecialchars($img2) ?>",
+        "<?= htmlspecialchars($img3) ?>",
+        "<?= htmlspecialchars($img4) ?>"
+    ];
         let currentIndex = 0;
 
         function updateSlider(index) {
@@ -2071,6 +2092,8 @@ $stockCount = (int)($watch['stock'] ?? 0);
             }
         }
     </script>
+
+    <?php include_once __DIR__ . '/../components/cart-drawer.php'; ?>
 </body>
 
 </html>

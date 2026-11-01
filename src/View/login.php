@@ -28,6 +28,27 @@
             font-size: 1rem;
             color: #ef4444;
         }
+
+        .login-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border-radius: 0.6rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background-color: rgba(255, 255, 255, 0.15);
+            outline: none;
+            font-size: 0.95rem;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .login-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .login-input:focus {
+            background-color: rgba(255, 255, 255, 0.25);
+            border-color: #ffffff;
+        }
     </style>
 </head>
 
@@ -35,13 +56,18 @@
     <!-- Background Video -->
     <video autoplay muted loop playsinline id="bg-video">
         <source src="<?php assets("video/property-details-background-video.mp4"); ?>" type="video/mp4">
-        Your browser does not support the video tag.
     </video>
 
     <!-- Dark Overlay for Contrast -->
     <div class="video-overlay"></div>
 
     <div class="login-container">
+
+        <?php if (isset($_GET['error']) && $_GET['error'] === 'suspended'): ?>
+            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #f87171; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-size: 14px;">
+                Your account has been suspended. Please contact the administrator.
+            </div>
+        <?php endif; ?>
         <div class="login-card">
             <h2 class="login-title">Welcome Back</h2>
             <p class="login-subtitle">Please enter your portal details to sign in</p>
@@ -61,9 +87,12 @@
                 <div>
                     <div class="login-password">
                         <label for="password" class="login-label">Password</label>
-                        <a href="./forgot-password.php" class="login-forgot-password">Forgot Password?</a>
+                        <a href="/Watch_Collection/auth/forgot-password" class="login-forgot-password">Forgot Password?</a>
                     </div>
-                    <input type="password" name="password" class="login-input" id="password" placeholder="••••••••" required>
+                    <div class="password-container" style="position: relative; display: flex; align-items: center;">
+                        <input type="password" name="password" class="login-input" id="password" placeholder="••••••••" required style="width: 100%; padding-right: 40px;">
+                        <i class="fa-solid fa-eye" id="toggle-password" style="position: absolute; right: 15px; cursor: pointer; color: #666;" title="Toggle password visibility"></i>
+                    </div>
                 </div>
 
                 <input type="hidden" id="csrf-token" name="csrf_token" value="<?= $csrf_token ?? '' ?>">
@@ -81,6 +110,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="<?php assets("js/login.js"); ?>"></script>
+    <script>
+        document.getElementById('toggle-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            // Toggle icon between eye and eye-slash
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 </body>
 
 </html>

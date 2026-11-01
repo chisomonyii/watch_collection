@@ -1,18 +1,5 @@
 <?php
-// views/Staff/sidebar.php
-
-/*
-|--------------------------------------------------------------------------
-| DETECT CURRENT STAFF PAGE
-|--------------------------------------------------------------------------
-| This keeps the active blue background on the correct link after
-| navigating to another PHP page.
-*/
-
-$currentPath = rtrim(
-    parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH),
-    '/'
-);
+$currentPath = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
 function zeithIsActive($path)
 {
@@ -23,11 +10,6 @@ function zeithIsActive($path)
     return $currentPath === $path ? 'active' : '';
 }
 ?>
-
-<!-- =========================================
-     MOBILE / TABLET MENU BUTTON
-========================================== -->
-
 <button
     type="button"
     class="zeith-mobile-menu-toggle"
@@ -39,24 +21,11 @@ function zeithIsActive($path)
     <span></span>
 </button>
 
-
-<!-- =========================================
-     SIDEBAR OVERLAY
-========================================== -->
-
 <div
     class="zeith-sidebar-overlay"
     id="zeithSidebarOverlay"></div>
 
-
-<!-- =========================================
-     SIDEBAR
-========================================== -->
-
 <aside class="zeith-sidebar" id="zeithSidebar">
-
-    <!-- MOBILE CLOSE BUTTON -->
-
     <button
         type="button"
         class="zeith-sidebar-close"
@@ -66,213 +35,219 @@ function zeithIsActive($path)
         <span></span>
     </button>
 
-
-    <!-- =========================================
-         LOGO
-    ========================================== -->
-
     <div class="zeith-sidebar-brand">
-
         <div class="zeith-brand-mark">
             Z
         </div>
-
         <div class="zeith-brand-text">
             <strong>ZEITH</strong>
-            <span>STAFF PANEL</span>
+            <span>ADMIN PANEL</span>
         </div>
-
     </div>
 
-
-    <!-- =========================================
-         NAVIGATION
-    ========================================== -->
-
     <nav class="zeith-sidebar-nav">
-
         <div class="zeith-nav-section-title">
             MAIN MENU
         </div>
 
-
-        <!-- =====================================
-             OVERVIEW
-        ====================================== -->
-
         <a
             href="/Watch_Collection/admin/dashboard"
             class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/dashboard') ?>">
-
             <span class="zeith-nav-icon">
-
                 <svg viewBox="0 0 24 24">
                     <path d="M3 10.5L12 3l9 7.5"></path>
                     <path d="M5 9.5V21h14V9.5"></path>
                     <path d="M9 21v-7h6v7"></path>
                 </svg>
-
             </span>
-
             <span class="zeith-nav-label">
                 Overview
             </span>
-
         </a>
-
-
-        <!-- =====================================
-             ORDERS
-        ====================================== -->
-
 
         <a
             href="/Watch_Collection/admin/watch"
             class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/watch') ?>">
-
             <span class="zeith-nav-icon">
-
                 <svg viewBox="0 0 24 24">
                     <rect x="3" y="5" width="18" height="14" rx="2"></rect>
                     <path d="M3 10h18"></path>
                     <path d="M7 15h4"></path>
                 </svg>
-
             </span>
-
             <span class="zeith-nav-label">
                 Watch
             </span>
+        </a>
 
-            <span class="zeith-nav-badge warning">
-                6
+        <a
+            href="/Watch_Collection/admin/orders"
+            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/orders') ?>">
+            <span class="zeith-nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                    <path d="M3 10h18"></path>
+                    <path d="M7 15h4"></path>
+                </svg>
             </span>
-
+            <span class="zeith-nav-label">
+                Order management
+            </span>
         </a>
 
         <a
             href="/Watch_Collection/admin/staff-requests"
             class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/staff-requests') ?>">
-
             <span class="zeith-nav-icon">
-
                 <svg viewBox="0 0 24 24">
                     <path d="M3 7l9-4 9 4-9 4-9-4z"></path>
                     <path d="M3 7v10l9 4 9-4V7"></path>
                     <path d="M12 11v10"></path>
                 </svg>
-
             </span>
-
             <span class="zeith-nav-label">
                 Staff Request
             </span>
-
         </a>
 
         <a
-            href="/Watch_Collection/admin/contact"
-            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/contact') ?>">
-
+            href="/Watch_Collection/admin/staff"
+            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/staff') ?>">
             <span class="zeith-nav-icon">
-
-                <svg viewBox="0 0 24 24">
-                    <rect x="5" y="3" width="14" height="18" rx="2"></rect>
-                    <path d="M9 3v3h6V3"></path>
-                    <path d="M8 11h8"></path>
-                    <path d="M8 15h6"></path>
-                </svg>
-
-            </span>
-
-            <span class="zeith-nav-label">
-                contact
-            </span>
-
-            <span class="zeith-nav-badge warning">
-                2
-            </span>
-
-        </a>
-
-
-        <!-- =====================================
-             PAYMENT RECEIPTS
-        ====================================== -->
-
-
-
-
-        <!-- =====================================
-             CONTACT QUERIES
-        ====================================== -->
-
-        <a
-            href="/Watch_Collection/admin/news"
-            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/news') ?>">
-
-            <span class="zeith-nav-icon">
-
                 <svg viewBox="0 0 24 24">
                     <circle cx="9" cy="8" r="3"></circle>
                     <path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"></path>
                     <circle cx="17" cy="9" r="2"></circle>
                     <path d="M15 14c2.8-.2 5 1.2 5 4"></path>
                 </svg>
-
             </span>
+            <span class="zeith-nav-label">
+                staff
+            </span>
+        </a>
 
+        <a
+            href="/Watch_Collection/admin/payment"
+            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/payment') ?>">
+            <span class="zeith-nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="8" r="3"></circle>
+                    <path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"></path>
+                    <circle cx="17" cy="9" r="2"></circle>
+                    <path d="M15 14c2.8-.2 5 1.2 5 4"></path>
+                </svg>
+            </span>
+            <span class="zeith-nav-label">
+                payment
+            </span>
+        </a>
+
+        <a
+            href="/Watch_Collection/admin/contact"
+            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/contact') ?>">
+            <span class="zeith-nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+                    <path d="M9 3v3h6V3"></path>
+                    <path d="M8 11h8"></path>
+                    <path d="M8 15h6"></path>
+                </svg>
+            </span>
+            <span class="zeith-nav-label">
+                contact
+            </span>
+        </a>
+
+        <a
+            href="/Watch_Collection/admin/news"
+            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/news') ?>">
+            <span class="zeith-nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="8" r="3"></circle>
+                    <path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"></path>
+                    <circle cx="17" cy="9" r="2"></circle>
+                    <path d="M15 14c2.8-.2 5 1.2 5 4"></path>
+                </svg>
+            </span>
             <span class="zeith-nav-label">
                 news
             </span>
-
-
-
         </a>
-
-
     </nav>
 
-
-    <!-- =========================================
-         BOTTOM NAVIGATION
-    ========================================== -->
-
     <div class="zeith-sidebar-bottom">
-
-
-
-        <!-- USER -->
-
         <div class="zeith-sidebar-user">
-
             <div class="zeith-user-avatar">
                 ZP
             </div>
-
             <div class="zeith-user-info">
-
-                <strong>
-                    ZEITH Pay
-                </strong>
-
-                <span>
-                    Administrator
-                </span>
-
+                <strong>ZEITH Pay</strong>
+                <span>Administrator</span>
             </div>
-
         </div>
-
+        <a href="http://localhost/Watch_Collection/auth/login" class="zeith-logout-btn">
+            <svg viewBox="0 0 24 24">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>Logout</span>
+        </a>
     </div>
-
 </aside>
-
 
 <style>
     /* =====================================================
    ZEITH STAFF SIDEBAR
 ===================================================== */
+    .zeith-logout-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        min-height: 44px;
+        padding: 11px 14px;
+        margin-top: 14px;
+        border: 1px solid rgba(239, 68, 68, 0.18);
+        border-radius: 10px;
+        background: rgba(239, 68, 68, 0.08);
+        color: #FCA5A5;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.25s ease;
+    }
+
+    .zeith-logout-btn svg {
+        width: 17px;
+        height: 17px;
+        flex-shrink: 0;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .zeith-logout-btn span {
+        white-space: nowrap;
+    }
+
+    .zeith-logout-btn:hover {
+        background: rgba(239, 68, 68, 0.15);
+        border-color: rgba(239, 68, 68, 0.35);
+        color: #EF4444;
+        transform: translateY(-1px);
+    }
+
+    .zeith-logout-btn:active {
+        transform: translateY(0);
+    }
+
+    .zeith-logout-btn:focus-visible {
+        outline: 2px solid #EF4444;
+        outline-offset: 2px;
+    }
 
     .zeith-sidebar {
 
@@ -922,214 +897,60 @@ function zeithIsActive($path)
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    
+document.addEventListener("DOMContentLoaded", function() {
+    const menuToggle = document.getElementById("zeithMenuToggle");
+    const sidebar = document.getElementById("zeithSidebar");
+    const overlay = document.getElementById("zeithSidebarOverlay");
+    const closeButton = document.getElementById("zeithSidebarClose");
 
-        const menuToggle =
-            document.getElementById("zeithMenuToggle");
+    if (!menuToggle || !sidebar || !overlay) {
+        return;
+    }
 
-        const sidebar =
-            document.getElementById("zeithSidebar");
+    function openSidebar() {
+        sidebar.classList.add("mobile-open");
+        overlay.classList.add("mobile-open");
+        document.body.classList.add("zeith-menu-open");
 
-        const overlay =
-            document.getElementById("zeithSidebarOverlay");
+        menuToggle.setAttribute("aria-expanded", "true");
+        menuToggle.setAttribute("aria-label", "Close navigation menu");
+    }
 
-        const closeButton =
-            document.getElementById("zeithSidebarClose");
+    function closeSidebar() {
+        sidebar.classList.remove("mobile-open");
+        overlay.classList.remove("mobile-open");
+        document.body.classList.remove("zeith-menu-open");
 
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open navigation menu");
+    }
 
-        if (!menuToggle || !sidebar || !overlay) {
-            return;
+    menuToggle.addEventListener("click", function() {
+        if (sidebar.classList.contains("mobile-open")) {
+            closeSidebar();
+        } else {
+            openSidebar();
         }
-
-
-        /* =================================================
-           MOBILE SIDEBAR
-        ================================================= */
-
-        function openSidebar() {
-
-            sidebar.classList.add("mobile-open");
-
-            overlay.classList.add("mobile-open");
-
-            document.body.classList.add("zeith-menu-open");
-
-            menuToggle.setAttribute(
-                "aria-expanded",
-                "true"
-            );
-
-            menuToggle.setAttribute(
-                "aria-label",
-                "Close navigation menu"
-            );
-        }
-
-
-        function closeSidebar() {
-
-            sidebar.classList.remove("mobile-open");
-
-            overlay.classList.remove("mobile-open");
-
-            document.body.classList.remove("zeith-menu-open");
-
-            menuToggle.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-            menuToggle.setAttribute(
-                "aria-label",
-                "Open navigation menu"
-            );
-        }
-
-
-        menuToggle.addEventListener(
-            "click",
-            function() {
-
-                if (
-                    sidebar.classList.contains(
-                        "mobile-open"
-                    )
-                ) {
-
-                    closeSidebar();
-
-                } else {
-
-                    openSidebar();
-
-                }
-
-            }
-        );
-
-
-        if (closeButton) {
-
-            closeButton.addEventListener(
-                "click",
-                closeSidebar
-            );
-
-        }
-
-
-        overlay.addEventListener(
-            "click",
-            closeSidebar
-        );
-
-
-        /* =================================================
-           ACTIVE NAVIGATION
-           -----------------------------------------------
-           This makes the blue background move immediately
-           when a menu item is clicked.
-        ================================================= */
-
-        const navLinks =
-            sidebar.querySelectorAll(
-                ".zeith-nav-item"
-            );
-
-
-        navLinks.forEach(function(link) {
-
-            link.addEventListener(
-                "click",
-                function() {
-
-                    /*
-                     * Remove blue background
-                     * from every navigation item.
-                     */
-
-                    navLinks.forEach(function(item) {
-
-                        item.classList.remove(
-                            "active"
-                        );
-
-                    });
-
-
-                    /*
-                     * Give blue background
-                     * to the clicked item.
-                     */
-
-                    this.classList.add("active");
-
-
-                    /*
-                     * Close mobile menu.
-                     */
-
-                    if (window.innerWidth <= 1024) {
-
-                        closeSidebar();
-
-                    }
-
-                }
-            );
-
-        });
-
-
-        /* =================================================
-           ESC KEY
-        ================================================= */
-
-        document.addEventListener(
-            "keydown",
-            function(event) {
-
-                if (event.key === "Escape") {
-
-                    closeSidebar();
-
-                }
-
-            }
-        );
-
-
-        /* =================================================
-           RESET MOBILE MENU ON DESKTOP
-        ================================================= */
-
-        window.addEventListener(
-            "resize",
-            function() {
-
-                if (window.innerWidth > 1024) {
-
-                    sidebar.classList.remove(
-                        "mobile-open"
-                    );
-
-                    overlay.classList.remove(
-                        "mobile-open"
-                    );
-
-                    document.body.classList.remove(
-                        "zeith-menu-open"
-                    );
-
-                    menuToggle.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-
-                }
-
-            }
-        );
-
     });
+
+    if (closeButton) {
+        closeButton.addEventListener("click", closeSidebar);
+    }
+
+    overlay.addEventListener("click", closeSidebar);
+
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+            closeSidebar();
+        }
+    });
+
+    window.addEventListener("resize", function() {
+        if (window.innerWidth > 1024) {
+            closeSidebar();
+        }
+    });
+});
+
 </script>

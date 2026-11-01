@@ -99,23 +99,7 @@
                     <input type="password" name="password" placeholder="your password" class="register-input" required>
                 </div>
 
-                <!-- ROLE SELECTION BLOCK -->
-                <!-- ROLE SELECTION BLOCK -->
-                <div class="form-group">
-                    <label class="register-label">Select Role Type</label>
-                    <div class="role-selector">
-                        <label class="role-option selected" id="optStaff">
-                            <input type="radio" name="role" value="staff" checked style="display: none;">
-                            <i class="fa-solid fa-user-gear"></i>
-                            <span>Staff</span>
-                        </label>
-                        <label class="role-option" id="optAdmin">
-                            <input type="radio" name="role" value="admin" style="display: none;">
-                            <i class="fa-solid fa-user-shield"></i>
-                            <span>Admin</span>
-                        </label>
-                    </div>
-                </div>
+             
 
                 <button type="submit" class="register-button" id="register-button">
                     Create Account
@@ -123,7 +107,7 @@
             </form>
 
             <p class="register-have-account">
-                Already have an account? <a href="./login.php" class="register-link">Sign in here</a>
+                Already have an account? <a href="/Watch_Collection/auth/login" class="register-link">Sign in here</a>
             </p>
         </div>
     </div>

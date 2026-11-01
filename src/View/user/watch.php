@@ -1903,42 +1903,45 @@ $watches = $watches ?? \App\Models\Watch::getAll();
         /* ======================================================
    GRID LOADING SPINNER OVERLAY
    ====================================================== */
-.property-grid {
-    position: relative;
-    min-height: 250px;
-}
+        .property-grid {
+            position: relative;
+            min-height: 250px;
+        }
 
-.grid-loading-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(245, 245, 247, 0.75);
-    backdrop-filter: blur(2px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-}
+        .grid-loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(245, 245, 247, 0.75);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
 
-.grid-loading-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
+        .grid-loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
 
-.grid-spinner {
-    width: 48px;
-    height: 48px;
-    border: 3px solid rgba(246, 139, 30, 0.2);
-    border-top-color: #f68b1e; /* Zeith Accent Orange */
-    border-radius: 50%;
-    animation: gridSpinnerRotate 0.8s linear infinite;
-}
+        .grid-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(246, 139, 30, 0.2);
+            border-top-color: #f68b1e;
+            /* Zeith Accent Orange */
+            border-radius: 50%;
+            animation: gridSpinnerRotate 0.8s linear infinite;
+        }
 
-@keyframes gridSpinnerRotate {
-    to { transform: rotate(360deg); }
-}
+        @keyframes gridSpinnerRotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -1960,7 +1963,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                     <li><a href="/Watch_Collection/user/watch/collection/daniel-klein">Daniel Klein</a></li>
                     <li><a href="/Watch_Collection/user/watch/collection/asorock">Asorock</a></li>
                     <li><a href="/Watch_Collection/user/watch/collection/bulova-watches">Bulova Watches</a></li>
-                    <li><a href="/Watch_Collection/user/watch/collection/patek-philippe">Patek Philippe & Cartier</a></li>
+                    <li><a href="/Watch_Collection/user/watch/collection/patek-philippe-cartier">Patek Philippe & Cartier</a></li>
                 </ul>
             </div>
 
@@ -2008,13 +2011,24 @@ $watches = $watches ?? \App\Models\Watch::getAll();
 
                         // 2. Direct Image Resolution matching home.php
                         $rawImg1 = trim($watch['image_url_1'] ?? $watch['image_url'] ?? 'default.png');
+                        // 2. Direct Image Resolution supporting both uploads and assets folders
+                        $rawImg1 = trim($watch['image_url_1'] ?? $watch['image_url'] ?? 'default.png');
                         $rawImg2 = trim($watch['image_url_2'] ?? $watch['image_url_1'] ?? 'default.png');
                         $rawImg3 = trim($watch['image_url_3'] ?? $watch['image_url_1'] ?? 'default.png');
                         $rawImg4 = trim($watch['image_url_4'] ?? $watch['image_url_1'] ?? 'default.png');
 
                         $resolvePath = function ($val) {
-                            if (strpos($val, 'http://') === 0 || strpos($val, 'https://') === 0) {
+                            if (empty($val)) {
+                                return '/Watch_Collection/assets/image/placeholder.jpg';
+                            }
+                            if (strpos($val, 'http://') === 0 || strpos($val, 'https://') === 0 || strpos($val, '/') === 0) {
                                 return $val;
+                            }
+
+                            // Check if file exists in public/uploads, otherwise fallback to assets/image
+                            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $val;
+                            if (file_exists($uploadPath)) {
+                                return '/Watch_Collection/public/uploads/' . $val;
                             }
                             return '/Watch_Collection/assets/image/' . ltrim($val, '/');
                         };
@@ -2096,7 +2110,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
     ========================================= -->
 
 
-    <button type="button"
+    <!-- <button type="button"
         class="floating-cart"
         id="open-cart"
         title="Shopping Cart"
@@ -2146,7 +2160,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                 Continue Shopping
             </button>
         </div>
-    </aside>
+    </aside> -->
 
 
 
@@ -2611,40 +2625,42 @@ $watches = $watches ?? \App\Models\Watch::getAll();
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-    const gridOverlay = document.getElementById('gridLoadingOverlay');
-    const applyFilterBtn = document.getElementById('btnApplyFilter');
-    const priceSlider = document.getElementById('priceRangeSlider');
+            const gridOverlay = document.getElementById('gridLoadingOverlay');
+            const applyFilterBtn = document.getElementById('btnApplyFilter');
+            const priceSlider = document.getElementById('priceRangeSlider');
 
-    function triggerGridLoader() {
-        if (!gridOverlay) return;
-        
-        // Show loading spinner overlay
-        gridOverlay.classList.add('active');
+            function triggerGridLoader() {
+                if (!gridOverlay) return;
 
-        // Simulate fetch delay or let your actual filtering script handle dismissal
-        // (Replace or adjust this timeout with your real AJAX filter completion call)
-        setTimeout(() => {
-            gridOverlay.classList.remove('active');
-        }, 600);
-    }
+                // Show loading spinner overlay
+                gridOverlay.classList.add('active');
 
-    // Trigger on "FILTER" button click
-    if (applyFilterBtn) {
-        applyFilterBtn.addEventListener('click', () => {
-            triggerGridLoader();
-            // Put your actual filter execution code here
+                // Simulate fetch delay or let your actual filtering script handle dismissal
+                // (Replace or adjust this timeout with your real AJAX filter completion call)
+                setTimeout(() => {
+                    gridOverlay.classList.remove('active');
+                }, 600);
+            }
+
+            // Trigger on "FILTER" button click
+            if (applyFilterBtn) {
+                applyFilterBtn.addEventListener('click', () => {
+                    triggerGridLoader();
+                    // Put your actual filter execution code here
+                });
+            }
+
+            // Trigger when moving/sliding through the price range
+            if (priceSlider) {
+                priceSlider.addEventListener('change', () => {
+                    triggerGridLoader();
+                    // Put your actual price filtering code here
+                });
+            }
         });
-    }
-
-    // Trigger when moving/sliding through the price range
-    if (priceSlider) {
-        priceSlider.addEventListener('change', () => {
-            triggerGridLoader();
-            // Put your actual price filtering code here
-        });
-    }
-});
     </script>
+
+    <?php include_once __DIR__ . '/../components/cart-drawer.php'; ?>
 
 
 

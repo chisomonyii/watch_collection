@@ -1,272 +1,206 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| ZEITH STAFF - MY LISTINGS
-|--------------------------------------------------------------------------
-| Replace the sample image filenames with your actual watch images.
-|--------------------------------------------------------------------------
-*/
+// Note: $watches is passed directly from AdminController::indexWatches()
 
-$listings = [
-
-    [
-        'id' => 1,
-        'name' => 'Nautilus 5711',
-        'price' => '₦85,000',
-        'status' => 'Available',
-        'description' => 'The Nautilus 5711 is one of the most coveted elite luxury sports watches in existence.',
-        'images' => [
-            '/Watch_Collection/assets/images/watches/nautilus-1.jpg',
-            '/Watch_Collection/assets/images/watches/nautilus-2.jpg',
-            '/Watch_Collection/assets/images/watches/nautilus-3.jpg',
-            '/Watch_Collection/assets/images/watches/nautilus-4.jpg',
-        ]
-    ],
-
-    [
-        'id' => 2,
-        'name' => 'Precisionist Chronograph',
-        'price' => '₦60,000',
-        'status' => 'Available',
-        'description' => 'Driven by Bulova’s exclusive high-frequency quartz movement, this chronograph delivers exceptional precision.',
-        'images' => [
-            '/Watch_Collection/assets/images/watches/precisionist-1.jpg',
-            '/Watch_Collection/assets/images/watches/precisionist-2.jpg',
-            '/Watch_Collection/assets/images/watches/precisionist-3.jpg',
-            '/Watch_Collection/assets/images/watches/precisionist-4.jpg',
-        ]
-    ],
-
-    [
-        'id' => 3,
-        'name' => 'Transporter Black Gold',
-        'price' => '₦30,000',
-        'status' => 'Available',
-        'description' => 'This bold statement piece merges rich African heritage inspiration with modern luxury.',
-        'images' => [
-            '/Watch_Collection/assets/images/watches/transporter-1.jpg',
-            '/Watch_Collection/assets/images/watches/transporter-2.jpg',
-            '/Watch_Collection/assets/images/watches/transporter-3.jpg',
-            '/Watch_Collection/assets/images/watches/transporter-4.jpg',
-        ]
-    ],
-
-    [
-        'id' => 4,
-        'name' => 'Classic Silver Chronograph',
-        'price' => '₦75,000',
-        'status' => 'Available',
-        'description' => 'A refined chronograph designed for everyday elegance and dependable performance.',
-        'images' => [
-            '/Watch_Collection/assets/images/watches/classic-1.jpg',
-            '/Watch_Collection/assets/images/watches/classic-2.jpg',
-            '/Watch_Collection/assets/images/watches/classic-3.jpg',
-            '/Watch_Collection/assets/images/watches/classic-4.jpg',
-        ]
-    ],
-
-];
-
-?>
-
-<?php
-// views/Staff/order.php
 \App\Helpers\View::displayComponent("admin/sidebar.php");
 ?>
 
-
 <main class="zeith-listings-page">
-
-    <!-- =========================================================
-         PAGE HEADER
-    ========================================================== -->
-
     <section class="zeith-listings-header">
-
         <div class="zeith-listings-heading">
-
-            <span class="zeith-listings-eyebrow">
-                INVENTORY
-            </span>
-
-            <h1>
-                My Listings
-            </h1>
-
-            <p>
-                Manage your listed watches and their availability.
-            </p>
-
+            <span class="zeith-listings-eyebrow">INVENTORY</span>
+            <h1>My Listings</h1>
+            <p>Manage your listed watches and their availability.</p>
         </div>
 
-        <button
-            type="button"
-            class="zeith-add-listing-btn">
+        <!-- Add New Watch Button linked to addWatch.php -->
+        <a href="/Watch_Collection/admin/watch/add" class="zeith-add-listing-btn" style="text-decoration: none;">
             <span>+</span>
             Add New Watch
-        </button>
-
+        </a>
     </section>
 
-
-    <!-- =========================================================
-         LISTINGS GRID
-    ========================================================== -->
+    <div class="zeith-listings-search">
+        <span class="zeith-search-icon">⌕</span>
+        <input
+            type="search"
+            id="zeithListingSearch"
+            placeholder="Search watches by name, description or price..."
+            autocomplete="off">
+        <span class="zeith-search-count" id="zeithSearchCount"></span>
+    </div>
 
     <section class="zeith-listings-grid">
+        <?php if (!empty($watches)): ?>
+            <?php foreach ($watches as $watch): ?>
+                <?php
+                // 1. Map the 4 database image columns
+                $images = [];
+                for ($i = 1; $i <= 4; $i++) {
+                    $imgCol = 'image_url_' . $i;
+                    if (!empty($watch[$imgCol])) {
+                        $val = trim($watch[$imgCol]);
 
-        <?php foreach ($listings as $listing): ?>
+                        if (filter_var($val, FILTER_VALIDATE_URL) || strpos($val, '/') === 0) {
+                            $images[] = $val;
+                        } else {
+                            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $val;
+                            if (file_exists($uploadPath)) {
+                                $images[] = '/Watch_Collection/public/uploads/' . $val;
+                            } else {
+                                $images[] = '/Watch_Collection/assets/image/' . $val;
+                            }
+                        }
+                    }
+                }
 
-            <article
-                class="zeith-listing-card"
-                data-listing-id="<?= htmlspecialchars($listing['id']) ?>">
+                while (count($images) < 4) {
+                    $images[] = '/Watch_Collection/assets/images/placeholder.jpg';
+                }
 
-                <!-- =================================================
-                     IMAGE AREA
-                ================================================== -->
+                // 2. Map database stock column (> 0 = Available, 0 = Sold out)
+                $isAvailable = (isset($watch['stock']) && intval($watch['stock']) > 0);
 
-                <div class="zeith-listing-image">
+                // 3. Shorten description (maximum 90 characters with ellipsis)
+                $fullDesc = $watch['description'] ?? '';
+                $shortDesc = mb_strlen($fullDesc) > 90 ? mb_substr($fullDesc, 0, 90) . '...' : $fullDesc;
+                ?>
+                <article class="zeith-listing-card <?= !$isAvailable ? 'is-sold' : '' ?>" data-listing-id="<?= htmlspecialchars($watch['id']) ?>">
+                    <div class="zeith-listing-image">
+                        <select class="zeith-status-select" aria-label="Listing status" onchange="updateStockStatus(<?= $watch['id'] ?>, this.value)">
+                            <option value="1" <?= $isAvailable ? 'selected' : '' ?>>Available</option>
+                            <option value="0" <?= !$isAvailable ? 'selected' : '' ?>>Sold out</option>
+                        </select>
 
-                    <!-- STATUS -->
-                    <select
-                        class="zeith-status-select"
-                        aria-label="Listing status">
-                        <option
-                            value="Available"
-                            <?= $listing['status'] === 'Available' ? 'selected' : '' ?>>
-                            Available
-                        </option>
-
-                        <option
-                            value="Sold"
-                            <?= $listing['status'] === 'Sold' ? 'selected' : '' ?>>
-                            Sold out
-                        </option>
-                    </select>
-
-
-                    <!-- IMAGE TRACK -->
-
-                    <div class="zeith-image-track">
-
-                        <?php foreach ($listing['images'] as $index => $image): ?>
-
-                            <div
-                                class="zeith-image-slide <?= $index === 0 ? 'active' : '' ?>">
-
-                                <img
-                                    src="<?= htmlspecialchars($image) ?>"
-                                    alt="<?= htmlspecialchars($listing['name']) ?>"
-                                    loading="lazy">
-
-                            </div>
-
-                        <?php endforeach; ?>
-
-                    </div>
-
-
-                    <!-- LEFT ARROW -->
-
-                    <button
-                        type="button"
-                        class="zeith-carousel-arrow zeith-carousel-prev"
-                        aria-label="Previous image">
-                        <span>‹</span>
-                    </button>
-
-
-                    <!-- RIGHT ARROW -->
-
-                    <button
-                        type="button"
-                        class="zeith-carousel-arrow zeith-carousel-next"
-                        aria-label="Next image">
-                        <span>›</span>
-                    </button>
-
-
-                    <!-- PRICE -->
-
-                    <div class="zeith-listing-price">
-                        <?= htmlspecialchars($listing['price']) ?>
-                    </div>
-
-
-                    <!-- IMAGE INDICATORS -->
-
-                    <div class="zeith-image-indicators">
-
-                        <?php foreach ($listing['images'] as $index => $image): ?>
-
-                            <span
-                                class="zeith-image-indicator <?= $index === 0 ? 'active' : '' ?>"
-                                data-index="<?= $index ?>"></span>
-
-                        <?php endforeach; ?>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =================================================
-                     LISTING CONTENT
-                ================================================== -->
-
-                <div class="zeith-listing-content">
-
-                    <h2>
-                        <?= htmlspecialchars($listing['name']) ?>
-                    </h2>
-
-                    <p class="zeith-listing-description">
-                        <?= htmlspecialchars($listing['description']) ?>
-                    </p>
-
-
-                    <!-- =================================================
-                         BOTTOM ACTIONS
-                    ================================================== -->
-
-                    <div class="zeith-listing-actions">
-
-                        <div class="zeith-management-actions">
-
-                            <button
-                                type="button"
-                                class="zeith-edit-btn">
-                                <span class="zeith-edit-icon">✎</span>
-                                Edit
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="zeith-delete-btn"
-                                aria-label="Delete listing">
-                                ♲
-                            </button>
-
+                        <div class="zeith-image-track">
+                            <?php foreach ($images as $index => $image): ?>
+                                <div class="zeith-image-slide <?= $index === 0 ? 'active' : '' ?>">
+                                    <img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($watch['name']) ?>" loading="lazy">
+                                </div>
+                            <?php endforeach; ?>
                         </div>
 
+                        <button type="button" class="zeith-carousel-arrow zeith-carousel-prev" aria-label="Previous image"><span>‹</span></button>
+                        <button type="button" class="zeith-carousel-arrow zeith-carousel-next" aria-label="Next image"><span>›</span></button>
+
+                        <div class="zeith-listing-price">
+                            ₦<?= number_format((float)$watch['price'], 0) ?>
+                        </div>
+
+                        <div class="zeith-image-indicators">
+                            <?php foreach ($images as $index => $image): ?>
+                                <span class="zeith-image-indicator <?= $index === 0 ? 'active' : '' ?>" data-index="<?= $index ?>"></span>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
 
-                </div>
+                    <div class="zeith-listing-content">
+                        <h2><?= htmlspecialchars($watch['name']) ?></h2>
+                        <p class="zeith-listing-description"><?= htmlspecialchars($shortDesc) ?></p>
 
-            </article>
+                        <div class="zeith-listing-actions">
+                            <div class="zeith-management-actions">
+                                <a href="/Watch_Collection/admin/watch/edit/<?= $watch['id'] ?>" class="zeith-edit-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                    <span class="zeith-edit-icon">✎</span> Edit
+                                </a>
 
-        <?php endforeach; ?>
-
+                                <form action="/Watch_Collection/admin/watch/delete/<?= $watch['id'] ?>" method="POST" onsubmit="return confirm('Are you sure you want to delete this watch?');" style="display: inline;">
+                                    <button type="submit" class="zeith-delete-btn" aria-label="Delete listing">&#128465;</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p style="grid-column: 1 / -1; text-align: center; color: #888; padding: 40px;">No watch listings found in the database.</p>
+        <?php endif; ?>
     </section>
-
 </main>
-
 
 <style>
     /* ================================================================
    ZEITH LISTINGS PAGE
 ================================================================ */
+
+    .zeith-listings-search {
+        position: relative;
+        width: 100%;
+        max-width: 550px;
+        margin: 0 0 25px;
+    }
+
+    .zeith-listings-search .zeith-search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748B;
+        font-size: 22px;
+        pointer-events: none;
+    }
+
+    .zeith-listings-search input {
+        width: 100%;
+        height: 46px;
+        padding: 0 110px 0 45px;
+        background: #FFFFFF;
+        color: #0F172A;
+        border: 1px solid #E2E8F0;
+        border-radius: 9px;
+        outline: none;
+        font-size: 13px;
+        transition: all 0.2s ease;
+    }
+
+    .zeith-listings-search input::placeholder {
+        color: #94A3B8;
+    }
+
+    .zeith-listings-search input:focus {
+        border-color: #2563EB;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .zeith-search-count {
+        position: absolute;
+        right: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .zeith-listing-card.search-hidden {
+        display: none !important;
+    }
+
+    .zeith-search-empty {
+        grid-column: 1 / -1;
+        padding: 45px 20px;
+        text-align: center;
+        color: #64748B;
+        background: #FFFFFF;
+        border: 1px dashed #CBD5E1;
+        border-radius: 10px;
+    }
+
+    .zeith-search-empty strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #0F172A;
+        font-size: 15px;
+    }
+
+    @media (max-width: 600px) {
+        .zeith-listings-search {
+            max-width: 100%;
+        }
+
+        .zeith-listings-search input {
+            font-size: 12px;
+        }
+    }
 
     .zeith-listings-page {
 
@@ -1440,390 +1374,176 @@ $listings = [
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-
-        /*
-        |--------------------------------------------------------------------------
-        | EACH LISTING GETS ITS OWN CAROUSEL
-        |--------------------------------------------------------------------------
-        */
-
-        const listingCards =
-            document.querySelectorAll(".zeith-listing-card");
-
+        const listingCards = document.querySelectorAll(".zeith-listing-card");
 
         listingCards.forEach(function(card) {
-
-            const slides =
-                card.querySelectorAll(".zeith-image-slide");
-
-            const indicators =
-                card.querySelectorAll(".zeith-image-indicator");
-
-            const previousButton =
-                card.querySelector(".zeith-carousel-prev");
-
-            const nextButton =
-                card.querySelector(".zeith-carousel-next");
-
-            const statusSelect =
-                card.querySelector(".zeith-status-select");
-
+            const slides = card.querySelectorAll(".zeith-image-slide");
+            const indicators = card.querySelectorAll(".zeith-image-indicator");
+            const previousButton = card.querySelector(".zeith-carousel-prev");
+            const nextButton = card.querySelector(".zeith-carousel-next");
+            const statusSelect = card.querySelector(".zeith-status-select");
 
             let currentIndex = 0;
 
-
-            /*
-            |--------------------------------------------------------------------------
-            | CHANGE IMAGE
-            |--------------------------------------------------------------------------
-            */
-
             function showImage(index) {
-
-                /*
-                | Keep index inside 0 - 3.
-                */
-
                 if (index < 0) {
-
                     index = slides.length - 1;
-
                 }
 
                 if (index >= slides.length) {
-
                     index = 0;
-
                 }
-
 
                 currentIndex = index;
 
-
-                /*
-                | Update images.
-                */
-
                 slides.forEach(function(slide, i) {
-
-                    slide.classList.toggle(
-                        "active",
-                        i === currentIndex
-                    );
-
+                    slide.classList.toggle("active", i === currentIndex);
                 });
-
-
-                /*
-                | Update indicator.
-                */
 
                 indicators.forEach(function(indicator, i) {
-
-                    indicator.classList.toggle(
-                        "active",
-                        i === currentIndex
-                    );
-
+                    indicator.classList.toggle("active", i === currentIndex);
                 });
-
             }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | NEXT IMAGE
-            |--------------------------------------------------------------------------
-            */
 
             if (nextButton) {
-
-                nextButton.addEventListener(
-                    "click",
-                    function(event) {
-
-                        event.preventDefault();
-
-                        event.stopPropagation();
-
-                        showImage(
-                            currentIndex + 1
-                        );
-
-                    }
-                );
-
+                nextButton.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    showImage(currentIndex + 1);
+                });
             }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | PREVIOUS IMAGE
-            |--------------------------------------------------------------------------
-            */
 
             if (previousButton) {
-
-                previousButton.addEventListener(
-                    "click",
-                    function(event) {
-
-                        event.preventDefault();
-
-                        event.stopPropagation();
-
-                        showImage(
-                            currentIndex - 1
-                        );
-
-                    }
-                );
-
+                previousButton.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    showImage(currentIndex - 1);
+                });
             }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | CLICK INDICATOR
-            |--------------------------------------------------------------------------
-            |
-            | Clicking the third indicator, for example, immediately moves
-            | to image number 3.
-            |
-            */
 
             indicators.forEach(function(indicator, index) {
-
-                indicator.addEventListener(
-                    "click",
-                    function(event) {
-
-                        event.preventDefault();
-
-                        event.stopPropagation();
-
-                        showImage(index);
-
-                    }
-                );
-
+                indicator.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    showImage(index);
+                });
             });
 
-
-            /*
-            |--------------------------------------------------------------------------
-            | STATUS
-            |--------------------------------------------------------------------------
-            */
-
+            // Handle status styling change (0 = Sold out, 1 = Available)
             if (statusSelect) {
+                // Set initial state on load
+                if (statusSelect.value === "0") {
+                    card.classList.add("is-sold");
+                }
 
-                statusSelect.addEventListener(
-                    "change",
-                    function() {
-
-                        if (
-                            this.value === "Sold"
-                        ) {
-
-                            card.classList.add(
-                                "is-sold"
-                            );
-
-                        } else {
-
-                            card.classList.remove(
-                                "is-sold"
-                            );
-
-                        }
-
+                statusSelect.addEventListener("change", function() {
+                    if (this.value === "0") {
+                        card.classList.add("is-sold");
+                    } else {
+                        card.classList.remove("is-sold");
                     }
-                );
 
+                    // Trigger the AJAX request to update database stock status
+                    const watchId = card.getAttribute("data-listing-id");
+                    updateStockStatus(watchId, this.value);
+                });
             }
 
-
-            /*
-            |--------------------------------------------------------------------------
-            | FAVORITE
-            |--------------------------------------------------------------------------
-            */
-
-            const favoriteButton =
-                card.querySelector(
-                    ".zeith-favorite-btn"
-                );
-
-
-            if (favoriteButton) {
-
-                favoriteButton.addEventListener(
-                    "click",
-                    function() {
-
-                        this.classList.toggle(
-                            "is-favorite"
-                        );
-
-
-                        if (
-                            this.classList.contains(
-                                "is-favorite"
-                            )
-                        ) {
-
-                            this.style.color =
-                                "#EF4444";
-
-                        } else {
-
-                            this.style.color =
-                                "#94A3B8";
-
-                        }
-
-                    }
-                );
-
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | KEYBOARD / SWIPE SUPPORT
-            |--------------------------------------------------------------------------
-            */
-
+            // Touch/Swipe navigation for mobile carousels
             let touchStartX = 0;
-
             let touchEndX = 0;
 
-
-            card.addEventListener(
-                "touchstart",
-                function(event) {
-
-                    touchStartX =
-                        event.changedTouches[0].screenX;
-
-                }, {
-                    passive: true
-                }
-            );
-
-
-            card.addEventListener(
-                "touchend",
-                function(event) {
-
-                    touchEndX =
-                        event.changedTouches[0].screenX;
-
-
-                    const difference =
-                        touchStartX - touchEndX;
-
-
-                    /*
-                    | Swipe left = next image
-                    */
-
-                    if (difference > 50) {
-
-                        showImage(
-                            currentIndex + 1
-                        );
-
-                    }
-
-
-                    /*
-                    | Swipe right = previous image
-                    */
-
-                    if (difference < -50) {
-
-                        showImage(
-                            currentIndex - 1
-                        );
-
-                    }
-
-                }, {
-                    passive: true
-                }
-            );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | INITIAL IMAGE
-            |--------------------------------------------------------------------------
-            */
-
-            showImage(0);
-
-        });
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | DELETE BUTTON
-        |--------------------------------------------------------------------------
-        */
-
-        document
-            .querySelectorAll(".zeith-delete-btn")
-            .forEach(function(button) {
-
-                button.addEventListener(
-                    "click",
-                    function() {
-
-                        const card =
-                            this.closest(
-                                ".zeith-listing-card"
-                            );
-
-
-                        const listingName =
-                            card.querySelector(
-                                ".zeith-listing-content h2"
-                            );
-
-
-                        const confirmed =
-                            confirm(
-                                "Are you sure you want to delete " +
-                                listingName.textContent.trim() +
-                                "?"
-                            );
-
-
-                        if (confirmed) {
-
-                            card.style.opacity = "0";
-
-                            card.style.transform =
-                                "scale(.96)";
-
-
-                            setTimeout(
-                                function() {
-
-                                    card.remove();
-
-                                },
-                                250
-                            );
-
-                        }
-
-                    }
-                );
-
+            card.addEventListener("touchstart", function(event) {
+                touchStartX = event.changedTouches[0].screenX;
+            }, {
+                passive: true
             });
 
+            card.addEventListener("touchend", function(event) {
+                touchEndX = event.changedTouches[0].screenX;
+                const difference = touchStartX - touchEndX;
+
+                if (difference > 50) {
+                    showImage(currentIndex + 1);
+                }
+
+                // Fixed syntax typo here:
+                if (difference < -50) {
+                    showImage(currentIndex - 1);
+                }
+            }, {
+                passive: true
+            });
+
+            showImage(0);
+        });
     });
+
+    // AJAX function to update database stock status when dropdown changes
+    function updateStockStatus(watchId, stockValue) {
+        const formData = new FormData();
+        formData.append('stock', stockValue);
+
+        fetch('/Watch_Collection/admin/watch/status/' + watchId, {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (!response.ok) {
+                alert('Failed to update stock status in database.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("zeithListingSearch");
+    const searchCount = document.getElementById("zeithSearchCount");
+    const listingsGrid = document.querySelector(".zeith-listings-grid");
+
+    if (!searchInput || !listingsGrid) return;
+
+    const cards = Array.from(
+        listingsGrid.querySelectorAll(".zeith-listing-card")
+    );
+
+    const emptyMessage = document.createElement("div");
+    emptyMessage.className = "zeith-search-empty";
+    emptyMessage.innerHTML = `
+        <strong>No watches found</strong>
+        Try searching with a different watch name or keyword.
+    `;
+
+    function filterListings() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        cards.forEach(function (card) {
+            const searchableText = card.textContent.toLowerCase();
+            const matches = searchableText.includes(query);
+
+            card.classList.toggle("search-hidden", !matches);
+
+            if (matches) {
+                visibleCount++;
+            }
+        });
+
+        if (cards.length > 0 && visibleCount === 0) {
+            if (!emptyMessage.isConnected) {
+                listingsGrid.appendChild(emptyMessage);
+            }
+        } else {
+            emptyMessage.remove();
+        }
+
+        searchCount.textContent = `${visibleCount} of ${cards.length} watches`;
+    }
+
+    searchInput.addEventListener("input", filterListings);
+
+    filterListings();
+});
+
 </script>
+
+

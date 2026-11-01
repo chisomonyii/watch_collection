@@ -28,4 +28,19 @@ class Collection extends Model
         
         return $result ?: null;
     }
+
+    /**
+     * Fetch watches belonging to a collection by its slug
+     */
+    public static function getByCollectionSlug(string $slug): array
+    {
+        $db = parent::connect();
+        $stmt = $db->prepare("
+            SELECT watches.* FROM watches 
+            JOIN collections ON watches.collection_id = collections.id 
+            WHERE collections.slug = :slug
+        ");
+        $stmt->execute(['slug' => $slug]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

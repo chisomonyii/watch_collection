@@ -658,7 +658,6 @@ if (!$activeOrderId) {
 </head>
 
 <body>
-
     <div id="zeith-preloader" class="zeith-preloader active">
         <div class="preloader-content">
             <h1 class="brand-logo">ZEITH</h1>
@@ -667,387 +666,276 @@ if (!$activeOrderId) {
             </div>
         </div>
     </div>
+<div class="checkout-wrapper">
+    <div class="summary-section" id="summarySection">
+        <a href="/Watch_Collection/checkout" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Back to Review
+        </a>
 
-    <div class="checkout-wrapper">
+        <div class="store-badge">
+            <span class="store-name"><span class="zeith">ZEITH</span> Payment Gateway</span>
+        </div>
 
-        <!-- LEFT SIDE: SUMMARY SECTION -->
-        <div class="summary-section" id="summarySection">
-            <a href="/Watch_Collection/checkout" class="back-link">
-                <i class="fa-solid fa-arrow-left"></i> Back to Review
-            </a>
+        <div class="total-price-display" id="totalPriceDisplay">
+            ₦<?= number_format($subtotal + 4000, 2) ?>
+        </div>
 
-            <div class="store-badge">
-                <span class="store-name"><span class="zeith">ZEITH</span> Payment Gateway</span>
+        <div class="itemized-list">
+            <div class="line-item">
+                <span class="item-name">Order Ref: <?= htmlspecialchars($orderNumber) ?></span>
+                <span class="item-price">₦<?= number_format($subtotal, 2) ?></span>
             </div>
-
-            <!-- Dynamic Subtotal + Shipping Total Display -->
-            <div class="total-price-display" id="totalPriceDisplay">
-                ₦<?= number_format($subtotal + 4000, 2) ?>
-            </div>
-
-            <div class="itemized-list">
-                <div class="line-item">
-                    <span class="item-name">Order Ref: <?= htmlspecialchars($orderNumber) ?></span>
-                    <span class="item-price">₦<?= number_format($subtotal, 2) ?></span>
-                </div>
-                <div class="line-item" style="color: var(--text-muted);">
-                    <span>Shipping</span>
-                    <span id="shippingSummaryPrice">₦4,000.00</span>
-                </div>
-            </div>
-
-            <!-- SHIPPING OPTIONS LOOP -->
-            <div class="shipping-section">
-                <h3 class="shipping-title">Shipping method</h3>
-                <div class="shipping-container" id="shippingOptionsContainer">
-                    <?php
-                    $isFirst = true;
-                    foreach ($shippingMethods as $method):
-                    ?>
-                        <label class="shipping-option <?= $isFirst ? 'selected' : '' ?>">
-                            <input
-                                type="radio"
-                                name="shipping_method_choice"
-                                data-name="<?= htmlspecialchars($method['method_name']) ?>"
-                                data-price="<?= htmlspecialchars($method['price']) ?>"
-                                value="<?= htmlspecialchars($method['id']) ?>"
-                                <?= $isFirst ? 'checked' : '' ?>>
-                            <div class="shipping-details">
-                                <div class="shipping-name">
-                                    <?= htmlspecialchars($method['method_name']) ?>
-                                    <?php if (!empty($method['description'])): ?>
-                                        <div class="shipping-desc"><?= htmlspecialchars($method['description']) ?></div>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                            <div class="shipping-price">₦<?= number_format($method['price'], 2) ?></div>
-                        </label>
-                    <?php
-                        $isFirst = false;
-                    endforeach;
-                    ?>
-                </div>
+            <div class="line-item" style="color: var(--text-muted);">
+                <span>Shipping</span>
+                <span id="shippingSummaryPrice">₦4,000.00</span>
             </div>
         </div>
 
-        <!-- RIGHT SIDE: PAYMENT & RECEIPT SECTION -->
-        <div class="payment-section">
-            <div class="form-inner">
+        <div class="shipping-section">
+            <h3 class="shipping-title">Shipping method</h3>
+            <div class="shipping-container" id="shippingOptionsContainer">
+                <?php
+                $isFirst = true;
+                foreach ($shippingMethods as $method):
+                ?>
+                    <label class="shipping-option <?= $isFirst ? 'selected' : '' ?>">
+                        <input
+                            type="radio"
+                            name="shipping_method_choice"
+                            data-name="<?= htmlspecialchars($method['method_name']) ?>"
+                            data-price="<?= htmlspecialchars($method['price']) ?>"
+                            value="<?= htmlspecialchars($method['id']) ?>"
+                            <?= $isFirst ? 'checked' : '' ?>>
+                        <div class="shipping-details">
+                            <div class="shipping-name">
+                                <?= htmlspecialchars($method['method_name']) ?>
+                                <?php if (!empty($method['description'])): ?>
+                                    <div class="shipping-desc"><?= htmlspecialchars($method['description']) ?></div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="shipping-price">₦<?= number_format($method['price'], 2) ?></div>
+                    </label>
+                <?php
+                    $isFirst = false;
+                endforeach;
+                ?>
+            </div>
+        </div>
+    </div>
 
-                <!-- STEP 1: INITIAL PAYSTACK PAYMENT VIEW -->
-                <div id="paystackCheckoutContainer">
-                    <div class="express-buttons">
-                        <button type="button" class="btn-express btn-apple">
-                            <i class="fa-brands fa-apple"></i> Pay
-                        </button>
-                        <button type="button" class="btn-express btn-link">
-                            <i class="fa-solid fa-bolt"></i> link
-                        </button>
-                    </div>
-
-                    <div class="divider">
-                        <span>OR</span>
-                    </div>
-
-                    <!-- MAIN PAYSTACK TRIGGER BUTTON -->
-                    <button type="button" class="btn-pay" id="btnPay">
-                        Pay ₦<?= number_format($subtotal + 4000, 2) ?>
+    <div class="payment-section">
+        <div class="form-inner">
+            <div id="paystackCheckoutContainer">
+                <div class="express-buttons">
+                    <button type="button" class="btn-express btn-apple">
+                        <i class="fa-brands fa-apple"></i> Pay
+                    </button>
+                    <button type="button" class="btn-express btn-link">
+                        <i class="fa-solid fa-bolt"></i> link
                     </button>
                 </div>
 
-                <!-- STEP 2: POST-PAYMENT RECEIPT UPLOAD VIEW (Hidden until Paystack succeeds) -->
-                <div id="postPaymentReceiptSection" style="display: none;">
-                    <form action="/Watch_Collection/payment/upload-receipt" method="POST" enctype="multipart/form-data" id="receiptForm">
-                        <input type="hidden" name="order_id" value="<?= htmlspecialchars($activeOrderId) ?>">
-                        <input type="hidden" name="reference" id="paystackTransactionRef" value="">
-
-                        <!-- HIDDEN FIELDS FOR SHIPPING DATA SUBMISSION -->
-                        <input type="hidden" name="shipping_fee" id="selectedShippingFee" value="4000">
-                        <input type="hidden" name="shipping_method_name" id="selectedShippingName" value="Standard Shipping">
-
-                        <div class="proof-card">
-                            <h3 class="proof-title">Final Step: Provide Proof of Payment</h3>
-
-                            <div class="success-banner">
-                                <i class="fa-solid fa-circle-check"></i>
-                                <div>
-                                    <strong>PAYMENT SUCCESSFUL!</strong>
-                                    <p>Finalizing Reconciliation.</p>
-                                </div>
-                            </div>
-
-                            <!-- DROPZONE WITH BLURRED IMAGE PREVIEW -->
-                            <div class="dropzone-box" id="dropzoneBox" onclick="document.getElementById('payment_receipt').click();">
-
-                                <div id="uploadPrompt">
-                                    <i class="fa-solid fa-cloud-arrow-up dropzone-icon"></i>
-                                    <p>Click to attach bank transfer receipt image</p>
-                                    <span class="file-format-note">File format (.jpg, .png, .pdf)</span>
-                                </div>
-
-                                <div class="preview-wrapper" id="previewWrapper" style="display: none;">
-                                    <img id="receiptPreview" src="" alt="Receipt Preview" class="blurred-preview">
-                                    <div class="preview-overlay">
-                                        <i class="fa-solid fa-eye-slash"></i>
-                                        <span id="previewFileName">Receipt Attached</span>
-                                        <button type="button" class="btn-remove-file" id="btnRemoveFile" onclick="event.stopPropagation();">
-                                            <i class="fa-solid fa-xmark"></i> Change File
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <input type="file" name="payment_receipt" id="payment_receipt" accept="image/*,.pdf" required style="display: none;">
-                            </div>
-
-                            <button type="submit" class="btn-submit-proof">
-                                Submit Proof & View Order Success
-                            </button>
-                        </div>
-                    </form>
+                <div class="divider">
+                    <span>OR</span>
                 </div>
 
-                <div class="checkout-footer">
-                    <span>Powered by <strong>ZEITH Pay</strong></span>
-                    <span>|</span>
-                    <a href="#" id="termsTrigger">Terms</a>
-                    <span>|</span>
-                    <a href="#" id="privacyTrigger">Privacy</a>
-                </div>
+                <button type="button" class="btn-pay" id="btnPay">
+                    Pay ₦<?= number_format($subtotal + 4000, 2) ?>
+                </button>
+            </div>
 
-                <!-- Modals -->
-                <div class="terms-modal-overlay" id="termsModal">
-                    <div class="terms-modal-card">
-                        <button type="button" class="terms-modal-close" id="closeTermsBtn" aria-label="Close modal">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                        <div class="terms-modal-header">
-                            <h3>Terms of Service</h3>
-                        </div>
-                        <div class="terms-modal-body">
-                            <p>Welcome to ZEITH. All transactions processed via ZEITH Pay are encrypted and authorized securely before order dispatch.</p>
-                        </div>
+            <div class="checkout-footer">
+                <span>Powered by <strong>ZEITH Pay</strong></span>
+                <span>|</span>
+                <a href="#" id="termsTrigger">Terms</a>
+                <span>|</span>
+                <a href="#" id="privacyTrigger">Privacy</a>
+            </div>
+
+            <div class="terms-modal-overlay" id="termsModal">
+                <div class="terms-modal-card">
+                    <button type="button" class="terms-modal-close" id="closeTermsBtn" aria-label="Close modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <div class="terms-modal-header">
+                        <h3>Terms of Service</h3>
+                    </div>
+                    <div class="terms-modal-body">
+                        <p>Welcome to ZEITH. All transactions processed via ZEITH Pay are encrypted and authorized securely before order dispatch.</p>
                     </div>
                 </div>
+            </div>
 
-                <div class="terms-modal-overlay" id="privacyModal">
-                    <div class="terms-modal-card">
-                        <button type="button" class="terms-modal-close" id="closePrivacyBtn" aria-label="Close modal">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                        <div class="terms-modal-header">
-                            <h3>Privacy Policy</h3>
-                        </div>
-                        <div class="terms-modal-body">
-                            <p>At ZEITH, we value your privacy and protect your personal checkout information rigorously.</p>
-                        </div>
+            <div class="terms-modal-overlay" id="privacyModal">
+                <div class="terms-modal-card">
+                    <button type="button" class="terms-modal-close" id="closePrivacyBtn" aria-label="Close modal">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <div class="terms-modal-header">
+                        <h3>Privacy Policy</h3>
+                    </div>
+                    <div class="terms-modal-body">
+                        <p>At ZEITH, we value your privacy and protect your personal checkout information rigorously.</p>
                     </div>
                 </div>
-
             </div>
         </div>
-
     </div>
+</div>
 
-    <script src="https://js.paystack.co/v2/inline.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const productPrice = <?= floatval($subtotal ?? 0) ?>;
-            const shippingOptions = document.querySelectorAll('.shipping-option');
-            const totalPriceDisplay = document.getElementById('totalPriceDisplay');
-            const shippingSummaryPrice = document.getElementById('shippingSummaryPrice');
+<script src="https://js.paystack.co/v2/inline.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const productPrice = <?= floatval($subtotal ?? 0) ?>;
+        const shippingOptions = document.querySelectorAll('.shipping-option');
+        const totalPriceDisplay = document.getElementById('totalPriceDisplay');
+        const shippingSummaryPrice = document.getElementById('shippingSummaryPrice');
+        const selectedShippingFeeInput = document.createElement('input'); // Fallback or use data attribute if needed
+        const btnPay = document.getElementById('btnPay');
+        
+        // Grab active order id stored safely from PHP session
+        const activeOrderId = "<?= htmlspecialchars($_SESSION['active_order_id'] ?? '') ?>";
 
-            // Fixed ID mappings matching your HTML form
-            const selectedShippingFeeInput = document.getElementById('selectedShippingFee');
-            const selectedShippingNameInput = document.getElementById('selectedShippingName');
-            const btnPay = document.getElementById('btnPay');
-
-            const paystackCheckoutContainer = document.getElementById('paystackCheckoutContainer');
-            const postPaymentReceiptSection = document.getElementById('postPaymentReceiptSection');
-            const paystackTransactionRef = document.getElementById('paystackTransactionRef');
-            const summarySection = document.getElementById('summarySection');
-
-            function formatCurrency(amount) {
-                return '₦' + amount.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-            }
-
-            // 1. Unified Shipping Selection Handler
-            shippingOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    shippingOptions.forEach(opt => opt.classList.remove('selected'));
-                    this.classList.add('selected');
-
-                    const radio = this.querySelector('input[type="radio"]');
-                    radio.checked = true;
-
-                    const shippingCost = parseFloat(radio.dataset.price || radio.value);
-                    const shippingName = radio.dataset.name || 'Standard Shipping';
-
-                    // Update hidden inputs for backend form submission
-                    if (selectedShippingFeeInput) selectedShippingFeeInput.value = shippingCost;
-                    if (selectedShippingNameInput) selectedShippingNameInput.value = shippingName;
-
-                    const grandTotal = productPrice + shippingCost;
-                    const formattedShipping = formatCurrency(shippingCost);
-                    const formattedGrandTotal = formatCurrency(grandTotal);
-
-                    if (shippingSummaryPrice) shippingSummaryPrice.textContent = formattedShipping;
-                    if (totalPriceDisplay) totalPriceDisplay.textContent = formattedGrandTotal;
-                    if (btnPay) btnPay.textContent = `Pay ${formattedGrandTotal}`;
-                });
+        function formatCurrency(amount) {
+            return '₦' + amount.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
             });
+        }
 
-            // 2. Paystack Inline Payment Trigger
-            const paystackPublicKey = 'pk_test_46537c2e2608da34a412e77a7baec683a5097391';
+        let currentSelectedShippingFee = 4000;
 
-            if (btnPay) {
-                btnPay.addEventListener('click', function(e) {
-                    e.preventDefault();
+        shippingOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                shippingOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
 
-                    const userEmail = "<?= htmlspecialchars($_SESSION['customer_email'] ?? 'customer@zeith.com') ?>";
-                    const currentShippingFee = selectedShippingFeeInput ? Number(selectedShippingFeeInput.value) : 4000;
-                    const totalAmountInKobo = Math.round((productPrice + currentShippingFee) * 100);
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
 
-                    if (typeof PaystackPop === 'undefined') {
-                        alert('Paystack SDK failed to load. Please check your internet connection.');
-                        return;
-                    }
+                currentSelectedShippingFee = parseFloat(radio.dataset.price || radio.value);
+                const shippingName = radio.dataset.name || 'Standard Shipping';
 
-                    const paystack = new PaystackPop();
-                    paystack.newTransaction({
-                        key: paystackPublicKey,
-                        email: userEmail,
-                        amount: totalAmountInKobo,
-                        currency: 'NGN',
-                        ref: 'ZEITH_' + Math.floor((Math.random() * 1000000000) + 1),
-                        onSuccess: function(transaction) {
-                            if (paystackTransactionRef) paystackTransactionRef.value = transaction.reference;
-                            if (summarySection) summarySection.style.opacity = '0.5';
+                const grandTotal = productPrice + currentSelectedShippingFee;
+                const formattedShipping = formatCurrency(currentSelectedShippingFee);
+                const formattedGrandTotal = formatCurrency(grandTotal);
 
-                            if (paystackCheckoutContainer) paystackCheckoutContainer.style.display = 'none';
-                            if (postPaymentReceiptSection) postPaymentReceiptSection.style.display = 'block';
-                        },
-                        onCancel: function() {
-                            alert('Payment window closed.');
-                        }
-                    });
-                });
-            }
-
-            // 3. Modals Setup
-            function setupModal(triggerId, modalId, closeBtnId) {
-                const trigger = document.getElementById(triggerId);
-                const modal = document.getElementById(modalId);
-                const closeBtn = document.getElementById(closeBtnId);
-                if (!trigger || !modal || !closeBtn) return;
-
-                trigger.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    modal.classList.add("active");
-                });
-                closeBtn.addEventListener("click", () => modal.classList.remove("active"));
-                modal.addEventListener("click", (e) => {
-                    if (e.target === modal) modal.classList.remove("active");
-                });
-            }
-
-            setupModal("termsTrigger", "termsModal", "closeTermsBtn");
-            setupModal("privacyTrigger", "privacyModal", "closePrivacyBtn");
-
-            // 4. Blurred Receipt Preview Logic
-            const receiptInput = document.getElementById('payment_receipt');
-            const receiptPreview = document.getElementById('receiptPreview');
-            const previewWrapper = document.getElementById('previewWrapper');
-            const uploadPrompt = document.getElementById('uploadPrompt');
-            const previewFileName = document.getElementById('previewFileName');
-            const btnRemoveFile = document.getElementById('btnRemoveFile');
-
-            if (receiptInput) {
-                receiptInput.addEventListener('change', function() {
-                    const file = this.files[0];
-                    if (file) {
-                        if (file.type.startsWith('image/')) {
-                            const reader = new FileReader();
-                            reader.onload = function(evt) {
-                                if (receiptPreview) receiptPreview.src = evt.target.result;
-                                if (previewWrapper) previewWrapper.style.display = 'block';
-                                if (uploadPrompt) uploadPrompt.style.display = 'none';
-                                if (previewFileName) previewFileName.textContent = file.name;
-                            };
-                            reader.readAsDataURL(file);
-                        } else {
-                            if (receiptPreview) receiptPreview.src = '';
-                            if (previewWrapper) previewWrapper.style.display = 'block';
-                            if (uploadPrompt) uploadPrompt.style.display = 'none';
-                            if (previewFileName) previewFileName.textContent = `PDF: ${file.name}`;
-                        }
-                    }
-                });
-            }
-
-            if (btnRemoveFile) {
-                btnRemoveFile.addEventListener('click', () => {
-                    receiptInput.value = '';
-                    if (receiptPreview) receiptPreview.src = '';
-                    if (previewWrapper) previewWrapper.style.display = 'none';
-                    if (uploadPrompt) uploadPrompt.style.display = 'block';
-                });
-            }
-
-            // 5. Global Brand Preloader & bfcache Fix
-            const preloader = document.getElementById('zeith-preloader');
-            const progressBar = document.querySelector('.preloader-progress-bar');
-
-            function hidePreloader() {
-                if (!preloader) return;
-                if (progressBar) progressBar.style.width = '100%';
-                setTimeout(() => {
-                    preloader.classList.remove('active');
-                    preloader.classList.add('fade-out');
-                }, 200);
-            }
-
-            hidePreloader();
-
-            window.addEventListener('pageshow', (event) => {
-                if (event.persisted) {
-                    hidePreloader();
-                }
-            });
-
-            document.addEventListener('click', function(e) {
-                const link = e.target.closest('a');
-                if (!link) return;
-
-                const href = link.getAttribute('href');
-                const target = link.getAttribute('target');
-
-                if (
-                    !href ||
-                    href.startsWith('#') ||
-                    href.startsWith('javascript:') ||
-                    target === '_blank' ||
-                    link.hasAttribute('download')
-                ) {
-                    return;
-                }
-
-                if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) {
-                    return;
-                }
-
-                if (preloader) {
-                    preloader.classList.remove('fade-out');
-                    preloader.classList.add('active');
-                    if (progressBar) {
-                        progressBar.style.width = '60%';
-                    }
-                }
+                if (shippingSummaryPrice) shippingSummaryPrice.textContent = formattedShipping;
+                if (totalPriceDisplay) totalPriceDisplay.textContent = formattedGrandTotal;
+                if (btnPay) btnPay.textContent = `Pay ${formattedGrandTotal}`;
             });
         });
-    </script>
+
+        const paystackPublicKey = 'pk_test_46537c2e2608da34a412e77a7baec683a5097391';
+
+        if (btnPay) {
+            btnPay.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const userEmail = "<?= htmlspecialchars($_SESSION['customer_email'] ?? 'customer@zeith.com') ?>";
+                const totalAmountInKobo = Math.round((productPrice + currentSelectedShippingFee) * 100);
+
+                if (typeof PaystackPop === 'undefined') {
+                    alert('Paystack SDK failed to load. Please check your internet connection.');
+                    return;
+                }
+
+                const paystack = new PaystackPop();
+                paystack.newTransaction({
+                    key: paystackPublicKey,
+                    email: userEmail,
+                    amount: totalAmountInKobo,
+                    currency: 'NGN',
+                    ref: 'ZEITH_' + Math.floor((Math.random() * 1000000000) + 1),
+                    onSuccess: function(transaction) {
+                        // Immediately redirect to your verifyPayment controller route with reference & order_id
+                        window.location.href = `/Watch_Collection/payment/verify?reference=${transaction.reference}&order_id=${activeOrderId}`;
+                    },
+                    onCancel: function() {
+                        alert('Payment window closed.');
+                    }
+                });
+            });
+        }
+
+        function setupModal(triggerId, modalId, closeBtnId) {
+            const trigger = document.getElementById(triggerId);
+            const modal = document.getElementById(modalId);
+            const closeBtn = document.getElementById(closeBtnId);
+
+            if (!trigger || !modal || !closeBtn) return;
+
+            trigger.addEventListener("click", (e) => {
+                e.preventDefault();
+                modal.classList.add("active");
+            });
+
+            closeBtn.addEventListener("click", () => modal.classList.remove("active"));
+
+            modal.addEventListener("click", (e) => {
+                if (e.target === modal) modal.classList.remove("active");
+            });
+        }
+
+        setupModal("termsTrigger", "termsModal", "closeTermsBtn");
+        setupModal("privacyTrigger", "privacyModal", "closePrivacyBtn");
+
+        const preloader = document.getElementById('zeith-preloader');
+        const progressBar = document.querySelector('.preloader-progress-bar');
+
+        function hidePreloader() {
+            if (!preloader) return;
+
+            if (progressBar) progressBar.style.width = '100%';
+
+            setTimeout(() => {
+                preloader.classList.remove('active');
+                preloader.classList.add('fade-out');
+            }, 200);
+        }
+
+        hidePreloader();
+
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                hidePreloader();
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('a');
+
+            if (!link) return;
+
+            const href = link.getAttribute('href');
+            const target = link.getAttribute('target');
+
+            if (
+                !href ||
+                href.startsWith('#') ||
+                href.startsWith('javascript:') ||
+                target === '_blank' ||
+                link.hasAttribute('download')
+            ) {
+                return;
+            }
+
+            if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) {
+                return;
+            }
+
+            if (preloader) {
+                preloader.classList.remove('fade-out');
+                preloader.classList.add('active');
+
+                if (progressBar) {
+                    progressBar.style.width = '60%';
+                }
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
