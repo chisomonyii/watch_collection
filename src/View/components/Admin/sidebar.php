@@ -51,8 +51,8 @@ function zeithIsActive($path)
         </div>
 
         <a
-            href="/Watch_Collection/admin/dashboard"
-            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/dashboard') ?>">
+            href="/Zeith/admin/dashboard"
+            class="zeith-nav-item <?= zeithIsActive('/Zeith/admin/dashboard') ?>">
             <span class="zeith-nav-icon">
                 <svg viewBox="0 0 24 24">
                     <path d="M3 10.5L12 3l9 7.5"></path>
@@ -66,8 +66,8 @@ function zeithIsActive($path)
         </a>
 
         <a
-            href="/Watch_Collection/admin/watch"
-            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/watch') ?>">
+            href="/Zeith/admin/watch"
+            class="zeith-nav-item <?= zeithIsActive('/Zeith/admin/watch') ?>">
             <span class="zeith-nav-icon">
                 <svg viewBox="0 0 24 24">
                     <rect x="3" y="5" width="18" height="14" rx="2"></rect>
@@ -81,8 +81,8 @@ function zeithIsActive($path)
         </a>
 
         <a
-            href="/Watch_Collection/admin/orders"
-            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/orders') ?>">
+            href="/Zeith/admin/orders"
+            class="zeith-nav-item <?= zeithIsActive('/Zeith/admin/orders') ?>">
             <span class="zeith-nav-icon">
                 <svg viewBox="0 0 24 24">
                     <rect x="3" y="5" width="18" height="14" rx="2"></rect>
@@ -96,8 +96,8 @@ function zeithIsActive($path)
         </a>
 
         <a
-            href="/Watch_Collection/admin/staff-requests"
-            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/staff-requests') ?>">
+            href="/Zeith/admin/staff-requests"
+            class="zeith-nav-item <?= zeithIsActive('/Zeith/admin/staff-requests') ?>">
             <span class="zeith-nav-icon">
                 <svg viewBox="0 0 24 24">
                     <path d="M3 7l9-4 9 4-9 4-9-4z"></path>
@@ -111,8 +111,8 @@ function zeithIsActive($path)
         </a>
 
         <a
-            href="/Watch_Collection/admin/staff"
-            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/staff') ?>">
+            href="/Zeith/admin/staff"
+            class="zeith-nav-item <?= zeithIsActive('/Zeith/admin/staff') ?>">
             <span class="zeith-nav-icon">
                 <svg viewBox="0 0 24 24">
                     <circle cx="9" cy="8" r="3"></circle>
@@ -127,8 +127,8 @@ function zeithIsActive($path)
         </a>
 
         <a
-            href="/Watch_Collection/admin/payment"
-            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/payment') ?>">
+            href="/Zeith/admin/payment"
+            class="zeith-nav-item <?= zeithIsActive('/Zeith/admin/payment') ?>">
             <span class="zeith-nav-icon">
                 <svg viewBox="0 0 24 24">
                     <circle cx="9" cy="8" r="3"></circle>
@@ -143,8 +143,8 @@ function zeithIsActive($path)
         </a>
 
         <a
-            href="/Watch_Collection/admin/contact"
-            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/contact') ?>">
+            href="/Zeith/admin/contact"
+            class="zeith-nav-item <?= zeithIsActive('/Zeith/admin/contact') ?>">
             <span class="zeith-nav-icon">
                 <svg viewBox="0 0 24 24">
                     <rect x="5" y="3" width="14" height="18" rx="2"></rect>
@@ -159,8 +159,8 @@ function zeithIsActive($path)
         </a>
 
         <a
-            href="/Watch_Collection/admin/news"
-            class="zeith-nav-item <?= zeithIsActive('/Watch_Collection/admin/news') ?>">
+            href="/Zeith/admin/news"
+            class="zeith-nav-item <?= zeithIsActive('/Zeith/admin/news') ?>">
             <span class="zeith-nav-icon">
                 <svg viewBox="0 0 24 24">
                     <circle cx="9" cy="8" r="3"></circle>
@@ -185,7 +185,7 @@ function zeithIsActive($path)
                 <span>Administrator</span>
             </div>
         </div>
-        <a href="http://localhost/Watch_Collection/auth/login" class="zeith-logout-btn">
+        <a href="http://localhost/Zeith/auth/login" class="zeith-logout-btn">
             <svg viewBox="0 0 24 24">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
                 <polyline points="16 17 21 12 16 7"></polyline>

@@ -25,11 +25,6 @@ $router->post('/payment/process', function() use ($checkoutController) {
     $checkoutController->processPayment();
 });
 
-// 5. Handle Post-Payment Receipt Upload (Saves receipt to DB and redirects to success)
-$router->post('/payment/upload-receipt', function() use ($checkoutController) {
-    $checkoutController->uploadPostPaymentReceipt();
-});
-
 // 6. Verify Paystack Payment Callback
 $router->get('/payment/verify', function() use ($checkoutController) {
     $checkoutController->verifyPayment();

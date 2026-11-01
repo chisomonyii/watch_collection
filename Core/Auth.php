@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
  */
 function checkAdmin() {
     if (!isset($_SESSION['user_id']) || ($_SESSION['user_role'] ?? '') !== 'admin') {
-        header('Location: /Watch_Collection/login?error=unauthorized');
+        header('Location: /Zeith/login?error=unauthorized');
         exit;
     }
 }
@@ -19,7 +19,7 @@ function checkAdmin() {
 function checkStaff() {
     $role = $_SESSION['user_role'] ?? '';
     if (!isset($_SESSION['user_id']) || ($role !== 'staff' && $role !== 'admin')) {
-        header('Location: /Watch_Collection/login?error=unauthorized');
+        header('Location: /Zeith/login?error=unauthorized');
         exit;
     }
 }

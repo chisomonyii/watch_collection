@@ -10,13 +10,13 @@
     </div>
 
     <nav class="sidebar-nav">
-        <a href="<?php echo "/Watch_Collection/staff/dashboard";?>" class="nav-item <?= ($current_page === 'overview') ? 'active' : ''; ?>">
+        <a href="<?php echo "/Zeith/staff/dashboard";?>" class="nav-item <?= ($current_page === 'overview') ? 'active' : ''; ?>">
             <i class="fa-solid fa-chart-pie"></i> <span>Overview</span>
         </a>
-        <a href="<?php echo "/Watch_Collection/staff/orders";?>" class="nav-item <?= ($current_page === 'orders') ? 'active' : ''; ?>">
+        <a href="<?php echo "/Zeith/staff/orders";?>" class="nav-item <?= ($current_page === 'orders') ? 'active' : ''; ?>">
             <i class="fa-solid fa-bag-shopping"></i> <span>Orders</span>
         </a>
-        <a href="<?php echo "/Watch_Collection/staff/settings"; ?>" class="nav-item <?= ($current_page === 'settings') ? 'active' : ''; ?>">
+        <a href="<?php echo "/Zeith/staff/settings"; ?>" class="nav-item <?= ($current_page === 'settings') ? 'active' : ''; ?>">
             <i class="fa-solid fa-user-gear"></i> <span>Settings</span>
         </a>
     </nav>

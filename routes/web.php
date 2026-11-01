@@ -9,7 +9,7 @@ $router->get('/api/search', function() use ($productController) {
     $productController->liveSearchApi();
 });
 
-$router->get('/Watch_Collection/api/search', function() use ($productController) {
+$router->get('/Zeith/api/search', function() use ($productController) {
     $productController->liveSearchApi();
 });
 
@@ -18,6 +18,6 @@ $router->get('/product/search', function() use ($productController) {
     $productController->search();
 });
 
-$router->get('/Watch_Collection/product/search', function() use ($productController) {
+$router->get('/Zeith/product/search', function() use ($productController) {
     $productController->search();
 });

@@ -16,18 +16,18 @@ $watch = $watch ?? [
 $resolveImagePath = function ($imgName) {
     $imgVal = trim($imgName ?? '');
     if (empty($imgVal)) {
-        return '/Watch_Collection/assets/image/placeholder.jpg';
+        return '/Zeith/assets/image/placeholder.jpg';
     }
     if (strpos($imgVal, 'http://') === 0 || strpos($imgVal, 'https://') === 0 || strpos($imgVal, '/') === 0) {
         return $imgVal;
     }
 
     // Check if file exists in public/uploads, otherwise fallback to assets/image
-    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $imgVal;
+    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/public/uploads/' . $imgVal;
     if (file_exists($uploadPath)) {
-        return '/Watch_Collection/public/uploads/' . $imgVal;
+        return '/Zeith/public/uploads/' . $imgVal;
     }
-    return '/Watch_Collection/assets/image/' . $imgVal;
+    return '/Zeith/assets/image/' . $imgVal;
 };
 
 // Resolve all 4 images dynamically using your original property fallbacks
@@ -1589,7 +1589,7 @@ $stockCount = (int)($watch['stock'] ?? 0);
                 </div>
 
                 <div class="accordion-item">
-                    <a href="/Watch_Collection/assets/manuals/<?= htmlspecialchars($watch['manual_file'] ?? 'default-watch-manual.pdf') ?>"
+                    <a href="/Zeith/assets/manuals/<?= htmlspecialchars($watch['manual_file'] ?? 'default-watch-manual.pdf') ?>"
                         class="accordion-header"
                         download style="text-decoration: none;">
                         <span>download user manual</span>
@@ -1769,7 +1769,7 @@ $stockCount = (int)($watch['stock'] ?? 0);
                     id: watchId,
                     name: <?= json_encode($watch['name'] ?? 'Watch') ?>,
                     price: basePrice,
-                    image: "/Watch_Collection/assets/image/" + <?= json_encode($watch['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png') ?>,
+                    image: "/Zeith/assets/image/" + <?= json_encode($watch['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png') ?>,
                     quantity: 1
                 };
 
@@ -1806,7 +1806,7 @@ $stockCount = (int)($watch['stock'] ?? 0);
                     id: watchId,
                     name: <?= json_encode($watch['name'] ?? 'Watch') ?>,
                     price: basePrice,
-                    image: "/Watch_Collection/assets/image/" + <?= json_encode($watch['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png') ?>,
+                    image: "/Zeith/assets/image/" + <?= json_encode($watch['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png') ?>,
                     quantity: 1,
                     shippingCost: selectedShippingCost,
                     shippingId: selectedShippingId
@@ -1823,7 +1823,7 @@ $stockCount = (int)($watch['stock'] ?? 0);
 
                 localStorage.setItem('zeith_cart', JSON.stringify(cart));
 
-                let checkoutUrl = `http://localhost/Watch_Collection/checkout?watch_id=${watchId}`;
+                let checkoutUrl = `http://localhost/Zeith/checkout?watch_id=${watchId}`;
                 if (selectedShippingId) {
                     checkoutUrl += `&shipping_id=${selectedShippingId}`;
                 }
@@ -1874,14 +1874,14 @@ $stockCount = (int)($watch['stock'] ?? 0);
                         id: watchId,
                         name: <?= json_encode($watch['name'] ?? 'Watch') ?>,
                         price: basePrice,
-                        image: "/Watch_Collection/assets/image/" + <?= json_encode($watch['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png') ?>,
+                        image: "/Zeith/assets/image/" + <?= json_encode($watch['image_url_1'] ?? 'Nautilus_5711-removebg-preview.png') ?>,
                         description: <?= json_encode($watch['description'] ?? '') ?>,
                         stock: watchStock
                     };
                     wishlist.push(watchItem);
 
                     // 👉 Send API fetch to update likes_count in database
-                    fetch('/Watch_Collection/api/like-watch.php', {
+                    fetch('/Zeith/api/like-watch.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -2086,7 +2086,7 @@ $stockCount = (int)($watch['stock'] ?? 0);
                 } else {
                     checkoutButton.classList.remove('disabled');
                     checkoutButton.onclick = function() {
-                        window.location.href = '/Watch_Collection/checkout';
+                        window.location.href = '/Zeith/checkout';
                     };
                 }
             }

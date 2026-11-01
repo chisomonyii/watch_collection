@@ -1024,7 +1024,7 @@ $currentDate = date('F j, Y');
                             <div class="zeith-seller-actions">
 
                                 <!-- APPROVE FORM -->
-                                <form action="/Watch_Collection/admin/staff/approve/<?= $sellerId ?>" method="POST" style="display:inline;">
+                                <form action="/Zeith/admin/staff/approve/<?= $sellerId ?>" method="POST" style="display:inline;">
                                     <button type="submit" class="zeith-btn-approve" style="/* your preferred button styling */">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                             <circle cx="12" cy="12" r="9" />
@@ -1198,10 +1198,10 @@ $currentDate = date('F j, Y');
                 // Determine route based on action
                 let endpoint = '';
                 if (selectedAction === 'approve') {
-                    endpoint = '/Watch_Collection/admin/staff/approve/' + selectedSellerId;
+                    endpoint = '/Zeith/admin/staff/approve/' + selectedSellerId;
                 } else {
                     // If you add a reject route later, plug it in here
-                    endpoint = '/Watch_Collection/admin/staff/reject/' + selectedSellerId;
+                    endpoint = '/Zeith/admin/staff/reject/' + selectedSellerId;
                 }
 
                 // Send request to backend controller to update database

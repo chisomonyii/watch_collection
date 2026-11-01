@@ -76,7 +76,7 @@ async function handleRegistration(data) {
   let registrationSuccessful = false;
 
   try {
-    const response = await fetch("/Watch_Collection/auth/register", {
+    const response = await fetch("/Zeith/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -105,7 +105,7 @@ async function handleRegistration(data) {
       showToast("Registration successful!", "success");
 
       setTimeout(function () {
-        window.location.href = "/Watch_Collection/auth/login";
+        window.location.href = "/Zeith/auth/login";
       }, 1500);
     } else {
       if (result.errors && Array.isArray(result.errors)) {

@@ -174,7 +174,7 @@
             e.preventDefault();
             const formData = new FormData(form);
 
-            fetch('/Watch_Collection/api/subscribe', {
+            fetch('/Zeith/api/subscribe', {
                 method: 'POST',
                 body: formData
             })

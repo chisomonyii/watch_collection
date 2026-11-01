@@ -753,17 +753,17 @@ $trendingWatches = $trendingWatches ?? [];
                 $resolveImagePath = function ($imgName) {
                     $imgVal = trim($imgName ?? '');
                     if (empty($imgVal)) {
-                        return '/Watch_Collection/assets/image/banner/banner1.jpg';
+                        return '/Zeith/assets/image/banner/banner1.jpg';
                     }
                     if (strpos($imgVal, 'http://') === 0 || strpos($imgVal, 'https://') === 0 || strpos($imgVal, '/') === 0) {
                         return $imgVal;
                     }
 
-                    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $imgVal;
+                    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/public/uploads/' . $imgVal;
                     if (file_exists($uploadPath)) {
-                        return '/Watch_Collection/public/uploads/' . $imgVal;
+                        return '/Zeith/public/uploads/' . $imgVal;
                     }
-                    return '/Watch_Collection/assets/image/' . $imgVal;
+                    return '/Zeith/assets/image/' . $imgVal;
                 };
 
                 for ($i = 0; $i < 2; $i++):
@@ -785,7 +785,7 @@ $trendingWatches = $trendingWatches ?? [];
                                     <span class="best-product-stars">★★★★★</span>
                                     <span class="best-product-count">(<?= htmlspecialchars($watch['rating'] ?? '5.0') ?>)</span>
                                 </div>
-                                <a href="/Watch_Collection/watch/details/<?= $watch['id'] ?>" class="best-product-button">VIEW DETAILS</a>
+                                <a href="/Zeith/watch/details/<?= $watch['id'] ?>" class="best-product-button">VIEW DETAILS</a>
                             </div>
                         </article>
                 <?php endforeach;
@@ -823,7 +823,7 @@ $trendingWatches = $trendingWatches ?? [];
                                     <span class="best-product-stars">★★★★★</span>
                                     <span class="best-product-count">(<?= htmlspecialchars($watch['rating'] ?? '5.0') ?>)</span>
                                 </div>
-                                <a href="/Watch_Collection/watch/details/<?= $watch['id'] ?>" class="best-product-button">VIEW DETAILS</a>
+                                <a href="/Zeith/watch/details/<?= $watch['id'] ?>" class="best-product-button">VIEW DETAILS</a>
                             </div>
                         </article>
                 <?php endforeach;

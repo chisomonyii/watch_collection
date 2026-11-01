@@ -6,7 +6,7 @@ const handlePost = async (post) => {
         loginButton.disabled = true;
         loginButton.textContent = "Logging in...";
 
-        const response = await fetch("/Watch_Collection/auth/login", {
+        const response = await fetch("/Zeith/auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -29,7 +29,7 @@ const handlePost = async (post) => {
             // Use the dynamic redirect URL returned from Auth::storeLogin()
             // Falls back to staff dashboard if redirect isn't specified
             setTimeout(() => {
-                window.location.href = data.redirect || "/Watch_Collection/staff/dashboard";
+                window.location.href = data.redirect || "/Zeith/staff/dashboard";
             }, 1500); // Reduced slightly for smoother UX
 
         } else {

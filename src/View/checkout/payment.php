@@ -10,7 +10,7 @@ $subtotal = floatval($_SESSION['order_subtotal'] ?? 0);
 $activeOrderId = $_SESSION['active_order_id'] ?? null;
 
 if (!$activeOrderId) {
-    header('Location: /Watch_Collection/');
+    header('Location: /Zeith/');
     exit;
 }
 ?>
@@ -21,8 +21,8 @@ if (!$activeOrderId) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZEITH - Payment</title>
-    <link rel="stylesheet" href="/Watch_Collection/assets/css/header.css">
-    <link rel="stylesheet" href="/Watch_Collection/assets/css/footer.css">
+    <link rel="stylesheet" href="/Zeith/assets/css/header.css">
+    <link rel="stylesheet" href="/Zeith/assets/css/footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
@@ -668,7 +668,7 @@ if (!$activeOrderId) {
     </div>
 <div class="checkout-wrapper">
     <div class="summary-section" id="summarySection">
-        <a href="/Watch_Collection/checkout" class="back-link">
+        <a href="/Zeith/checkout" class="back-link">
             <i class="fa-solid fa-arrow-left"></i> Back to Review
         </a>
 
@@ -850,7 +850,7 @@ if (!$activeOrderId) {
                     ref: 'ZEITH_' + Math.floor((Math.random() * 1000000000) + 1),
                     onSuccess: function(transaction) {
                         // Immediately redirect to your verifyPayment controller route with reference & order_id
-                        window.location.href = `/Watch_Collection/payment/verify?reference=${transaction.reference}&order_id=${activeOrderId}`;
+                        window.location.href = `/Zeith/payment/verify?reference=${transaction.reference}&order_id=${activeOrderId}`;
                     },
                     onCancel: function() {
                         alert('Payment window closed.');

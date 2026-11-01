@@ -478,7 +478,7 @@
             <?php if (!empty($featuredReviews)): ?>
                 <?php foreach ($featuredReviews as $review): 
                     $reviewImg = !empty($review['image_url']) 
-                        ? "/Watch_Collection/assets/image/reviews/" . htmlspecialchars($review['image_url']) 
+                        ? "/Zeith/assets/image/reviews/" . htmlspecialchars($review['image_url']) 
                         : "assets/image/reviews/review3.jpg";
                 ?>
                     <article class="review-card">

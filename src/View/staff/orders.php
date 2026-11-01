@@ -125,7 +125,7 @@ function getStatusClass($statusStr)
                         $statusClass = getStatusClass($ord['order_status'] ?? '');
                         $statusLabel = htmlspecialchars($ord['order_status'] ?? 'Pending Verification', ENT_QUOTES, 'UTF-8');
                         ?>
-                        <a href="/Watch_Collection/staff/orders/<?= $ord['id'] ?>"
+                        <a href="/Zeith/staff/orders/<?= $ord['id'] ?>"
                             class="zeith-order-row <?= $isSelected ? 'active' : '' ?>"
                             data-order-id="<?= htmlspecialchars($ord['order_number'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
                             data-status="<?= $statusClass ?>"
@@ -151,7 +151,7 @@ function getStatusClass($statusStr)
             <?php
             $selStatusClass = getStatusClass($selectedOrder['order_status'] ?? '');
             $selStatusText  = htmlspecialchars($selectedOrder['order_status'] ?? 'Pending Verification', ENT_QUOTES, 'UTF-8');
-            $receiptUrl     = $selectedOrder['receipt_url'] ?? '/Watch_Collection/assets/images/placeholder.jpg';
+            $receiptUrl     = $selectedOrder['receipt_url'] ?? '/Zeith/assets/images/placeholder.jpg';
             ?>
             <aside class="zeith-order-details">
                 <div class="zeith-details-header">
@@ -243,7 +243,7 @@ function getStatusClass($statusStr)
                         <h3>Update Order Status</h3>
                         <span>Operational Access</span>
                     </div>
-                    <form action="/Watch_Collection/staff/orders/update/<?= $selectedOrder['id'] ?>" method="POST" class="zeith-status-update">
+                    <form action="/Zeith/staff/orders/update/<?= $selectedOrder['id'] ?>" method="POST" class="zeith-status-update">
                         <select name="order_status" id="zeithStatusSelect">
                             <option value="Pending Verification" <?= strcasecmp($selectedOrder['order_status'] ?? '', 'Pending Verification') === 0 ? 'selected' : '' ?>>Pending Verification</option>
                             <option value="Processing" <?= strcasecmp($selectedOrder['order_status'] ?? '', 'Processing') === 0 ? 'selected' : '' ?>>Processing</option>
@@ -318,7 +318,7 @@ function getStatusClass($statusStr)
                 <button type="button" class="zeith-modal-close" id="zeithCloseReceipt" aria-label="Close receipt">&times;</button>
             </div>
 
-            <form action="/Watch_Collection/staff/orders/update-payment/<?= $selectedOrder['id'] ?>" method="POST">
+            <form action="/Zeith/staff/orders/update-payment/<?= $selectedOrder['id'] ?>" method="POST">
                 <div class="zeith-receipt-body">
                     <div class="zeith-receipt-preview">
                         <img src="<?= htmlspecialchars($receiptUrl, ENT_QUOTES, 'UTF-8') ?>" alt="Customer payment receipt">

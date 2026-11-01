@@ -189,7 +189,7 @@ $orderId = $_GET['order_id'] ?? '';
             </div>
         <?php endif; ?>
 
-        <form action="/Watch_Collection/review/store" method="POST" enctype="multipart/form-data" id="reviewForm">
+        <form action="/Zeith/review/store" method="POST" enctype="multipart/form-data" id="reviewForm">
             <input type="hidden" name="order_id" value="<?= htmlspecialchars($orderId) ?>">
 
             <div class="form-group">

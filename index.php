@@ -12,7 +12,7 @@ use App\Helpers\View;
 $router = new Router();
 
 // Set base path for XAMPP subfolder
-$router->setBasePath('/Watch_Collection');
+$router->setBasePath('/Zeith');
 
 $router->setNamespace("App\Controller");
 
@@ -28,10 +28,9 @@ require_once __DIR__ . '/routes/contact.php';
 require_once __DIR__ . '/routes/admin.php'; // Fixed path
 
 // Wishlist Page Route
-$router->get('/user/wishlist', function () {
+$router->get('/wishlist', function () {
     View::displayView('user/wishlist.php');
 });
-
 // API Endpoint for Wishlist Items Hydration
 $router->post('/api/wishlist-items', 'Home@getWishlistItems');
 
@@ -45,10 +44,10 @@ $router->set404(function () {
 });
 
 // View route for watch catalog
-$router->get('/user/watch', 'Watch@showWatchPage');
+$router->get('/watch', 'Watch@showWatchPage');
 
 // View route for brand/collection pages
-$router->get('/user/watch/collection/{name}', 'Collection@showByPath');
+$router->get('/watch/collection/{name}', 'Collection@showByPath');
 
 // API route to get watch details for saved items
 $router->post('/api/watch-items', 'Watch@getCartItems');

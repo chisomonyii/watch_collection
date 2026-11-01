@@ -1052,7 +1052,7 @@ $sideStories = $sideStories ?? [
 
             <!-- HEADER -->
             <header class="zeith-news-header">
-                <a href="/Watch_Collection/" class="zeith-news-logo">
+                <a href="/Zeith/" class="zeith-news-logo">
                     <span class="zeith-news-logo-small">Zeith's</span>
                     <span class="zeith-news-logo-main">News</span>
                 </a>
@@ -1074,13 +1074,13 @@ $sideStories = $sideStories ?? [
                         <?= htmlspecialchars($featured['summary']) ?>
                     </p>
                     <!-- Hero & Feature Story Links -->
-                    <a href="/Watch_Collection/news/<?= htmlspecialchars($featured['slug'] ?? 'fury-vs-usyk') ?>" class="zeith-news-read-button">
+                    <a href="/Zeith/news/<?= htmlspecialchars($featured['slug'] ?? 'fury-vs-usyk') ?>" class="zeith-news-read-button">
                         Read Full Story
                     </a>
                 </div>
 
                 <div class="zeith-news-hero-image">
-                    <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($featured['image_url']) ?>" alt="Zeith luxury watch editorial">
+                    <img src="/Zeith/assets/image/<?= htmlspecialchars($featured['image_url']) ?>" alt="Zeith luxury watch editorial">
                 </div>
             </section>
 
@@ -1091,7 +1091,7 @@ $sideStories = $sideStories ?? [
                 <article class="zeith-feature-story">
                     <div class="zeith-feature-image">
                         <span class="zeith-feature-label">Feature Story</span>
-                        <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($featured['image_url']) ?>" alt="Zeith watch feature">
+                        <img src="/Zeith/assets/image/<?= htmlspecialchars($featured['image_url']) ?>" alt="Zeith watch feature">
                     </div>
                     <div class="zeith-story-meta">
                         <?= date('F j, Y', strtotime($featured['created_at'] ?? 'now')) ?> &nbsp;&nbsp; Zeith Editorial
@@ -1102,7 +1102,7 @@ $sideStories = $sideStories ?? [
                     <p class="zeith-story-excerpt">
                         <?= htmlspecialchars($featured['summary']) ?>
                     </p>
-                    <a href="/Watch_Collection/news/<?= htmlspecialchars($featured['slug'] ?? 'fury-vs-usyk') ?>" class="zeith-story-link">
+                    <a href="/Zeith/news/<?= htmlspecialchars($featured['slug'] ?? 'fury-vs-usyk') ?>" class="zeith-story-link">
                         Read Full Story
                     </a>
                 </article>
@@ -1116,7 +1116,7 @@ $sideStories = $sideStories ?? [
                                     <?= $index + 1 ?>
                                 </div>
                                 <div class="zeith-side-image">
-                                    <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($story['image_url']) ?>" alt="Watch story">
+                                    <img src="/Zeith/assets/image/<?= htmlspecialchars($story['image_url']) ?>" alt="Watch story">
                                 </div>
                                 <div class="zeith-side-content">
                                     <div class="zeith-side-category">
@@ -1128,7 +1128,7 @@ $sideStories = $sideStories ?? [
                                     <p class="zeith-side-excerpt">
                                         <?= htmlspecialchars($story['summary']) ?>
                                     </p>
-                                    <a href="/Watch_Collection/news/<?= htmlspecialchars($story['slug']) ?>" class="zeith-side-link">
+                                    <a href="/Zeith/news/<?= htmlspecialchars($story['slug']) ?>" class="zeith-side-link">
                                         Read Full Story
                                     </a>
                                 </div>

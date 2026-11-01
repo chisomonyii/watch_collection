@@ -53,7 +53,7 @@ $availablePercentage = $availablePercentage ?? 0;
             <div class="staff-stat-number"><?= $pendingCount ?></div>
             <div class="staff-stat-bottom">
                 <strong>Pending Verification</strong>
-                <a href="/Watch_Collection/staff/orders?status=pending">
+                <a href="/Zeith/staff/orders?status=pending">
                     View Orders
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
@@ -70,7 +70,7 @@ $availablePercentage = $availablePercentage ?? 0;
             <div class="staff-stat-number"><?= $processingCount ?></div>
             <div class="staff-stat-bottom">
                 <strong>Processing Orders</strong>
-                <a href="/Watch_Collection/staff/orders?status=processing">
+                <a href="/Zeith/staff/orders?status=processing">
                     View Orders
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
@@ -87,7 +87,7 @@ $availablePercentage = $availablePercentage ?? 0;
             <div class="staff-stat-number"><?= $dispatchedCount ?></div>
             <div class="staff-stat-bottom">
                 <strong>Dispatched Orders</strong>
-                <a href="/Watch_Collection/staff/orders?status=dispatched">
+                <a href="/Zeith/staff/orders?status=dispatched">
                     View Orders
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
@@ -104,7 +104,7 @@ $availablePercentage = $availablePercentage ?? 0;
             <div class="staff-stat-number"><?= $deliveredCount ?></div>
             <div class="staff-stat-bottom">
                 <strong>Delivered Orders</strong>
-                <a href="/Watch_Collection/staff/orders?status=delivered">
+                <a href="/Zeith/staff/orders?status=delivered">
                     View Orders
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
@@ -120,7 +120,7 @@ $availablePercentage = $availablePercentage ?? 0;
                     <h2>Order Status</h2>
                     <p>Current operational order breakdown.</p>
                 </div>
-                <a href="/Watch_Collection/staff/orders" class="staff-panel-link">
+                <a href="/Zeith/staff/orders" class="staff-panel-link">
                     View All
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
@@ -176,7 +176,7 @@ $availablePercentage = $availablePercentage ?? 0;
             </div>
 
             <div class="staff-actions-list">
-                <a href="/Watch_Collection/staff/orders" class="staff-action-item">
+                <a href="/Zeith/staff/orders" class="staff-action-item">
                     <span class="staff-action-icon blue">
                         <i class="fa-solid fa-cart-shopping"></i>
                     </span>
@@ -187,7 +187,7 @@ $availablePercentage = $availablePercentage ?? 0;
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
 
-                <a href="/Watch_Collection/staff/reviews" class="staff-action-item">
+                <a href="/Zeith/staff/reviews" class="staff-action-item">
                     <span class="staff-action-icon orange">
                         <i class="fa-solid fa-star"></i>
                     </span>
@@ -198,7 +198,7 @@ $availablePercentage = $availablePercentage ?? 0;
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
 
-                <a href="/Watch_Collection/staff/contact" class="staff-action-item">
+                <a href="/Zeith/staff/contact" class="staff-action-item">
                     <span class="staff-action-icon purple">
                         <i class="fa-solid fa-envelope"></i>
                     </span>
@@ -219,7 +219,7 @@ $availablePercentage = $availablePercentage ?? 0;
                 <h2>Recent Orders</h2>
                 <p>Latest orders requiring operational attention.</p>
             </div>
-            <a href="/Watch_Collection/staff/orders" class="staff-panel-link">
+            <a href="/Zeith/staff/orders" class="staff-panel-link">
                 View All Orders
                 <i class="fa-solid fa-arrow-right"></i>
             </a>
@@ -273,7 +273,7 @@ $availablePercentage = $availablePercentage ?? 0;
                     <h2>Inventory Snapshot</h2>
                     <p>Current watch availability.</p>
                 </div>
-                <a href="/Watch_Collection/staff/watch" class="staff-panel-link">
+                <a href="/Zeith/staff/watch" class="staff-panel-link">
                     View Inventory
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>

@@ -53,7 +53,7 @@ class Home
 
     public function displaywishlist()
     {
-        View::displayView('user/wishlist.php');
+        View::displayView('wishlist.php');
     }
 
     public static function getWishlistItems()

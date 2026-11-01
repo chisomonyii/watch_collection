@@ -881,7 +881,7 @@
 
         checkoutButton?.addEventListener('click', () => {
             if (readCart().length === 0) return;
-            window.location.href = '/Watch_Collection/checkout';
+            window.location.href = '/Zeith/checkout';
         });
 
         window.addEventListener('storage', event => {

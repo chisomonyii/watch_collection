@@ -486,7 +486,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Top Bar Navigation -->
         <div class="cart-top-bar">
-            <a href="/Watch_Collection/user/watch" class="btn-back">
+            <a href="/Zeith/watch" class="btn-back">
                 <i class="fa-solid fa-arrow-left"></i> Back to Watches
             </a>
         </div>
@@ -507,7 +507,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h2>Enter your details</h2>
                     <p class="sub-text">All fields are required.</p>
 
-                    <form id="checkoutForm" action="/Watch_Collection/checkout/process" method="POST">
+                    <form id="checkoutForm" action="/Zeith/checkout/process" method="POST">
                         <div class="form-row-split">
                             <div class="form-group" style="margin-bottom: 0;">
                                 <input type="text" name="fullname" class="form-input" placeholder="Full name" required>

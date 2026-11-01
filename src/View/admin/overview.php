@@ -1444,7 +1444,7 @@
            </section>
 
            <section class="quick-grid">
-               <a href="/Watch_Collection/admin/orders" class="quick-card">
+               <a href="/Zeith/admin/orders" class="quick-card">
                    <div class="quick-icon icon-orange">
                        <i class="fa-solid fa-clock"></i>
                    </div>
@@ -1455,7 +1455,7 @@
                    <i class="fa-solid fa-chevron-right quick-arrow"></i>
                </a>
 
-               <a href="/Watch_Collection/admin/staff-requests" class="quick-card">
+               <a href="/Zeith/admin/staff-requests" class="quick-card">
                    <div class="quick-icon icon-purple">
                        <i class="fa-solid fa-user-check"></i>
                    </div>
@@ -1485,7 +1485,7 @@
                            <h2 class="panel-title">Order Status</h2>
                            <p class="panel-subtitle">Current order distribution.</p>
                        </div>
-                       <a href="/Watch_Collection/admin/orders" class="panel-link">View Orders</a>
+                       <a href="/Zeith/admin/orders" class="panel-link">View Orders</a>
                    </div>
 
                    <div class="order-status-list">
@@ -1546,7 +1546,7 @@
                        <h2 class="panel-title">Recent Orders</h2>
                        <p class="panel-subtitle">Latest customer orders requiring attention.</p>
                    </div>
-                   <a href="/Watch_Collection/admin/orders" class="panel-link">View All Orders</a>
+                   <a href="/Zeith/admin/orders" class="panel-link">View All Orders</a>
                </div>
 
                <div class="table-wrap">
@@ -1656,7 +1656,7 @@
                                                    <button type="button" class="shipping-edit-btn" onclick="openEditShippingModal(<?= $sm['id'] ?>, '<?= htmlspecialchars($sm['method_name'], ENT_QUOTES) ?>', '<?= htmlspecialchars($sm['description'], ENT_QUOTES) ?>', <?= $sm['price'] ?>)" title="Edit shipping">
                                                        <i class="fa-solid fa-pen"></i>
                                                    </button>
-                                                   <a href="/Watch_Collection/admin/shipping/delete/<?= $sm['id'] ?>" class="shipping-delete-btn" onclick="return confirm('Are you sure you want to delete this shipping method?');" title="Delete shipping" style="display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+                                                   <a href="/Zeith/admin/shipping/delete/<?= $sm['id'] ?>" class="shipping-delete-btn" onclick="return confirm('Are you sure you want to delete this shipping method?');" title="Delete shipping" style="display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
                                                        <i class="fa-solid fa-trash"></i>
                                                    </a>
                                                </div>
@@ -1687,7 +1687,7 @@
                            </button>
                        </div>
 
-                       <form id="shippingForm" action="/Watch_Collection/admin/shipping/store" method="POST">
+                       <form id="shippingForm" action="/Zeith/admin/shipping/store" method="POST">
                            <div class="shipping-form-group">
                                <label for="shippingMethodName">Method Name</label>
                                <input type="text" name="method_name" id="shippingMethodName" placeholder="e.g. Lagos Island 3" required>
@@ -1722,7 +1722,7 @@
        <script>
            function openAddShippingModal() {
                document.getElementById('shippingModalTitle').textContent = 'Add Shipping Method';
-               document.getElementById('shippingForm').action = '/Watch_Collection/admin/shipping/store';
+               document.getElementById('shippingForm').action = '/Zeith/admin/shipping/store';
                document.getElementById('shippingMethodName').value = '';
                document.getElementById('shippingDescription').value = '';
                document.getElementById('shippingPrice').value = '';
@@ -1732,7 +1732,7 @@
 
            function openEditShippingModal(id, name, description, price) {
                document.getElementById('shippingModalTitle').textContent = 'Edit Shipping Method';
-               document.getElementById('shippingForm').action = '/Watch_Collection/admin/shipping/update/' + id;
+               document.getElementById('shippingForm').action = '/Zeith/admin/shipping/update/' + id;
                document.getElementById('shippingMethodName').value = name;
                document.getElementById('shippingDescription').value = description;
                document.getElementById('shippingPrice').value = price;

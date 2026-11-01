@@ -1513,7 +1513,7 @@ $featuredArticles = $stats['featured'];
                                     <?php if (!empty($imageUrl)): ?>
 
                                         <img
-                                            src="/Watch_Collection/assets/image/<?= $imageUrl ?>"
+                                            src="/Zeith/assets/image/<?= $imageUrl ?>"
                                             alt="<?= $title ?>"
                                             loading="lazy">
 
@@ -2059,7 +2059,7 @@ $featuredArticles = $stats['featured'];
             if (modalTitle) modalTitle.textContent = 'Create New Article';
             if (articleForm) {
                 articleForm.reset();
-                articleForm.action = '/Watch_Collection/admin/news/store';
+                articleForm.action = '/Zeith/admin/news/store';
             }
             if (articleStatus) articleStatus.value = 'draft';
             if (articleFeatured) articleFeatured.checked = false;
@@ -2081,7 +2081,7 @@ $featuredArticles = $stats['featured'];
             if (modalTitle) modalTitle.textContent = 'Edit Article';
 
             if (articleForm && editingArticleId) {
-                articleForm.action = '/Watch_Collection/admin/news/update/' + editingArticleId;
+                articleForm.action = '/Zeith/admin/news/update/' + editingArticleId;
             }
 
             if (articleTitle) articleTitle.value = article.title || button.getAttribute('data-title') || '';
@@ -2149,7 +2149,7 @@ $featuredArticles = $stats['featured'];
         if (deleteConfirmBtn) {
             deleteConfirmBtn.addEventListener('click', function() {
                 if (deletingArticleId) {
-                    window.location.href = `/Watch_Collection/admin/news/delete/${deletingArticleId}`;
+                    window.location.href = `/Zeith/admin/news/delete/${deletingArticleId}`;
                 }
             });
         }

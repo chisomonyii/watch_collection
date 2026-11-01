@@ -1437,7 +1437,7 @@ $contacts = $_SESSION['admin_contacts'] ?? [];
                             <div class="inquiry-actions">
                                 <?php if ($isAdmin): ?>
                                     <?php if (!$isRead): ?>
-                                        <a href="/Watch_Collection/admin/contact/read/<?= $contact['id'] ?>"
+                                        <a href="/Zeith/admin/contact/read/<?= $contact['id'] ?>"
                                             class="inquiry-btn mark-read"
                                             style="text-decoration: none;"
                                             onclick="removeCard(event, this)">
@@ -1469,7 +1469,7 @@ $contacts = $_SESSION['admin_contacts'] ?? [];
     <!-- Message Modal Form -->
     <div class="message-modal" id="messageModal">
         <div class="message-modal-box">
-            <form action="/Watch_Collection/admin/contact/send-message" method="POST" id="sendMessageForm">
+            <form action="/Zeith/admin/contact/send-message" method="POST" id="sendMessageForm">
                 <div class="message-modal-header">
                     <h3>Message Customer</h3>
                     <button type="button" class="close-message" onclick="closeMessageModal()" aria-label="Close">✕</button>

@@ -1124,7 +1124,7 @@ use App\Helpers\View;
             <div class="hero-text-column">
                 <h1 class="hero-title">Watch<br>Collection</h1>
                 <p class="hero-description">Discover precision timepieces crafted with exceptional luxury, sophisticated engineering, and timeless style.</p>
-                <a href="/Watch_Collection/user/watch" class="hero-btn">See Products</a>
+                <a href="/Zeith/watch" class="hero-btn">See Products</a>
             </div>
 
             <!-- Right Column: Watch Showcase Card -->
@@ -1157,18 +1157,18 @@ use App\Helpers\View;
                     $resolveImagePath = function ($imgName) {
                         $imgVal = trim($imgName ?? '');
                         if (empty($imgVal)) {
-                            return '/Watch_Collection/assets/image/placeholder.jpg';
+                            return '/Zeith/assets/image/placeholder.jpg';
                         }
                         if (strpos($imgVal, 'http://') === 0 || strpos($imgVal, 'https://') === 0 || strpos($imgVal, '/') === 0) {
                             return $imgVal;
                         }
 
                         // Check if file exists in public/uploads, otherwise fallback to assets/image
-                        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $imgVal;
+                        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/public/uploads/' . $imgVal;
                         if (file_exists($uploadPath)) {
-                            return '/Watch_Collection/public/uploads/' . $imgVal;
+                            return '/Zeith/public/uploads/' . $imgVal;
                         }
-                        return '/Watch_Collection/assets/image/' . $imgVal;
+                        return '/Zeith/assets/image/' . $imgVal;
                     };
 
                     // Resolve all 4 images dynamically
@@ -1226,7 +1226,7 @@ use App\Helpers\View;
                             <h3><?= htmlspecialchars($watch['name']) ?></h3>
                             <p><?= htmlspecialchars($watch['description']) ?></p>
 
-                            <a href="/Watch_Collection/watch/details/<?= $watch['id'] ?>" class="view-details-link">
+                            <a href="/Zeith/watch/details/<?= $watch['id'] ?>" class="view-details-link">
                                 View details &rarr;
                             </a>
 
@@ -1238,7 +1238,7 @@ use App\Helpers\View;
             <?php endif; ?>
         </div>
 
-        <a href="/Watch_Collection/user/watch" class="view-all"> <button class="arrive-btn search-btn">
+        <a href="/Zeith/watch" class="view-all"> <button class="arrive-btn search-btn">
                 View all
             </button>
         </a>
@@ -1549,7 +1549,7 @@ use App\Helpers\View;
 
                     // 👉 ADD THE FETCH REQUEST HERE:
                     // This fires only when a user likes/favorites the watch, incrementing likes_count in the DB
-                    fetch('/Watch_Collection/api/like-watch.php', {
+                    fetch('/Zeith/api/like-watch.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -1744,7 +1744,7 @@ use App\Helpers\View;
             // ----------------------------------------------------
             checkoutButton?.addEventListener('click', () => {
                 if (readCart().length === 0) return;
-                window.location.href = '/Watch_Collection/checkout';
+                window.location.href = '/Zeith/checkout';
             });
 
             // Initial Setup

@@ -67,7 +67,7 @@ $isPending = (($user['status'] ?? '') === 'pending');
             <div class="zeith-approval-actions">
 
                 <a
-                    href="/Watch_Collection/user/watch"
+                    href="/Zeith/watch"
                     class="zeith-approval-btn zeith-approval-primary">
 
                     Browse Watches
@@ -112,7 +112,7 @@ $isPending = (($user['status'] ?? '') === 'pending');
                     Need help?
                 </span>
 
-                <a href="/Watch_Collection/contact">
+                <a href="/Zeith/contact">
                     Contact Support
                 </a>
 
@@ -776,7 +776,7 @@ $isPending = (($user['status'] ?? '') === 'pending');
 
         if (!button) {
             // Fallback if button isn't found, reload directly
-            window.location.href = '/Watch_Collection/staff/dashboard';
+            window.location.href = '/Zeith/staff/dashboard';
             return;
         }
 
@@ -793,7 +793,7 @@ $isPending = (($user['status'] ?? '') === 'pending');
 
         // Brief delay to display the loading state, then reload the dashboard route
         setTimeout(function() {
-            window.location.href = '/Watch_Collection/staff/dashboard';
+            window.location.href = '/Zeith/staff/dashboard';
         }, 600);
     }
 </script>

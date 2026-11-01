@@ -432,10 +432,10 @@
 
         <!-- Left Group: Logo & Search Bar -->
         <div class="zeith-left-group">
-            <a href="/Watch_Collection/" class="zeith-brand-logo">ZEITH</a>
+            <a href="/Zeith/" class="zeith-brand-logo">ZEITH</a>
 
             <div class="zeith-search-container">
-                <form action="/Watch_Collection/product/search" method="GET" class="zeith-search-box">
+                <form action="/Zeith/product/search" method="GET" class="zeith-search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="liveSearchInput" name="q" placeholder="Search through 20,000 watches" autocomplete="off">
                     <button type="button" id="clearSearchBtn" style="display: none; background: none; border: none; cursor: pointer; color: #555555; padding: 0 4px;"><i class="fa-solid fa-xmark"></i></button>
@@ -450,15 +450,15 @@
         <div class="zeith-right-group">
             <nav>
                 <ul class="zeith-nav-menu">
-                    <li><a href="/Watch_Collection/user/watch" class="zeith-nav-link">Watches</a></li>
-                    <li><a href="/Watch_Collection/news" class="zeith-nav-link">News</a></li>
-                    <li><a href="/Watch_Collection/user/contact" class="zeith-nav-link">Contact</a></li>
+                    <li><a href="/Zeith/watch" class="zeith-nav-link">Watches</a></li>
+                    <li><a href="/Zeith/news" class="zeith-nav-link">News</a></li>
+                    <li><a href="/Zeith/contact" class="zeith-nav-link">Contact</a></li>
                 </ul>
             </nav>
 
             <div class="zeith-action-icons">
                 <!-- Wishlist Heart Icon -->
-                <a href="/Watch_Collection/user/wishlist" class="zeith-icon-btn" aria-label="Wishlist">
+                <a href="/Zeith/wishlist" class="zeith-icon-btn" aria-label="Wishlist">
                     <i class="fa-regular fa-heart"></i>
                 </a>
 
@@ -474,9 +474,9 @@
     <!-- Mobile Drawer -->
     <div class="zeith-mobile-menu" id="zeith-mobile-dropdown">
         <ul class="zeith-mobile-nav-list">
-            <li><a href="/Watch_Collection/user/watch" class="zeith-mobile-nav-link">Watches</a></li>
-            <li><a href="/Watch_Collection/news" class="zeith-mobile-nav-link">News</a></li>
-            <li><a href="/Watch_Collection/contact" class="zeith-mobile-nav-link">Contact</a></li>
+            <li><a href="/Zeith/watch" class="zeith-mobile-nav-link">Watches</a></li>
+            <li><a href="/Zeith/news" class="zeith-mobile-nav-link">News</a></li>
+            <li><a href="/Zeith/contact" class="zeith-mobile-nav-link">Contact</a></li>
         </ul>
     </div>
 </div>
@@ -533,7 +533,7 @@
                 }
 
                 // FIXED: Absolute path so it never breaks on sub-pages
-                fetch(`/Watch_Collection/api/search?q=${encodeURIComponent(query)}`)
+                fetch(`/Zeith/api/search?q=${encodeURIComponent(query)}`)
                     .then(response => response.json())
                     .then(data => {
                         let html = `
@@ -548,9 +548,9 @@
                                 let formattedPrice = '₦' + parseFloat(product.price).toLocaleString();
 
                                 // Add your actual image folder path here (e.g., 'assets/images/' or 'uploads/')
-                                let imgSrc = product.image_url_1 ? `/Watch_Collection/assets/image/${product.image_url_1}` : '/Watch_Collection/assets/images/placeholder.jpg';
+                                let imgSrc = product.image_url_1 ? `/Zeith/assets/image/${product.image_url_1}` : '/Zeith/assets/images/placeholder.jpg';
                                 html += `
-                               <a href="/Watch_Collection/watch/details/${product.id}" class="zeith-dropdown-item">
+                               <a href="/Zeith/watch/details/${product.id}" class="zeith-dropdown-item">
                                    <img src="${imgSrc}" alt="${escapeHtml(product.name)}" class="zeith-dropdown-img">
                                    <div class="zeith-dropdown-info">
                                        <div class="zeith-dropdown-title">${escapeHtml(product.name)}</div>
@@ -564,7 +564,7 @@
                             // FIXED: Point to /product/search instead of /search
                             html += `
                                 <div class="zeith-dropdown-footer">
-                                    <a href="/Watch_Collection/product/search?q=${encodeURIComponent(query)}" class="zeith-dropdown-viewall">View all</a>
+                                    <a href="/Zeith/product/search?q=${encodeURIComponent(query)}" class="zeith-dropdown-viewall">View all</a>
                                 </div>
                             `;
                         } else {

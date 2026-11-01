@@ -1956,14 +1956,14 @@ $watches = $watches ?? \App\Models\Watch::getAll();
             <div class="property-sidebar-widget">
                 <h3 class="property-widget-title">THE <span class="zeith-span">ZEITH</span> ASSETS</h3>
                 <ul class="property-category-list">
-                    <li><a href="/Watch_Collection/user/watch/collection/hublot">Hublot</a></li>
-                    <li><a href="/Watch_Collection/user/watch/collection/g-shock">G-Shock</a></li>
-                    <li><a href="/Watch_Collection/user/watch/collection/rolex">Rolex</a></li>
-                    <li><a href="/Watch_Collection/user/watch/collection/omega">Omega</a></li>
-                    <li><a href="/Watch_Collection/user/watch/collection/daniel-klein">Daniel Klein</a></li>
-                    <li><a href="/Watch_Collection/user/watch/collection/asorock">Asorock</a></li>
-                    <li><a href="/Watch_Collection/user/watch/collection/bulova-watches">Bulova Watches</a></li>
-                    <li><a href="/Watch_Collection/user/watch/collection/patek-philippe-cartier">Patek Philippe & Cartier</a></li>
+                    <li><a href="/Zeith/watch/collection/hublot">Hublot</a></li>
+                    <li><a href="/Zeith/watch/collection/g-shock">G-Shock</a></li>
+                    <li><a href="/Zeith/watch/collection/rolex">Rolex</a></li>
+                    <li><a href="/Zeith/watch/collection/omega">Omega</a></li>
+                    <li><a href="/Zeith/watch/collection/daniel-klein">Daniel Klein</a></li>
+                    <li><a href="/Zeith/watch/collection/asorock">Asorock</a></li>
+                    <li><a href="/Zeith/watch/collection/bulova-watches">Bulova Watches</a></li>
+                    <li><a href="/Zeith/watch/collection/patek-philippe-cartier">Patek Philippe & Cartier</a></li>
                 </ul>
             </div>
 
@@ -2019,18 +2019,18 @@ $watches = $watches ?? \App\Models\Watch::getAll();
 
                         $resolvePath = function ($val) {
                             if (empty($val)) {
-                                return '/Watch_Collection/assets/image/placeholder.jpg';
+                                return '/Zeith/assets/image/placeholder.jpg';
                             }
                             if (strpos($val, 'http://') === 0 || strpos($val, 'https://') === 0 || strpos($val, '/') === 0) {
                                 return $val;
                             }
 
                             // Check if file exists in public/uploads, otherwise fallback to assets/image
-                            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $val;
+                            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/public/uploads/' . $val;
                             if (file_exists($uploadPath)) {
-                                return '/Watch_Collection/public/uploads/' . $val;
+                                return '/Zeith/public/uploads/' . $val;
                             }
-                            return '/Watch_Collection/assets/image/' . ltrim($val, '/');
+                            return '/Zeith/assets/image/' . ltrim($val, '/');
                         };
 
                         $img1 = $resolvePath($rawImg1);
@@ -2089,7 +2089,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                             <!-- FOOTER ACTIONS (Keeps standard "Add" button visible) -->
                             <div class="card-footer-actions">
                                 <button type="button" class="add-button">Add</button>
-                                <a href="/Watch_Collection/watch/details/<?= $watchId; ?>" class="view-details-link">View details &rarr;</a>
+                                <a href="/Zeith/watch/details/<?= $watchId; ?>" class="view-details-link">View details &rarr;</a>
                             </div>
 
                         </div>
@@ -2352,7 +2352,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                     wishlist.push(watchId);
 
                     // 👉 Send API fetch to update likes_count in database for Trending section
-                    fetch('/Watch_Collection/api/like-watch.php', {
+                    fetch('/Zeith/api/like-watch.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -2607,7 +2607,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
 
             checkoutButton?.addEventListener('click', () => {
                 if (readCart().length === 0) return;
-                window.location.href = '/Watch_Collection/checkout';
+                window.location.href = '/Zeith/checkout';
             });
 
             // 9. LISTENERS & CROSS-TAB SYNC

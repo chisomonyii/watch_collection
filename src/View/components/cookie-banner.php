@@ -350,7 +350,7 @@
     <div class="cookie-container">
         <div class="cookie-text">
             <h4>Privacy & Cookie Preferences</h4>
-            <p>We use cookies to enhance your browsing experience, analyze site traffic, and secure your shopping cart. Read our <a href="/Watch_Collection/privacy-policy">Privacy Notice</a> for details.</p>
+            <p>We use cookies to enhance your browsing experience, analyze site traffic, and secure your shopping cart. Read our <a href="/Zeith/privacy-policy">Privacy Notice</a> for details.</p>
         </div>
         <div class="cookie-buttons">
             <button class="cookie-btn cookie-btn-settings" id="cookieSettingsBtn">Preferences</button>

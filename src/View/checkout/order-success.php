@@ -139,14 +139,14 @@
 
         <div class="tracking-cta-box" style="margin-top: 24px; text-align: center;">
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;">Want to check the live status of your timepiece?</p>
-            <a href="/Watch_Collection/track?ref=<?= htmlspecialchars($orderNumber ?? '') ?>" class="btn-track-order" style="display: inline-block; background-color: #111; color: #fff; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+            <a href="/Zeith/track?ref=<?= htmlspecialchars($orderNumber ?? '') ?>" class="btn-track-order" style="display: inline-block; background-color: #111; color: #fff; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">
                 <i class="fa-solid fa-truck-fast"></i> Track Your Order Now
             </a>
         </div>
 
         <div class="ref-box">Ref: <?= htmlspecialchars($_GET['ref'] ?? 'N/A') ?></div>
 
-        <a href="/Watch_Collection/" class="btn-home">Return to Store</a>
+        <a href="/Zeith/" class="btn-home">Return to Store</a>
     </div>
 
     <script>

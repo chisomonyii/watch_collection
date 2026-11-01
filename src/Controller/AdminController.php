@@ -14,14 +14,14 @@ class AdminController
         Session::start();
 
         if (!Authentication::isLoggedIn()) {
-            header("Location: /Watch_Collection/auth/login");
+            header("Location: /Zeith/auth/login");
             exit;
         }
 
         $user = $_SESSION['user'] ?? null;
 
         if (($user['role'] ?? '') !== 'admin') {
-            header("Location: /Watch_Collection/staff/dashboard");
+            header("Location: /Zeith/staff/dashboard");
             exit;
         }
     }
@@ -126,10 +126,10 @@ class AdminController
             $stmt = $pdo->prepare("UPDATE users SET status = 'active', updated_at = NOW() WHERE id = ? AND role = 'staff'");
             $stmt->execute([$id]);
 
-            header("Location: /Watch_Collection/admin/staff-requests");
+            header("Location: /Zeith/admin/staff-requests");
             exit;
         } catch (\Exception $e) {
-            header("Location: /Watch_Collection/admin/staff-requests?error=approval_failed");
+            header("Location: /Zeith/admin/staff-requests?error=approval_failed");
             exit;
         }
     }
@@ -177,10 +177,10 @@ class AdminController
                     $isFeatured
                 ]);
 
-                header("Location: /Watch_Collection/admin/news?success=created");
+                header("Location: /Zeith/admin/news?success=created");
                 exit;
             } catch (\Exception $e) {
-                header("Location: /Watch_Collection/admin/news?error=create_failed");
+                header("Location: /Zeith/admin/news?error=create_failed");
                 exit;
             }
         }
@@ -229,10 +229,10 @@ class AdminController
                     $id
                 ]);
 
-                header("Location: /Watch_Collection/admin/news?success=updated");
+                header("Location: /Zeith/admin/news?success=updated");
                 exit;
             } catch (\Exception $e) {
-                header("Location: /Watch_Collection/admin/news?error=update_failed");
+                header("Location: /Zeith/admin/news?error=update_failed");
                 exit;
             }
         }
@@ -249,10 +249,10 @@ class AdminController
             $stmt = $pdo->prepare("DELETE FROM news WHERE id = ?");
             $stmt->execute([$id]);
 
-            header("Location: /Watch_Collection/admin/news?success=deleted");
+            header("Location: /Zeith/admin/news?success=deleted");
             exit;
         } catch (\Exception $e) {
-            header("Location: /Watch_Collection/admin/news?error=delete_failed");
+            header("Location: /Zeith/admin/news?error=delete_failed");
             exit;
         }
     }
@@ -284,7 +284,7 @@ class AdminController
         $user = $_SESSION['user'] ?? null;
 
         if (($user['role'] ?? '') !== 'admin') {
-            header("Location: /Watch_Collection/admin/contact?error=unauthorized");
+            header("Location: /Zeith/admin/contact?error=unauthorized");
             exit;
         }
 
@@ -295,10 +295,10 @@ class AdminController
             $stmt = $pdo->prepare("UPDATE contact SET status = 'read' WHERE id = ?");
             $stmt->execute([$id]);
 
-            header("Location: /Watch_Collection/admin/contact?success=read");
+            header("Location: /Zeith/admin/contact?success=read");
             exit;
         } catch (\Exception $e) {
-            header("Location: /Watch_Collection/admin/contact?error=failed");
+            header("Location: /Zeith/admin/contact?error=failed");
             exit;
         }
     }
@@ -310,7 +310,7 @@ class AdminController
         $user = $_SESSION['user'] ?? null;
 
         if (($user['role'] ?? '') !== 'admin') {
-            header("Location: /Watch_Collection/admin/contact?error=unauthorized");
+            header("Location: /Zeith/admin/contact?error=unauthorized");
             exit;
         }
 
@@ -319,7 +319,7 @@ class AdminController
             $messageBody = trim($_POST['message'] ?? '');
 
             if (!$recipientEmail || empty($messageBody)) {
-                header("Location: /Watch_Collection/admin/contact?error=invalid_input");
+                header("Location: /Zeith/admin/contact?error=invalid_input");
                 exit;
             }
 
@@ -356,11 +356,11 @@ class AdminController
             curl_close($ch);
 
             if ($httpCode >= 200 && $httpCode < 300) {
-                header("Location: /Watch_Collection/admin/contact?success=message_sent");
+                header("Location: /Zeith/admin/contact?success=message_sent");
                 exit;
             }
 
-            header("Location: /Watch_Collection/admin/contact?error=send_failed");
+            header("Location: /Zeith/admin/contact?error=send_failed");
             exit;
         }
     }
@@ -378,7 +378,7 @@ class AdminController
         } catch (\Exception $e) {
         }
 
-        header("Location: /Watch_Collection/admin/contact");
+        header("Location: /Zeith/admin/contact");
         exit;
     }
 
@@ -399,14 +399,14 @@ class AdminController
             $updateStmt->execute([$newStatus, $userId]);
         }
 
-        header("Location: /Watch_Collection/admin/staff?success=status_updated");
+        header("Location: /Zeith/admin/staff?success=status_updated");
         exit;
     }
 
     public static function verifyActiveSession()
     {
         if (!isset($_SESSION['user_id'])) {
-            header("Location: /Watch_Collection/auth/login");
+            header("Location: /Zeith/auth/login");
             exit;
         }
 
@@ -422,7 +422,7 @@ class AdminController
                 session_unset();
                 session_destroy();
 
-                header("Location: /Watch_Collection/auth/login?error=suspended");
+                header("Location: /Zeith/auth/login?error=suspended");
                 exit;
             }
         } catch (\Exception $e) {
@@ -463,7 +463,7 @@ class AdminController
         $stmt = $db->prepare("UPDATE users SET role = ? WHERE id = ?");
         $stmt->execute([$newRole, $id]);
 
-        header("Location: /Watch_Collection/admin/staff?success=role_updated");
+        header("Location: /Zeith/admin/staff?success=role_updated");
         exit;
     }
 
@@ -478,7 +478,7 @@ class AdminController
         $stmt = $db->prepare("UPDATE users SET status = ? WHERE id = ?");
         $stmt->execute([$newStatus, $id]);
 
-        header("Location: /Watch_Collection/admin/staff?success=status_updated");
+        header("Location: /Zeith/admin/staff?success=status_updated");
         exit;
     }
 
@@ -571,7 +571,7 @@ class AdminController
             $imagePaths['image_url_4']
         ]);
 
-        header("Location: /Watch_Collection/admin/watch?success=created");
+        header("Location: /Zeith/admin/watch?success=created");
         exit;
     }
 
@@ -641,7 +641,7 @@ class AdminController
             $id
         ]);
 
-        header("Location: /Watch_Collection/admin/watch?success=updated");
+        header("Location: /Zeith/admin/watch?success=updated");
         exit;
     }
 
@@ -655,7 +655,7 @@ class AdminController
         $stmt = $db->prepare("UPDATE watches SET stock = ? WHERE id = ?");
         $stmt->execute([$newStockStatus, $id]);
 
-        header("Location: /Watch_Collection/admin/watch?success=status_updated");
+        header("Location: /Zeith/admin/watch?success=status_updated");
         exit;
     }
 
@@ -667,7 +667,7 @@ class AdminController
         $stmt = $db->prepare("DELETE FROM watches WHERE id = ?");
         $stmt->execute([$id]);
 
-        header("Location: /Watch_Collection/admin/watch?success=deleted");
+        header("Location: /Zeith/admin/watch?success=deleted");
         exit;
     }
 
@@ -719,7 +719,7 @@ class AdminController
             }
         }
 
-        header("Location: /Watch_Collection/admin/payments?success=updated");
+        header("Location: /Zeith/admin/payments?success=updated");
         exit;
     }
 
@@ -787,7 +787,7 @@ class AdminController
                 $stmt->execute([$methodName, $description, $price]);
             }
         }
-        header("Location: /Watch_Collection/admin/dashboard?success=shipping_added");
+        header("Location: /Zeith/admin/dashboard?success=shipping_added");
         exit;
     }
 
@@ -805,7 +805,7 @@ class AdminController
                 $stmt->execute([$methodName, $description, $price, $id]);
             }
         }
-        header("Location: /Watch_Collection/admin/dashboard?success=shipping_updated");
+        header("Location: /Zeith/admin/dashboard?success=shipping_updated");
         exit;
     }
 
@@ -817,7 +817,7 @@ class AdminController
             $stmt = $db->prepare("DELETE FROM shipping_methods WHERE id = ?");
             $stmt->execute([$id]);
         }
-        header("Location: /Watch_Collection/admin/dashboard?success=shipping_deleted");
+        header("Location: /Zeith/admin/dashboard?success=shipping_deleted");
         exit;
     }
 

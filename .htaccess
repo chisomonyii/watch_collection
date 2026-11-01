@@ -2,7 +2,7 @@ RewriteEngine On
 
 # Ensure your project folder matches this path if you change its name
 
-RewriteBase /Watch_Collection/
+RewriteBase /Zeith/
 
 # Do not redirect actual physical files or directory paths
 

@@ -770,23 +770,23 @@
                     $resolvePath = function ($val) {
                         $clean = trim($val ?? '');
                         if (empty($clean)) {
-                            return '/Watch_Collection/assets/image/pngwing.com (1).png';
+                            return '/Zeith/assets/image/pngwing.com (1).png';
                         }
                         if (strpos($clean, 'http://') === 0 || strpos($clean, 'https://') === 0 || strpos($clean, '/') === 0) {
                             return $clean;
                         }
 
                         // Clean up file name string if paths were pre-attached
-                        $filename = ltrim(str_replace(['/Watch_Collection/assets/image/', 'assets/image/', '/Watch_Collection/public/uploads/', 'public/uploads/'], '', $clean), '/');
+                        $filename = ltrim(str_replace(['/Zeith/assets/image/', 'assets/image/', '/Zeith/public/uploads/', 'public/uploads/'], '', $clean), '/');
 
                         // Check if the image exists in public/uploads/
-                        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $filename;
+                        $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/public/uploads/' . $filename;
                         if (file_exists($uploadPath)) {
-                            return '/Watch_Collection/public/uploads/' . $filename;
+                            return '/Zeith/public/uploads/' . $filename;
                         }
 
                         // Fallback to assets/image/ for pre-seeded items
-                        return '/Watch_Collection/assets/image/' . $filename;
+                        return '/Zeith/assets/image/' . $filename;
                     };
 
                     $img1 = $resolvePath($watch['image_url_1'] ?? $watch['image_url'] ?? $watch['image'] ?? '');
@@ -840,7 +840,7 @@
                         <!-- CARD FOOTER ACTIONS -->
                         <div class="card-footer-actions property-card-footer">
                             <button type="button" class="add-button property-add-btn">Add</button>
-                            <a href="/Watch_Collection/watch/details/<?= $watchId; ?>" class="view-details-link">View details &rarr;</a>
+                            <a href="/Zeith/watch/details/<?= $watchId; ?>" class="view-details-link">View details &rarr;</a>
                         </div>
 
                     </div>
@@ -1078,7 +1078,7 @@
 
             checkoutButton?.addEventListener('click', () => {
                 if (readCart().length === 0) return;
-                window.location.href = '/Watch_Collection/checkout';
+                window.location.href = '/Zeith/checkout';
             });
 
             // 1. CAROUSEL SLIDE ARROWS LOGIC
@@ -1142,7 +1142,7 @@
                             wishlist.push(watchId);
 
                             // 👉 Send API fetch to update likes_count in database for Trending section
-                            fetch('/Watch_Collection/api/like-watch.php', {
+                            fetch('/Zeith/api/like-watch.php', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'

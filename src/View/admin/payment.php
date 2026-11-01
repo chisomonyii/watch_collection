@@ -683,7 +683,7 @@
 
                             <td>
                                 <form
-                                    action="/Watch_Collection/admin/payments/update/<?= $ord['id'] ?>"
+                                    action="/Zeith/admin/payments/update/<?= $ord['id'] ?>"
                                     method="POST"
                                     class="zeith-payment-status-form">
                                     <select name="payment_status">

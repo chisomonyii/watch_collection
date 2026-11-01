@@ -34,7 +34,7 @@
         </div>
       <?php endif; ?>
 
-      <form action="/Watch_Collection/auth/forgot-password" method="POST" class="forgot-form">
+      <form action="/Zeith/auth/forgot-password" method="POST" class="forgot-form">
         <div class="forgot-field">
           <label class="forgot-label">Email Address</label>
           <input 
@@ -50,7 +50,7 @@
       </form>
 
       <p class="forgot-back">
-        Remembered your password? <a href="/Watch_Collection/auth/login" class="forgot-link">Back to Login</a>
+        Remembered your password? <a href="/Zeith/auth/login" class="forgot-link">Back to Login</a>
       </p>
     </div>
   </div>

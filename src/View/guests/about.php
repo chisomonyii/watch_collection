@@ -1126,7 +1126,7 @@
                         </div>
 
                         <div class="zeith-footer-links">
-                            <a href="/Watch_Collection/user/contact">Contact Us</a>
+                            <a href="/Zeith/contact">Contact Us</a>
                         </div>
 
                     </div>

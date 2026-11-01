@@ -276,7 +276,7 @@
         <div class="search-card">
             <h2>Track Your Timepiece</h2>
             <p style="color: var(--text-muted); font-size: 0.9rem;">Enter your ZEITH order reference, email, or phone number below.</p>
-            <form class="search-form" method="GET" action="/Watch_Collection/track">
+            <form class="search-form" method="GET" action="/Zeith/track">
                 <input type="text" name="ref" class="search-input" placeholder="e.g. ZEITH-XXXXX or Email / Phone" value="<?= htmlspecialchars($_GET['ref'] ?? '') ?>" required>
                 <button type="submit" class="search-btn">Search</button>
             </form>

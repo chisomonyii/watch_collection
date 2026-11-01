@@ -18,7 +18,7 @@ $stock        = (int)($watch['stock'] ?? 0);
 $inStock      = !empty($watch['in_stock']) && $stock > 0;
 $description  = htmlspecialchars($watch['description'] ?? 'No description provided.', ENT_QUOTES, 'UTF-8');
 $strap        = htmlspecialchars($watch['strap'] ?? 'Standard Strap', ENT_QUOTES, 'UTF-8');
-$images       = $watch['images'] ?? ['/Watch_Collection/assets/images/placeholder.jpg'];
+$images       = $watch['images'] ?? ['/Zeith/assets/images/placeholder.jpg'];
 $manual       = $watch['manual_path'] ?? null;
 ?>
 
@@ -872,7 +872,7 @@ if (class_exists('App\Helpers\View')) {
                 <h1>Watch Details</h1>
                 <p>View detailed information about this timepiece.</p>
             </div>
-            <a href="/Watch_Collection/staff/watch" class="zeith-back-button">&larr; Back to Inventory</a>
+            <a href="/Zeith/staff/watch" class="zeith-back-button">&larr; Back to Inventory</a>
         </div>
 
         <div class="zeith-details-notice">

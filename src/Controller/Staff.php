@@ -17,7 +17,7 @@ class Staff
         Session::start();
 
         if (!Authentication::isLoggedIn()) {
-            header("Location: /Watch_Collection/auth/login");
+            header("Location: /Zeith/auth/login");
             exit;
         }
     }
@@ -27,7 +27,7 @@ class Staff
         $sessionUser = $_SESSION['user'] ?? null;
 
         if (!$sessionUser || !isset($sessionUser['id'])) {
-            header("Location: /Watch_Collection/auth/login");
+            header("Location: /Zeith/auth/login");
             exit;
         }
 
@@ -107,7 +107,7 @@ class Staff
         $status = self::fetchUserStatus($userId);
 
         if ($status === 'pending') {
-            header("Location: /Watch_Collection/staff/dashboard");
+            header("Location: /Zeith/staff/dashboard");
             exit;
         }
     }
@@ -135,19 +135,19 @@ class Staff
                     }
 
                     $filename = ltrim(str_replace([
-                        '/Watch_Collection/assets/image/',
+                        '/Zeith/assets/image/',
                         'assets/image/',
-                        '/Watch_Collection/public/uploads/',
+                        '/Zeith/public/uploads/',
                         'public/uploads/'
                     ], '', $clean), '/');
 
-                    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $filename;
+                    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/public/uploads/' . $filename;
 
                     if (file_exists($uploadPath)) {
-                        return '/Watch_Collection/public/uploads/' . $filename;
+                        return '/Zeith/public/uploads/' . $filename;
                     }
 
-                    return '/Watch_Collection/assets/image/' . $filename;
+                    return '/Zeith/assets/image/' . $filename;
                 };
 
                 $images = [];
@@ -161,7 +161,7 @@ class Staff
                 }
 
                 if (empty($images)) {
-                    $images[] = '/Watch_Collection/assets/images/placeholder.jpg';
+                    $images[] = '/Zeith/assets/images/placeholder.jpg';
                 }
 
                 $watch['images'] = $images;
@@ -221,7 +221,7 @@ class Staff
             $password = trim($_POST['password'] ?? '');
 
             if (!$firstname || !$lastname || !$email) {
-                header("Location: /Watch_Collection/staff/profile?error=invalid_input");
+                header("Location: /Zeith/staff/profile?error=invalid_input");
                 exit;
             }
 
@@ -241,10 +241,10 @@ class Staff
                 $_SESSION['user']['lastname'] = $lastname;
                 $_SESSION['user']['email'] = $email;
 
-                header("Location: /Watch_Collection/staff/profile?success=profile_updated");
+                header("Location: /Zeith/staff/profile?success=profile_updated");
                 exit;
             } catch (\Exception $e) {
-                header("Location: /Watch_Collection/staff/profile?error=update_failed");
+                header("Location: /Zeith/staff/profile?error=update_failed");
                 exit;
             }
         }
@@ -304,7 +304,7 @@ class Staff
         } catch (\Exception $e) {
         }
 
-        header("Location: /Watch_Collection/staff/reviews?success=approved");
+        header("Location: /Zeith/staff/reviews?success=approved");
         exit;
     }
 
@@ -319,7 +319,7 @@ class Staff
         } catch (\Exception $e) {
         }
 
-        header("Location: /Watch_Collection/staff/reviews?success=rejected");
+        header("Location: /Zeith/staff/reviews?success=rejected");
         exit;
     }
 
@@ -328,7 +328,7 @@ class Staff
         self::checkPendingStatus();
 
         if (!$id || !is_numeric($id)) {
-            header("Location: /Watch_Collection/staff/watch?error=invalid_id");
+            header("Location: /Zeith/staff/watch?error=invalid_id");
             exit;
         }
 
@@ -339,7 +339,7 @@ class Staff
             $watch = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$watch) {
-                header("Location: /Watch_Collection/staff/watch?error=not_found");
+                header("Location: /Zeith/staff/watch?error=not_found");
                 exit;
             }
 
@@ -355,19 +355,19 @@ class Staff
                 }
 
                 $filename = ltrim(str_replace([
-                    '/Watch_Collection/assets/image/',
+                    '/Zeith/assets/image/',
                     'assets/image/',
-                    '/Watch_Collection/public/uploads/',
+                    '/Zeith/public/uploads/',
                     'public/uploads/'
                 ], '', $clean), '/');
 
-                $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $filename;
+                $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/public/uploads/' . $filename;
 
                 if (file_exists($uploadPath)) {
-                    return '/Watch_Collection/public/uploads/' . $filename;
+                    return '/Zeith/public/uploads/' . $filename;
                 }
 
-                return '/Watch_Collection/assets/image/' . $filename;
+                return '/Zeith/assets/image/' . $filename;
             };
 
             $images = [];
@@ -381,17 +381,17 @@ class Staff
             }
 
             if (empty($images)) {
-                $images[] = '/Watch_Collection/assets/images/placeholder.jpg';
+                $images[] = '/Zeith/assets/images/placeholder.jpg';
             }
 
             $manualPath = null;
 
             if (!empty($watch['manual_file'])) {
                 $manualFile = trim($watch['manual_file']);
-                $manualUploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $manualFile;
+                $manualUploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/public/uploads/' . $manualFile;
                 $manualPath = file_exists($manualUploadPath)
-                    ? '/Watch_Collection/public/uploads/' . $manualFile
-                    : '/Watch_Collection/assets/image/' . $manualFile;
+                    ? '/Zeith/public/uploads/' . $manualFile
+                    : '/Zeith/assets/image/' . $manualFile;
             }
 
             $watch['images'] = $images;
@@ -400,7 +400,7 @@ class Staff
 
             View::displayView("staff/view-details.php", ['watch' => $watch]);
         } catch (\Exception $e) {
-            header("Location: /Watch_Collection/staff/watch?error=db_error");
+            header("Location: /Zeith/staff/watch?error=db_error");
             exit;
         }
     }
@@ -484,7 +484,7 @@ class Staff
             }
         }
 
-        header("Location: /Watch_Collection/staff/orders/" . $id);
+        header("Location: /Zeith/staff/orders/" . $id);
         exit;
     }
 
@@ -570,7 +570,7 @@ class Staff
             fclose($output);
             exit;
         } catch (\Exception $e) {
-            header("Location: /Watch_Collection/staff/subscribers?error=export_failed");
+            header("Location: /Zeith/staff/subscribers?error=export_failed");
             exit;
         }
     }
@@ -724,7 +724,7 @@ class Staff
         $subscriberId = (int)($_POST['subscriber_id'] ?? $_GET['id'] ?? 0);
 
         if ($subscriberId <= 0) {
-            header("Location: /Watch_Collection/staff/subscribers");
+            header("Location: /Zeith/staff/subscribers");
             exit;
         }
 
@@ -733,10 +733,10 @@ class Staff
             $stmt = $db->prepare("DELETE FROM subscribers WHERE id = ?");
             $stmt->execute([$subscriberId]);
 
-            header("Location: /Watch_Collection/staff/subscribers?message=" . urlencode("Subscriber removed successfully."));
+            header("Location: /Zeith/staff/subscribers?message=" . urlencode("Subscriber removed successfully."));
             exit;
         } catch (\Exception $e) {
-            header("Location: /Watch_Collection/staff/subscribers?message=" . urlencode("Failed to delete subscriber."));
+            header("Location: /Zeith/staff/subscribers?message=" . urlencode("Failed to delete subscriber."));
             exit;
         }
     }

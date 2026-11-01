@@ -141,7 +141,7 @@ $rejectedReviews = $rejectedReviews ?? 0;
                         $status = strtolower(trim($rev['status'] ?? 'pending'));
                         $createdAt = $rev['created_at'] ?? '';
                         $formattedDate = $createdAt ? date('F j, Y', strtotime($createdAt)) : 'Recent';
-                        $imageUrl = !empty($rev['image_url']) ? '/Watch_Collection/assets/image/reviews/' . $rev['image_url'] : '/Watch_Collection/assets/image/reviews/review3.jpg';
+                        $imageUrl = !empty($rev['image_url']) ? '/Zeith/assets/image/reviews/' . $rev['image_url'] : '/Zeith/assets/image/reviews/review3.jpg';
                         
                         // Generate star rating string
                         $stars = str_repeat('★', $rating) . str_repeat('☆', 5 - $rating);
@@ -191,7 +191,7 @@ $rejectedReviews = $rejectedReviews ?? 0;
                 $defaultId = $first ? 'REV-' . (1000 + $first['id']) : 'REV-1001';
                 $defaultTitle = $first['title'] ?? 'No Review Selected';
                 $defaultStatus = $first['status'] ?? 'pending';
-                $defaultImage = !empty($first['image_url']) ? '/Watch_Collection/assets/image/reviews/' . $first['image_url'] : '/Watch_Collection/assets/image/reviews/review3.jpg';
+                $defaultImage = !empty($first['image_url']) ? '/Zeith/assets/image/reviews/' . $first['image_url'] : '/Zeith/assets/image/reviews/review3.jpg';
                 $defaultName = $first['customer_name'] ?? 'N/A';
                 $defaultEmail = $first['customer_email'] ?? 'N/A';
                 $defaultRating = (int)($first['rating'] ?? 5);
@@ -266,12 +266,12 @@ $rejectedReviews = $rejectedReviews ?? 0;
                 </div>
 
                 <div class="zeith-moderation-buttons">
-                    <a href="/Watch_Collection/staff/reviews/reject/<?= $defaultDbId ?>" class="zeith-reject-btn" id="zeithRejectReviewLink" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                    <a href="/Zeith/staff/reviews/reject/<?= $defaultDbId ?>" class="zeith-reject-btn" id="zeithRejectReviewLink" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
                         <svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;"><path d="M7 7l10 10M17 7 7 17" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
                         Reject
                     </a>
 
-                    <a href="/Watch_Collection/staff/reviews/approve/<?= $defaultDbId ?>" class="zeith-approve-btn" id="zeithApproveReviewLink" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                    <a href="/Zeith/staff/reviews/approve/<?= $defaultDbId ?>" class="zeith-approve-btn" id="zeithApproveReviewLink" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
                         <svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;"><path d="M5 12.5 9.2 17 19 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         Approve
                     </a>
@@ -1142,8 +1142,8 @@ $rejectedReviews = $rejectedReviews ?? 0;
         document.getElementById('zeithReviewFooterId').textContent = reviewId;
 
         // Update action link URLs dynamically
-        document.getElementById('zeithRejectReviewLink').href = '/Watch_Collection/staff/reviews/reject/' + dbId;
-        document.getElementById('zeithApproveReviewLink').href = '/Watch_Collection/staff/reviews/approve/' + dbId;
+        document.getElementById('zeithRejectReviewLink').href = '/Zeith/staff/reviews/reject/' + dbId;
+        document.getElementById('zeithApproveReviewLink').href = '/Zeith/staff/reviews/approve/' + dbId;
     }
 
     // Search and Filter functionality

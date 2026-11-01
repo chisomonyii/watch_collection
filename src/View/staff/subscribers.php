@@ -1359,7 +1359,7 @@ $deleteMessage = $deleteMessage ?? null;
                     <i class="fa-solid fa-paper-plane"></i>
                     Newsletter Centre
                 </button>
-                <a href="/Watch_Collection/staff/subscribers?export=csv" class="zeith-export-all">
+                <a href="/Zeith/staff/subscribers?export=csv" class="zeith-export-all">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M12 3v12" stroke-linecap="round" />
                         <path d="M7 10l5 5 5-5" stroke-linecap="round" stroke-linejoin="round" />
@@ -1545,7 +1545,7 @@ $deleteMessage = $deleteMessage ?? null;
     <div class="zeith-modal-box">
         <h3>Remove Subscriber?</h3>
         <p>Are you sure you want to remove <strong id="zeithDeleteSubscriberName">this subscriber</strong> from the ZEITH newsletter list? This action cannot be undone.</p>
-        <form method="POST" action="/Watch_Collection/staff/subscribers/delete" id="zeithDeleteForm">
+        <form method="POST" action="/Zeith/staff/subscribers/delete" id="zeithDeleteForm">
             <input type="hidden" name="subscriber_id" id="zeithDeleteSubscriberId" value="">
             <div class="zeith-modal-actions">
                 <button type="button" class="zeith-modal-btn zeith-modal-cancel" id="zeithDeleteCancel">Cancel</button>
@@ -1779,7 +1779,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statusText.textContent = '';
 
         try {
-            const response = await fetch('/Watch_Collection/staff/send-newsletter', {
+            const response = await fetch('/Zeith/staff/send-newsletter', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

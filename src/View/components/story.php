@@ -46,7 +46,7 @@
 
 
         <a
-            href="/Watch_Collection/user/watch"
+            href="/Zeith/watch"
             class="zeith-story__button">
 
             <span>

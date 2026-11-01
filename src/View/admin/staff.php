@@ -2010,7 +2010,7 @@ $adminCount = $adminCount ?? 0;
                 document.getElementById('roleStaff').checked = true;
             }
 
-            document.getElementById('zeithRoleForm').action = '/Watch_Collection/admin/users/role/' + id;
+            document.getElementById('zeithRoleForm').action = '/Zeith/admin/users/role/' + id;
             document.getElementById('zeithRoleModal').style.display = 'flex';
             document.getElementById('zeithRoleModal').setAttribute('aria-hidden', 'false');
         }
@@ -2040,7 +2040,7 @@ $adminCount = $adminCount ?? 0;
                 statusInput.value = 'active';
             }
 
-            document.getElementById('zeithStatusForm').action = '/Watch_Collection/admin/users/status/' + id;
+            document.getElementById('zeithStatusForm').action = '/Zeith/admin/users/status/' + id;
             document.getElementById('zeithStatusModal').style.display = 'flex';
             document.getElementById('zeithStatusModal').setAttribute('aria-hidden', 'false');
         }

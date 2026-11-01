@@ -628,7 +628,7 @@ $article = $article ?? [
     </div>
 
     <div class="article-container">
-        <a href="/Watch_Collection/news" class="back-link">← Back to Chronicle</a>
+        <a href="/Zeith/news" class="back-link">← Back to Chronicle</a>
 
         <div class="article-category">
             <?= htmlspecialchars($article['category']) ?>
@@ -645,7 +645,7 @@ $article = $article ?? [
         </div>
 
         <?php if (!empty($article['image_url'])): ?>
-            <img src="/Watch_Collection/assets/image/<?= htmlspecialchars($article['image_url']) ?>" alt="Article cover" class="article-hero-image">
+            <img src="/Zeith/assets/image/<?= htmlspecialchars($article['image_url']) ?>" alt="Article cover" class="article-hero-image">
         <?php endif; ?>
 
         <div class="article-content">

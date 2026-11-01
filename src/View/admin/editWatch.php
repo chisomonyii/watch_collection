@@ -13,7 +13,7 @@ for ($i = 1; $i <= 4; $i++) {
         if (filter_var($val, FILTER_VALIDATE_URL) || strpos($val, '/') === 0) {
             $existingImages[] = $val;
         } else {
-            $existingImages[] = '/Watch_Collection/assets/image/' . $val;
+            $existingImages[] = '/Zeith/assets/image/' . $val;
         }
     }
 }
@@ -946,7 +946,7 @@ for ($i = 1; $i <= 4; $i++) {
 
             <div class="zeith-edit-grid">
                 <!-- Connect form directly to update controller route with multipart encoding for files -->
-                <form action="/Watch_Collection/admin/watch/update/<?= htmlspecialchars($watch['id']) ?>"
+                <form action="/Zeith/admin/watch/update/<?= htmlspecialchars($watch['id']) ?>"
                     method="POST"
                     enctype="multipart/form-data"
                     class="zeith-edit-form-card"
@@ -1156,7 +1156,7 @@ for ($i = 1; $i <= 4; $i++) {
                     </section>
 
                     <div class="zeith-form-actions">
-                        <a href="/Watch_Collection/admin/watch" class="zeith-cancel-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                        <a href="/Zeith/admin/watch" class="zeith-cancel-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
                             Cancel
                         </a>
 
@@ -1179,7 +1179,7 @@ for ($i = 1; $i <= 4; $i++) {
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div class="zeith-preview-slide active">
-                                <img src="/Watch_Collection/assets/images/placeholder.jpg" alt="Watch preview">
+                                <img src="/Zeith/assets/images/placeholder.jpg" alt="Watch preview">
                             </div>
                         <?php endif; ?>
 

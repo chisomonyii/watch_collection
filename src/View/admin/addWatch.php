@@ -921,7 +921,7 @@
 
             <div class="zeith-edit-grid">
                 <!-- Form points to the store route with multipart/form-data encoding -->
-                <form action="/Watch_Collection/admin/watch/store" method="POST" enctype="multipart/form-data" class="zeith-edit-form-card" id="zeithEditForm">
+                <form action="/Zeith/admin/watch/store" method="POST" enctype="multipart/form-data" class="zeith-edit-form-card" id="zeithEditForm">
                     <section class="zeith-form-section">
                         <h2 class="zeith-form-section-title">Watch Images</h2>
 
@@ -1072,7 +1072,7 @@
                     </section>
 
                     <div class="zeith-form-actions">
-                        <a href="/Watch_Collection/admin/watch" class="zeith-cancel-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                        <a href="/Zeith/admin/watch" class="zeith-cancel-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
                             Cancel
                         </a>
 
@@ -1089,19 +1089,19 @@
 
                     <div class="zeith-preview-slider" id="zeithPreviewSlider">
                         <div class="zeith-preview-slide active">
-                            <img src="/Watch_Collection/assets/images/placeholder.jpg" alt="Watch preview 1">
+                            <img src="/Zeith/assets/images/placeholder.jpg" alt="Watch preview 1">
                         </div>
 
                         <div class="zeith-preview-slide">
-                            <img src="/Watch_Collection/assets/images/placeholder.jpg" alt="Watch preview 2">
+                            <img src="/Zeith/assets/images/placeholder.jpg" alt="Watch preview 2">
                         </div>
 
                         <div class="zeith-preview-slide">
-                            <img src="/Watch_Collection/assets/images/placeholder.jpg" alt="Watch preview 3">
+                            <img src="/Zeith/assets/images/placeholder.jpg" alt="Watch preview 3">
                         </div>
 
                         <div class="zeith-preview-slide">
-                            <img src="/Watch_Collection/assets/images/placeholder.jpg" alt="Watch preview 4">
+                            <img src="/Zeith/assets/images/placeholder.jpg" alt="Watch preview 4">
                         </div>
 
                         <button type="button" class="zeith-preview-arrow left" id="zeithPreviewPrev" aria-label="Previous image">

@@ -211,9 +211,9 @@
         <div class="zeith-footer-col">
             <h2 class="zeith-logo">ZEITH</h2>
             <ul class="zeith-footer-links">
-                <li><a href="/Watch_Collection/user/watch">Collections</a></li>
-                <li><a href="/Watch_Collection/user/watch">New Arrivals</a></li>
-                <li><a href="/Watch_Collection/home#best-sellers">Best Sellers</a></li>
+                <li><a href="/Zeith/watch">Collections</a></li>
+                <li><a href="/Zeith/watch">New Arrivals</a></li>
+                <li><a href="/Zeith/home#best-sellers">Best Sellers</a></li>
             </ul>
         </div>
 
@@ -231,9 +231,9 @@
         <div class="zeith-footer-col">
             <h3>SUPPORT</h3>
             <ul class="zeith-footer-links">
-                <li><a href="/Watch_Collection/user/contact">Contact Us</a></li>
-                <li><a href="/Watch_Collection/track">Track Your Order</a></li>
-                <li><a href="/Watch_Collection/about">About Us</a></li>
+                <li><a href="/Zeith/contact">Contact Us</a></li>
+                <li><a href="/Zeith/track">Track Your Order</a></li>
+                <li><a href="/Zeith/about">About Us</a></li>
                 <li><a href="#">Returns</a></li>
             </ul>
         </div>
@@ -271,7 +271,7 @@
                 e.preventDefault();
                 const formData = new FormData(footerForm);
 
-                fetch('/Watch_Collection/api/subscribe', {
+                fetch('/Zeith/api/subscribe', {
                         method: 'POST',
                         body: formData
                     })

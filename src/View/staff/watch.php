@@ -678,7 +678,7 @@ $watches = $watches ?? [];
                 $inStock = !empty($watch['in_stock']) && $stock > 0;
                 $images = $watch['images'] ?? [];
                 if (empty($images)) {
-                    $images = ['/Watch_Collection/assets/images/placeholder.jpg'];
+                    $images = ['/Zeith/assets/images/placeholder.jpg'];
                 }
                 ?>
                 <article class="zeith-watch-card" data-watch-id="<?= $watchId ?>">
@@ -746,7 +746,7 @@ $watches = $watches ?? [];
                         </div>
                         <div class="zeith-watch-bottom">
                             <div class="zeith-watch-price">₦<?= number_format($price, 0) ?></div>
-                            <a href="/Watch_Collection/staff/watch/details/<?= $watchId ?>" class="zeith-watch-view-btn">
+                            <a href="/Zeith/staff/watch/details/<?= $watchId ?>" class="zeith-watch-view-btn">
                                 View Details
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path d="M5 12h14" stroke-linecap="round" />

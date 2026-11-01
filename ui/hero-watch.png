@@ -637,7 +637,7 @@ initializeBrowserTheme("codex.browser.appThemes.v1");})();</script><style type="
 </span><span class="text-codex-syntax-name">&lt;?php</span><span>
 </span><span class="Comment-dh5VVn">// Use an existing watch image from your project.</span><span>
 </span><span class="Comment-dh5VVn">// Change this filename to the actual image you want to feature.</span><span>
-</span><span class="text-codex-syntax-variable">$heroWatchImage</span><span> </span><span class="text-codex-syntax-keyword">=</span><span> </span><span class="text-codex-syntax-string">'/Watch_Collection/assets/Images/hero-watch.png'</span><span>;
+</span><span class="text-codex-syntax-variable">$heroWatchImage</span><span> </span><span class="text-codex-syntax-keyword">=</span><span> </span><span class="text-codex-syntax-string">'/Zeith/assets/Images/hero-watch.png'</span><span>;
 </span><span class="text-codex-syntax-name">?&gt;</span><span>
 
 </span><span class="text-codex-syntax-name">&lt;section</span><span> </span><span class="text-codex-syntax-attribute">class</span><span class="text-codex-syntax-keyword">=</span><span class="text-codex-syntax-string">"zeith-hero"</span><span> </span><span class="text-codex-syntax-attribute">id</span><span class="text-codex-syntax-keyword">=</span><span class="text-codex-syntax-string">"zeithHero"</span><span class="text-codex-syntax-name">&gt;</span><span>

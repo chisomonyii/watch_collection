@@ -153,9 +153,9 @@
                     <img src="<?= htmlspecialchars($product['image'] ?? 'assets/images/placeholder.jpg') ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="product-image">
                     <div class="product-info">
                         <span class="product-brand"><?= htmlspecialchars($product['brand'] ?? 'ZEITH') ?></span>
-                        <a href="/Watch_Collection/product?id=<?= $product['id'] ?>" class="product-title"><?= htmlspecialchars($product['name']) ?></a>
+                        <a href="/Zeith/product?id=<?= $product['id'] ?>" class="product-title"><?= htmlspecialchars($product['name']) ?></a>
                         <div class="product-price">₦<?= number_format($product['price'], 2) ?></div>
-                        <a href="/Watch_Collection/product?id=<?= $product['id'] ?>" class="btn-view">View Timepiece</a>
+                        <a href="/Zeith/product?id=<?= $product['id'] ?>" class="btn-view">View Timepiece</a>
                     </div>
                 </div>
             <?php endforeach; ?>

@@ -87,7 +87,7 @@
                 <div>
                     <div class="login-password">
                         <label for="password" class="login-label">Password</label>
-                        <a href="/Watch_Collection/auth/forgot-password" class="login-forgot-password">Forgot Password?</a>
+                        <a href="/Zeith/auth/forgot-password" class="login-forgot-password">Forgot Password?</a>
                     </div>
                     <div class="password-container" style="position: relative; display: flex; align-items: center;">
                         <input type="password" name="password" class="login-input" id="password" placeholder="••••••••" required style="width: 100%; padding-right: 40px;">

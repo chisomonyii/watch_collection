@@ -37,7 +37,7 @@
 
         <!-- CTA -->
         <a
-            href="/Watch_Collection/user/watch"
+            href="/Zeith/watch"
             class="btn-shop exp search-btn"
         >
             <span>

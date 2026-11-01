@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const response = await fetch('/Watch_Collection/api/wishlist-items', {
+        const response = await fetch('/Zeith/api/wishlist-items', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ids: savedIds })
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         ♥
                     </div>
                     <div class="watch-image">
-                        <img src="/Watch_Collection/assets/Images/${item.image || item.image_url}" alt="${item.name}">
+                        <img src="/Zeith/assets/Images/${item.image || item.image_url}" alt="${item.name}">
                     </div>
                     <h2 class="watch-name">${item.brand || item.collection_name || ''}</h2>
                     <p class="watch-description">${item.name || ''}</p>

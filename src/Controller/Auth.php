@@ -175,8 +175,8 @@ class Auth
             $role = $user['role'] ?? 'staff';
 
             $redirectUrl = ($role === 'admin')
-                ? '/Watch_Collection/admin/dashboard'
-                : '/Watch_Collection/staff/dashboard';
+                ? '/Zeith/admin/dashboard'
+                : '/Zeith/staff/dashboard';
 
             Response::json([
                 'message' => 'User has been logged in successfully',
@@ -216,7 +216,7 @@ class Auth
         }
         session_unset();
         session_destroy();
-        header("Location: http://localhost/Watch_Collection/auth/login");
+        header("Location: http://localhost/Zeith/auth/login");
         exit;
     }
 
@@ -244,7 +244,7 @@ class Auth
 
             // If user does NOT exist in the database, redirect with error
             if (!$user) {
-                header("Location: /Watch_Collection/auth/forgot-password?error=not_found");
+                header("Location: /Zeith/auth/forgot-password?error=not_found");
                 exit;
             }
 
@@ -259,7 +259,7 @@ class Auth
             $stmt->execute([$email, $token]);
 
             // Build the dynamic reset link
-            $resetLink = "http://localhost/Watch_Collection/auth/reset-password?token=" . $token;
+            $resetLink = "http://localhost/Zeith/auth/reset-password?token=" . $token;
 
             // Send email via PHPMailer & Brevo SMTP
             $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
@@ -297,7 +297,7 @@ class Auth
                 $mail->send();
 
                 // Redirect immediately upon successful dispatch matching view check (?success=sent)
-                header("Location: /Watch_Collection/auth/forgot-password?success=sent");
+                header("Location: /Zeith/auth/forgot-password?success=sent");
                 exit;
             } catch (\Exception $e) {
                 echo "Mailer Error: " . $mail->ErrorInfo;
@@ -352,7 +352,7 @@ class Auth
             // 4. Redirect to login with success message
             Session::start();
             $_SESSION['flash'] = "Password updated successfully. You can now login.";
-            header("Location: /Watch_Collection/auth/login");
+            header("Location: /Zeith/auth/login");
             exit;
         }
     }

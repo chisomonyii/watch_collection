@@ -371,7 +371,7 @@
                 <!-- Status Feedback Message -->
                 <div id="alertMsg" class="alert-message"></div>
 
-                <form id="contactForm" action="/Watch_Collection/api/contact" method="POST">
+                <form id="contactForm" action="/Zeith/api/contact" method="POST">
 
                     <div class="form-row">
                         <div class="form-group">

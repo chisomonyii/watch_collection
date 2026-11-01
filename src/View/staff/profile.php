@@ -24,7 +24,7 @@ $initials = strtoupper(substr($firstName, 0, 1) . substr($lastName, 0, 1));
         </header>
 
         <!-- Profile Form Wrapper for Editing -->
-        <form action="/Watch_Collection/staff/profile/update" method="POST" class="zeith-profile-layout" id="profileForm">
+        <form action="/Zeith/staff/profile/update" method="POST" class="zeith-profile-layout" id="profileForm">
 
             <section class="zeith-profile-card">
                 <div class="zeith-profile-header">

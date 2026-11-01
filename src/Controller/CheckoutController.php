@@ -55,12 +55,12 @@ class CheckoutController
                 $_SESSION['order_number'] = $result['order_number'];
                 $_SESSION['order_subtotal'] = $result['subtotal'];
 
-                header('Location: /Watch_Collection/payment');
+                header('Location: /Zeith/payment');
                 exit;
             }
         }
 
-        header('Location: /Watch_Collection/checkout');
+        header('Location: /Zeith/checkout');
         exit;
     }
 
@@ -92,12 +92,12 @@ class CheckoutController
                 // Proceed directly to gateway flow (Paystack handles payment securely online)
                 // Session cleanup will happen inside verifyPayment once Paystack confirms success.
                 
-                header('Location: /Watch_Collection/payment'); // or your Paystack trigger response redirect
+                header('Location: /Zeith/payment'); // or your Paystack trigger response redirect
                 exit;
             }
         }
 
-        header('Location: /Watch_Collection/payment');
+        header('Location: /Zeith/payment');
         exit;
     }
 
@@ -107,7 +107,7 @@ class CheckoutController
         $orderId = $_GET['order_id'] ?? null;
 
         if (!$reference) {
-            header('Location: /Watch_Collection/payment');
+            header('Location: /Zeith/payment');
             exit;
         }
 
@@ -139,7 +139,7 @@ class CheckoutController
             unset($_SESSION['order_number']);
             unset($_SESSION['order_subtotal']);
 
-            header('Location: /Watch_Collection/user/order-success?ref=' . $reference);
+            header('Location: /Zeith/user/order-success?ref=' . $reference);
             exit;
         } else {
             die("Payment verification failed or payment was declined.");

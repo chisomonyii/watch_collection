@@ -523,7 +523,7 @@
     $imgVal = trim($imgName ?? '');
 
     if (empty($imgVal)) {
-        return '/Watch_Collection/assets/image/placeholder.jpg';
+        return '/Zeith/assets/image/placeholder.jpg';
     }
 
     if (strpos($imgVal, 'http://') === 0 || strpos($imgVal, 'https://') === 0) {
@@ -533,27 +533,27 @@
     $filename = basename($imgVal);
 
     // 1. Check direct path inside public/uploads/ using the clean filename
-    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $filename;
+    $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/public/uploads/' . $filename;
     if (file_exists($uploadPath)) {
-        return '/Watch_Collection/public/uploads/' . $filename;
+        return '/Zeith/public/uploads/' . $filename;
     }
 
     // 2. Check if the raw string already points to uploads or contains uploads path
     if (strpos($imgVal, 'uploads/') !== false || strpos($imgVal, 'public/uploads/') !== false) {
-        $fullUploadCheck = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/' . ltrim($imgVal, '/');
+        $fullUploadCheck = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/' . ltrim($imgVal, '/');
         if (file_exists($fullUploadCheck)) {
-            return '/Watch_Collection/' . ltrim($imgVal, '/');
+            return '/Zeith/' . ltrim($imgVal, '/');
         }
     }
 
     // 3. Check if the file actually exists in assets/image/ before defaulting there
-    $assetPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/assets/image/' . $filename;
+    $assetPath = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/assets/image/' . $filename;
     if (file_exists($assetPath)) {
-        return '/Watch_Collection/assets/image/' . $filename;
+        return '/Zeith/assets/image/' . $filename;
     }
 
     // 4. Final safety fallback: if it's an uploaded watch, force public/uploads path anyway
-    return '/Watch_Collection/public/uploads/' . $filename;
+    return '/Zeith/public/uploads/' . $filename;
 };
 
                     // Resolve images dynamically
@@ -606,7 +606,7 @@
                         <!-- FOOTER -->
                         <div class="card-footer-actions">
                             <button class="btn-add-cart-orange" type="button">Add</button>
-                            <a href="/Watch_Collection/watch/details/<?= $watchId; ?>" class="view-details-link">View details &rarr;</a>
+                            <a href="/Zeith/watch/details/<?= $watchId; ?>" class="view-details-link">View details &rarr;</a>
                         </div>
 
                     </div>
@@ -642,7 +642,7 @@
 
             if (!hasPhpItems && grid) {
                 try {
-                    const response = await fetch('/Watch_Collection/api/wishlist-items', {
+                    const response = await fetch('/Zeith/api/wishlist-items', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -660,7 +660,7 @@
                         // Client-side image resolver supporting public/uploads/ and assets/image/
                         const resolveJsImage = (imgName) => {
                             const clean = (imgName || '').trim();
-                            if (!clean) return '/Watch_Collection/assets/image/Nautilus_5711-removebg-preview.png';
+                            if (!clean) return '/Zeith/assets/image/Nautilus_5711-removebg-preview.png';
                             if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('/')) {
                                 return clean;
                             }
@@ -668,7 +668,7 @@
                             // If the database string already references uploads
                             if (clean.includes('public/uploads/') || clean.includes('uploads/')) {
                                 const filename = clean.split('/').pop();
-                                return `/Watch_Collection/public/uploads/${filename}`;
+                                return `/Zeith/public/uploads/${filename}`;
                             }
 
                             // Check if it's likely a device upload (custom names or hashes) or fallback to assets
@@ -677,7 +677,7 @@
                             const filename = clean.split('/').pop();
 
                             // Let's check if it exists or treat as upload if it doesn't match default asset names
-                            return `/Watch_Collection/public/uploads/${filename}`;
+                            return `/Zeith/public/uploads/${filename}`;
                         };
 
                         grid.innerHTML = result.data.map(item => {
@@ -689,7 +689,7 @@
                        const formatPath = (p) => {
     const clean = (p || '').trim();
 
-    if (!clean) return '/Watch_Collection/assets/image/Nautilus_5711-removebg-preview.png';
+    if (!clean) return '/Zeith/assets/image/Nautilus_5711-removebg-preview.png';
 
     if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('/')) {
         return encodeURI(clean);
@@ -699,10 +699,10 @@
     const defaults = ['Nautilus_5711-removebg-preview.png', 'banner1.jpg', 'placeholder.jpg'];
 
     if (defaults.includes(fname)) {
-        return encodeURI(`/Watch_Collection/assets/image/${fname}`);
+        return encodeURI(`/Zeith/assets/image/${fname}`);
     }
 
-    return encodeURI(`/Watch_Collection/public/uploads/${fname}`);
+    return encodeURI(`/Zeith/public/uploads/${fname}`);
 };
 
                         const img1 = formatPath(rawImg1);
@@ -745,7 +745,7 @@
 
                             <div class="card-footer-actions">
                                 <button class="btn-add-cart-orange" type="button">Add</button>
-                                <a href="/Watch_Collection/watch/details/${item.id}" class="view-details-link">View details &rarr;</a>
+                                <a href="/Zeith/watch/details/${item.id}" class="view-details-link">View details &rarr;</a>
                             </div>
                         </div>
                     `;

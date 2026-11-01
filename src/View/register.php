@@ -107,7 +107,7 @@
             </form>
 
             <p class="register-have-account">
-                Already have an account? <a href="/Watch_Collection/auth/login" class="register-link">Sign in here</a>
+                Already have an account? <a href="/Zeith/auth/login" class="register-link">Sign in here</a>
             </p>
         </div>
     </div>

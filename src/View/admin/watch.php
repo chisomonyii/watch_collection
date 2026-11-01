@@ -13,7 +13,7 @@
         </div>
 
         <!-- Add New Watch Button linked to addWatch.php -->
-        <a href="/Watch_Collection/admin/watch/add" class="zeith-add-listing-btn" style="text-decoration: none;">
+        <a href="/Zeith/admin/watch/add" class="zeith-add-listing-btn" style="text-decoration: none;">
             <span>+</span>
             Add New Watch
         </a>
@@ -43,18 +43,18 @@
                         if (filter_var($val, FILTER_VALIDATE_URL) || strpos($val, '/') === 0) {
                             $images[] = $val;
                         } else {
-                            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Watch_Collection/public/uploads/' . $val;
+                            $uploadPath = $_SERVER['DOCUMENT_ROOT'] . '/Zeith/public/uploads/' . $val;
                             if (file_exists($uploadPath)) {
-                                $images[] = '/Watch_Collection/public/uploads/' . $val;
+                                $images[] = '/Zeith/public/uploads/' . $val;
                             } else {
-                                $images[] = '/Watch_Collection/assets/image/' . $val;
+                                $images[] = '/Zeith/assets/image/' . $val;
                             }
                         }
                     }
                 }
 
                 while (count($images) < 4) {
-                    $images[] = '/Watch_Collection/assets/images/placeholder.jpg';
+                    $images[] = '/Zeith/assets/images/placeholder.jpg';
                 }
 
                 // 2. Map database stock column (> 0 = Available, 0 = Sold out)
@@ -99,11 +99,11 @@
 
                         <div class="zeith-listing-actions">
                             <div class="zeith-management-actions">
-                                <a href="/Watch_Collection/admin/watch/edit/<?= $watch['id'] ?>" class="zeith-edit-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                <a href="/Zeith/admin/watch/edit/<?= $watch['id'] ?>" class="zeith-edit-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
                                     <span class="zeith-edit-icon">✎</span> Edit
                                 </a>
 
-                                <form action="/Watch_Collection/admin/watch/delete/<?= $watch['id'] ?>" method="POST" onsubmit="return confirm('Are you sure you want to delete this watch?');" style="display: inline;">
+                                <form action="/Zeith/admin/watch/delete/<?= $watch['id'] ?>" method="POST" onsubmit="return confirm('Are you sure you want to delete this watch?');" style="display: inline;">
                                     <button type="submit" class="zeith-delete-btn" aria-label="Delete listing">&#128465;</button>
                                 </form>
                             </div>
@@ -1484,7 +1484,7 @@
         const formData = new FormData();
         formData.append('stock', stockValue);
 
-        fetch('/Watch_Collection/admin/watch/status/' + watchId, {
+        fetch('/Zeith/admin/watch/status/' + watchId, {
             method: 'POST',
             body: formData
         }).then(response => {

@@ -283,7 +283,7 @@
             </p>
 
             <form
-    action="/Watch_Collection/auth/reset-password"
+    action="/Zeith/auth/reset-password"
     method="POST"
     class="forgot-form">
 
