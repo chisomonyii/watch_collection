@@ -8,234 +8,409 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Wishlist - Zeith</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                Roboto, Helvetica, Arial, sans-serif;
-        }
+   <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+            Roboto, Helvetica, Arial, sans-serif;
+    }
 
-        /* 1. Ensure Body Fills Screen and Stacks Elements Vertically */
-        html,
-        body {
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
+    /* 1. Ensure Body Fills Screen and Stacks Elements Vertically */
+    html,
+    body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
 
-        body {
-            background: #f8f8f6;
-            color: #111;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+    body {
+        background: #f8f8f6;
+        color: #111;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-        /* PAGE CONTAINER */
+    /* PAGE CONTAINER */
+    .wishlist-container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 35px 30px 80px;
+        flex: 1;
+    }
+
+    .wishlist-title {
+        margin-top: 39px;
+        text-align: center;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 35px;
+    }
+
+    /* GRID */
+    .wishlist-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 24px;
+    }
+
+    /* EMPTY STATE */
+    .empty-wishlist {
+        grid-column: 1 / -1;
+        text-align: center;
+        color: #888;
+        padding: 80px 0;
+        display: none;
+    }
+
+    .empty-wishlist.active {
+        display: block;
+    }
+
+    /* CARD */
+    .watch-card {
+        background: #fdfbf8;
+        border-radius: 0;
+        padding: 0 0 16px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        box-shadow: none;
+        transition: transform .3s ease;
+        min-width: 0;
+    }
+
+    .watch-card:hover {
+        transform: translateY(-3px);
+    }
+
+    /* TOP BADGES */
+    .card-top-bar {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        right: 16px;
+        z-index: 10;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        pointer-events: none;
+    }
+
+    .status-badge {
+        background: #dce8d7;
+        color: #24813c;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 9px 15px;
+        border-radius: 25px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .wishlist-heart {
+        width: 46px;
+        height: 46px;
+        background: #fffdfb;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        pointer-events: auto;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, .10);
+        color: #f68b1e;
+        transition: transform .25s ease, background .25s ease;
+    }
+
+    .wishlist-heart:hover {
+        transform: scale(1.08);
+    }
+
+    .wishlist-heart svg {
+        width: 23px;
+        height: 23px;
+        fill: #f68b1e;
+    }
+
+    /* IMAGE AREA */
+    .watch-image-container {
+        position: relative;
+        width: 100%;
+        height: 380px;
+        flex-shrink: 0;
+        margin-bottom: 0;
+        overflow: hidden;
+        border-radius: 0 0 16px 16px;
+        background: #fbf9f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .watch-image-container .card-main-img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        object-fit: cover;
+        object-position: center center;
+        padding: 0;
+        position: relative;
+        z-index: 0;
+        transition: opacity .25s ease, transform .3s ease;
+    }
+
+    .watch-card:hover .card-main-img {
+        transform: scale(1.025);
+    }
+
+    /* SOFT BOTTOM GRADIENT */
+    .price-overlay-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        padding: 48px 20px 13px;
+        background: linear-gradient(to bottom,
+                rgba(0, 0, 0, 0) 0%,
+                rgba(0, 0, 0, .035) 20%,
+                rgba(0, 0, 0, .22) 58%,
+                rgba(0, 0, 0, .82) 100%);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .price-display {
+        color: #fff;
+        font-size: 26px;
+        font-weight: 800;
+        text-align: right;
+        letter-spacing: .1px;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, .3);
+    }
+
+    /* IMAGE PROGRESS BARS */
+    .progress-indicators {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .progress-bar-segment {
+        height: 4px;
+        flex: 1;
+        background: rgba(40, 40, 40, .28);
+        border-radius: 10px;
+        transition: background .25s ease;
+    }
+
+    .progress-bar-segment.active {
+        background: #171717;
+    }
+
+    /* IMAGE ARROWS */
+    .carousel-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+        height: 48px;
+        background: #fff;
+        color: #012e1d;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 4;
+        font-size: 24px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, .10);
+        transition: background .25s ease, color .25s ease;
+    }
+
+    .carousel-arrow.prev {
+        left: 18px;
+    }
+
+    .carousel-arrow.next {
+        right: 18px;
+    }
+
+    .carousel-arrow:hover {
+        background: #012e1d;
+        color: #fff;
+    }
+
+    /* PRODUCT DETAILS */
+    .watch-details-content {
+        padding: 0 18px;
+        margin: 0;
+        min-height: 190px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .watch-title-text {
+        font-size: 24px;
+        line-height: 1.4;
+        font-weight: 600;
+        color: #080808;
+        letter-spacing: 0;
+        margin-top: 32px;
+        margin-bottom: 30px;
+    }
+
+    .watch-desc-text {
+        max-width: 100%;
+        font-size: 16px;
+        line-height: 1.5;
+        font-weight: 300;
+        color: #666666;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* ACTIONS */
+    .card-footer-actions {
+        width: 100%;
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 14px;
+        gap: 8px;
+    }
+
+    .btn-add-cart-orange {
+        background: #f68b1e;
+        color: #080808;
+        border: none;
+        cursor: pointer;
+        transition: background .25s ease, transform .25s ease;
+        padding: 10px 22px;
+        font-size: 15px;
+        font-weight: 700;
+        border-radius: 24px;
+    }
+
+    .btn-add-cart-orange:hover {
+        background: #e77c0b;
+        transform: translateY(-2px);
+    }
+
+    .view-details-link {
+        display: inline-block;
+        font-size: 0.8rem;
+        color: #e67e22;
+        text-decoration: none;
+        font-weight: 500;
+        margin-bottom: 10px;
+        transition: color 0.2s ease;
+    }
+
+    .view-details-link:hover {
+        text-decoration: underline;
+    }
+
+    /* TABLET (4 Columns -> 3 Columns) */
+    @media (max-width: 1200px) {
+        .wishlist-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    /* SMALLER TABLETS (3 Columns -> 2 Columns) */
+    @media (max-width: 900px) {
         .wishlist-container {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 35px 30px 80px;
-            flex: 1;
-            /* Pushes footer to the absolute bottom even when wishlist is empty */
+            padding: 28px 18px 60px;
+        }
+
+        .wishlist-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .watch-image-container {
+            height: 340px;
+        }
+
+        .watch-details-content {
+            min-height: 180px;
+        }
+
+        .watch-title-text {
+            font-size: 22px;
+        }
+
+        .watch-desc-text {
+            font-size: 15px;
+        }
+    }
+
+    /* MOBILE (2 Columns -> 1 Column) */
+    @media (max-width: 600px) {
+        .wishlist-container {
+            padding: 20px 9px 45px;
         }
 
         .wishlist-title {
-            margin-top: 39px;
-            text-align: center;
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 35px;
+            font-size: 27px;
+            margin-bottom: 25px;
         }
 
-        /* GRID */
         .wishlist-grid {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 24px;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 20px;
         }
 
-        /* EMPTY STATE */
-        .empty-wishlist {
-            grid-column: 1 / -1;
-            text-align: center;
-            color: #888;
-            padding: 80px 0;
-            display: none;
-        }
-
-        .empty-wishlist.active {
-            display: block;
-        }
-
-        /* CARD */
         .watch-card {
-            background: #fdfbf8;
             border-radius: 0;
-            padding: 0 0 16px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: none;
-            transition: transform .3s ease;
-            min-width: 0;
+            padding-bottom: 16px;
         }
 
-        .watch-card:hover {
-            transform: translateY(-3px);
-        }
-
-        /* TOP BADGES */
-        .card-top-bar {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            right: 16px;
-            z-index: 10;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        .status-badge {
-            background: #dce8d7;
-            color: #24813c;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 9px 15px;
-            border-radius: 25px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .wishlist-heart {
-            width: 46px;
-            height: 46px;
-            background: #fffdfb;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            pointer-events: auto;
-            box-shadow: 0 5px 18px rgba(0, 0, 0, .10);
-            color: #f68b1e;
-            transition: transform .25s ease, background .25s ease;
-        }
-
-        .wishlist-heart:hover {
-            transform: scale(1.08);
-        }
-
-        .wishlist-heart svg {
-            width: 23px;
-            height: 23px;
-            fill: #f68b1e;
-        }
-
-        /* IMAGE AREA */
         .watch-image-container {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            flex-shrink: 0;
-            margin-bottom: 0;
-            overflow: hidden;
+            height: 450px;
             border-radius: 0 0 16px 16px;
-            background: #fbf9f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .watch-image-container .card-main-img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            max-width: none;
-            max-height: none;
-            object-fit: contain;
-            padding: 80px 24px 75px;
-            position: relative;
-            z-index: 0;
-            transition: opacity .25s ease, transform .3s ease;
+            padding: 0;
         }
 
-        .watch-card:hover .card-main-img {
-            transform: scale(1.025);
+        .card-top-bar {
+            top: 16px;
+            left: 21px;
+            right: 21px;
         }
 
-        /* SOFT BOTTOM GRADIENT */
-        .price-overlay-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 2;
-            padding: 48px 20px 13px;
-            background: linear-gradient(to bottom,
-                    rgba(0, 0, 0, 0) 0%,
-                    rgba(0, 0, 0, .035) 20%,
-                    rgba(0, 0, 0, .22) 58%,
-                    rgba(0, 0, 0, .82) 100%);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .status-badge {
+            font-size: 12px;
+            padding: 9px 15px;
         }
 
-        .price-display {
-            color: #fff;
-            font-size: 26px;
-            font-weight: 800;
-            text-align: right;
-            letter-spacing: .1px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, .3);
-        }
-
-        /* IMAGE PROGRESS BARS */
-        .progress-indicators {
-            display: flex;
-            gap: 8px;
-            width: 100%;
-        }
-
-        .progress-bar-segment {
-            height: 4px;
-            flex: 1;
-            background: rgba(40, 40, 40, .28);
-            border-radius: 10px;
-            transition: background .25s ease;
-        }
-
-        .progress-bar-segment.active {
-            background: #171717;
-        }
-
-        /* IMAGE ARROWS */
-        .carousel-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+        .wishlist-heart {
             width: 48px;
             height: 48px;
-            background: #fff;
-            color: #012e1d;
-            border: none;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 4;
-            font-size: 24px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, .10);
-            transition: background .25s ease, color .25s ease;
+        }
+
+        .carousel-arrow {
+            width: 48px;
+            height: 48px;
         }
 
         .carousel-arrow.prev {
@@ -246,263 +421,87 @@
             right: 18px;
         }
 
-        .carousel-arrow:hover {
-            background: #012e1d;
-            color: #fff;
+        .price-overlay-bar {
+            padding: 48px 24px 13px;
+            gap: 12px;
         }
 
-        /* PRODUCT DETAILS */
+        .price-display {
+            font-size: 27px;
+        }
+
         .watch-details-content {
-            padding: 0 18px;
-            margin: 0;
-            min-height: 190px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+            min-height: 0;
+            padding: 0 20px;
         }
 
         .watch-title-text {
             font-size: 24px;
-            line-height: 1.4;
-            font-weight: 600;
-            color: #080808;
-            letter-spacing: 0;
-            margin-top: 32px;
-            margin-bottom: 30px;
+            margin-top: 35px;
+            margin-bottom: 28px;
         }
 
         .watch-desc-text {
-            max-width: 100%;
             font-size: 16px;
             line-height: 1.5;
-            font-weight: 300;
-            color: #666666;
-            /* Improved contrast for light card backgrounds */
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            margin-bottom: 25px;
         }
 
-        /* ACTIONS */
         .card-footer-actions {
-            width: 100%;
-            margin-top: auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 14px;
-            gap: 8px;
+            padding: 0 16px;
+            margin-top: 0;
         }
 
         .btn-add-cart-orange {
-            background: #f68b1e;
-            color: #080808;
-            border: none;
-            cursor: pointer;
-            transition: background .25s ease, transform .25s ease;
-            padding: 10px 22px;
-            font-size: 15px;
-            font-weight: 700;
-            border-radius: 24px;
-        }
-
-        .btn-add-cart-orange:hover {
-            background: #e77c0b;
-            transform: translateY(-2px);
+            padding: 11px 25px;
         }
 
         .view-details-link {
-            display: inline-block;
-            font-size: 0.8rem;
-            color: #e67e22;
-            text-decoration: none;
-            font-weight: 500;
-            margin-bottom: 10px;
-            transition: color 0.2s ease;
+            font-size: 16px;
+        }
+    }
+
+    /* SMALL PHONES */
+    @media (max-width: 380px) {
+        .watch-image-container {
+            height: 380px;
         }
 
-        .view-details-link:hover {
-            text-decoration: underline;
+        .watch-image-container .card-main-img {
+            padding: 0;
         }
 
-        /* TABLET (4 Columns -> 3 Columns) */
-        @media (max-width: 1200px) {
-            .wishlist-grid {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-            }
+        .price-display {
+            font-size: 24px;
         }
 
-        /* SMALLER TABLETS (3 Columns -> 2 Columns) */
-        @media (max-width: 900px) {
-            .wishlist-container {
-                padding: 28px 18px 60px;
-            }
-
-            .wishlist-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 20px;
-            }
-
-            .watch-image-container {
-                height: 340px;
-            }
-
-            .watch-details-content {
-                min-height: 180px;
-            }
-
-            .watch-title-text {
-                font-size: 22px;
-            }
-
-            .watch-desc-text {
-                font-size: 15px;
-            }
+        .watch-title-text {
+            font-size: 22px;
         }
 
-        /* MOBILE (2 Columns -> 1 Column) */
-        @media (max-width: 600px) {
-            .wishlist-container {
-                padding: 20px 9px 45px;
-            }
-
-            .wishlist-title {
-                font-size: 27px;
-                margin-bottom: 25px;
-            }
-
-            .wishlist-grid {
-                grid-template-columns: minmax(0, 1fr);
-                gap: 20px;
-            }
-
-            .watch-card {
-                border-radius: 0;
-                padding-bottom: 16px;
-            }
-
-            .watch-image-container {
-                height: 450px;
-                border-radius: 0 0 16px 16px;
-            }
-
-            .watch-image-container .card-main-img {
-                padding: 85px 25px 75px;
-            }
-
-            .card-top-bar {
-                top: 16px;
-                left: 21px;
-                right: 21px;
-            }
-
-            .status-badge {
-                font-size: 12px;
-                padding: 9px 15px;
-            }
-
-            .wishlist-heart {
-                width: 48px;
-                height: 48px;
-            }
-
-            .carousel-arrow {
-                width: 48px;
-                height: 48px;
-            }
-
-            .carousel-arrow.prev {
-                left: 18px;
-            }
-
-            .carousel-arrow.next {
-                right: 18px;
-            }
-
-            .price-overlay-bar {
-                padding: 48px 24px 13px;
-                gap: 12px;
-            }
-
-            .price-display {
-                font-size: 27px;
-            }
-
-            .watch-details-content {
-                min-height: 0;
-                padding: 0 20px;
-            }
-
-            .watch-title-text {
-                font-size: 24px;
-                margin-top: 35px;
-                margin-bottom: 28px;
-            }
-
-            .watch-desc-text {
-                font-size: 16px;
-                line-height: 1.5;
-                margin-bottom: 25px;
-            }
-
-            .card-footer-actions {
-                padding: 0 16px;
-                margin-top: 0;
-            }
-
-            .btn-add-cart-orange {
-                padding: 11px 25px;
-            }
-
-            .view-details-link {
-                font-size: 16px;
-            }
+        .watch-desc-text {
+            font-size: 14px;
         }
 
-        /* SMALL PHONES */
-        @media (max-width: 380px) {
-            .watch-image-container {
-                height: 380px;
-            }
-
-            .watch-image-container .card-main-img {
-                padding: 80px 20px 70px;
-            }
-
-            .price-display {
-                font-size: 24px;
-            }
-
-            .watch-title-text {
-                font-size: 22px;
-            }
-
-            .watch-desc-text {
-                font-size: 14px;
-            }
-
-            .view-details-link {
-                font-size: 14px;
-            }
-
-            .carousel-arrow {
-                width: 42px;
-                height: 42px;
-            }
+        .view-details-link {
+            font-size: 14px;
         }
 
-        /* Full-Bleed Footer Fix */
-        footer.zeith-footer {
-            position: relative !important;
-            width: 100% !important;
-            margin-top: auto !important;
-            box-sizing: border-box !important;
-            clear: both !important;
+        .carousel-arrow {
+            width: 42px;
+            height: 42px;
         }
-    </style>
+    }
+
+    /* Full-Bleed Footer Fix */
+    footer.zeith-footer {
+        position: relative !important;
+        width: 100% !important;
+        margin-top: auto !important;
+        box-sizing: border-box !important;
+        clear: both !important;
+    }
+</style>
 </head>
 
 <body>

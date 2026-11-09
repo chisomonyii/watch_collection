@@ -226,18 +226,19 @@ class Auth
             $email = trim($_POST['email']);
 
             // Database connection
-            $host = 'localhost';
-            $db_name = 'watch_collection';
-            $username = 'root';
-            $password = '';
+            $host = $_ENV['DB_HOST'] ?? 'localhost';
+            $port = $_ENV['DB_PORT'] ?? '3306';
+            $db_name = $_ENV['DB_NAME'] ?? 'watch_collection';
+            $username = $_ENV['DB_USER'] ?? 'root';
+            $password = $_ENV['DB_PASS'] ?? '';
 
             try {
-                $db = new \PDO("mysql:host=$host;dbname=$db_name;charset=utf8mb4", $username, $password);
+                $dsn = "mysql:host=$host;port=$port;dbname=$db_name;charset=utf8mb4";
+                $db = new \PDO($dsn, $username, $password);
                 $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             } catch (\PDOException $e) {
                 die("Database connection failed: " . $e->getMessage());
             }
-
             $stmt = $db->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
             $stmt->execute([$email]);
             $user = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -318,13 +319,15 @@ class Auth
                 exit;
             }
 
-            $host = 'localhost';
-            $db_name = 'watch_collection';
-            $username = 'root';
-            $password_db = '';
+            $host = $_ENV['DB_HOST'] ?? 'localhost';
+            $port = $_ENV['DB_PORT'] ?? '3306';
+            $db_name = $_ENV['DB_NAME'] ?? 'watch_collection';
+            $username = $_ENV['DB_USER'] ?? 'root';
+            $password_db = $_ENV['DB_PASS'] ?? '';
 
             try {
-                $db = new \PDO("mysql:host=$host;dbname=$db_name;charset=utf8mb4", $username, $password_db);
+                $dsn = "mysql:host=$host;port=$port;dbname=$db_name;charset=utf8mb4";
+                $db = new \PDO($dsn, $username, $password_db);
                 $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             } catch (\PDOException $e) {
                 die("Database connection failed: " . $e->getMessage());

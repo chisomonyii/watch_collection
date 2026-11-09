@@ -204,7 +204,8 @@
     .zeith-no-results {
         padding: 30px 20px;
         text-align: center;
-        color: #64748b;
+        font-weight: 300;
+        color: red;
         font-size: 0.9rem;
         background: #ffffff;
     }
@@ -576,7 +577,7 @@
                             html += `</div>`;
                             html += `
                                 <div class="zeith-dropdown-footer">
-                                    <a href="/Zeith/product/search?q=${encodeURIComponent(query)}" class="zeith-dropdown-viewall">View all</a>
+                                    <a href="/Zeith/watch" class="zeith-dropdown-viewall">View all</a>
                                 </div>
                             `;
                         } else {

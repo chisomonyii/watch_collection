@@ -1,15 +1,15 @@
 <?php
 // PHP Backend Processing when user clicks "Proceed to Payment"
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $host = 'localhost';
-    $db   = 'Watch_Collection'; // Update if your database name is different
-    $user = 'root';
-    $pass = '';
+    $host = $_ENV['DB_HOST'] ?? 'localhost';
+    $port = $_ENV['DB_PORT'] ?? '3306';
+    $db   = $_ENV['DB_NAME'] ?? 'watch_collection';
+    $user = $_ENV['DB_USER'] ?? 'root';
+    $pass = $_ENV['DB_PASS'] ?? '';
 
     try {
-        $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
+        $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4", $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
         // Collect form data
         $fullName = trim($_POST['fullname'] ?? '');
         $email = trim($_POST['email'] ?? '');

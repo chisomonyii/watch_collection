@@ -9,9 +9,14 @@ abstract class Db
     public static function connect()
     {
         try {
-            $dsn = "mysql:host=localhost;dbname=watch_collection;";
-            $user = "root";
-            $password = "";
+            // Updated fallbacks to point to local XAMPP by default
+            $host = $_ENV['DB_HOST'] ?? 'localhost';
+            $port = $_ENV['DB_PORT'] ?? '3306';
+            $db   = $_ENV['DB_NAME'] ?? 'Watch_Collection';
+            $user = $_ENV['DB_USER'] ?? 'root';
+            $password = $_ENV['DB_PASS'] ?? '';
+
+            $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
 
             $connection = new PDO($dsn, $user, $password, [
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -21,7 +26,7 @@ abstract class Db
             return $connection;
 
         } catch (\Exception $error) {
-            echo $error->getMessage();
+            echo "Database Connection Error: " . $error->getMessage();
             die();
         }
     }

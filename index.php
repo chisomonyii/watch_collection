@@ -11,7 +11,8 @@ use App\Helpers\View;
 
 $router = new Router();
 
-// Set base path for XAMPP subfolder
+// Updated base path for production root deployment on InfinityFree
+// Local XAMPP Base Path
 $router->setBasePath('/Zeith');
 
 $router->setNamespace("App\Controller");
@@ -19,13 +20,12 @@ $router->setNamespace("App\Controller");
 $router->get("/", "Home@showLandingpage");
 
 // Route modules
-// Route modules
 require_once __DIR__ . '/routes/auth.php';
 require_once __DIR__ . '/routes/staff.php';
 require_once __DIR__ . '/routes/watch.php';
 require_once __DIR__ . '/routes/checkout.php';
 require_once __DIR__ . '/routes/contact.php';
-require_once __DIR__ . '/routes/admin.php'; // Fixed path
+require_once __DIR__ . '/routes/admin.php';
 
 // Wishlist Page Route
 $router->get('/wishlist', function () {
@@ -68,6 +68,5 @@ $router->get('/about', 'Home@displayAboutPage');
 $router->post('/api/subscribe', 'Home@subscribeNewsletter');
 
 $router->get('/admin/dashboard', 'AdminController@dashboard');
-
 
 $router->run();

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ZEITH Luxury Watches</string>
+    <string name="title_activity_main">ZEITH Luxury Watches</string>
+    <string name="package_name">com.zeith.app</string>
+    <string name="custom_url_scheme">com.zeith.app</string>
+</resources>

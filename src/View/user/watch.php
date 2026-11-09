@@ -10,8 +10,8 @@ $watches = $watches ?? \App\Models\Watch::getAll();
     <script src="https://kit.fontawesome.com/69c405441a.js" crossorigin="anonymous"></script>
     <title>Zeith - Luxury Watch Collections</title>
 
-    <style>
-        html,
+     <style>
+             html,
         body {
             margin: 0 !important;
             padding: 0 !important;
@@ -1682,9 +1682,13 @@ $watches = $watches ?? \App\Models\Watch::getAll();
         }
 
         .watch-image-container img.card-main-img {
-            max-width: 80%;
-            max-height: 80%;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            max-height: none;
+            object-fit: cover;
+            object-position: center center;
+            display: block;
             transition: opacity 0.25s ease, transform 0.25s ease;
         }
 
@@ -1942,6 +1946,7 @@ $watches = $watches ?? \App\Models\Watch::getAll();
                 transform: rotate(360deg);
             }
         }
+    
     </style>
 </head>
 

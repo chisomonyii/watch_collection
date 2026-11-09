@@ -5,16 +5,17 @@ namespace App\Models;
 class Order
 {
     private ?\PDO $pdo;
-
-    public function __construct()
+public function __construct()
     {
-        $host = 'localhost';
-        $db   = 'Watch_Collection';
-        $user = 'root';
-        $pass = '';
+      $host = $_ENV['DB_HOST'] ?? 'localhost';
+        $port = $_ENV['DB_PORT'] ?? '3306';
+        $db   = $_ENV['DB_NAME'] ?? 'watch_collection';
+        $user = $_ENV['DB_USER'] ?? 'root';
+        $pass = $_ENV['DB_PASS'] ?? '';
 
         try {
-            $this->pdo = new \PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
+            $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
+            $this->pdo = new \PDO($dsn, $user, $pass);
             $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {
             die("Database Connection Error: " . $e->getMessage());

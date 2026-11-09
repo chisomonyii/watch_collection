@@ -8,17 +8,19 @@ class Product
 {
     private ?PDO $pdo = null;
 
-    public function __construct() {
-        $host = 'localhost';
-        $db   = 'watch_collection';
-        $user = 'root';
-        $pass = '';
+public function __construct() {
+       $host = $_ENV['DB_HOST'] ?? 'localhost';
+        $port = $_ENV['DB_PORT'] ?? '3306';
+        $db   = $_ENV['DB_NAME'] ?? 'watch_collection';
+        $user = $_ENV['DB_USER'] ?? 'root';
+        $pass = $_ENV['DB_PASS'] ?? '';
 
         try {
-            $this->pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
+            $this->pdo = new \PDO($dsn, $user, $pass);
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {
-            die(json_encode(["error" => "Database connection failed: " . $e->getMessage()]));
+            die("Database Connection Error: " . $e->getMessage());
         }
     }
 

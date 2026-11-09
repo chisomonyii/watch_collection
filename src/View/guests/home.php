@@ -7,7 +7,7 @@ use App\Helpers\View;
 
 <head>
 
-    <style>
+  <style>
         /* =========================================
    ZEITH LUXURY HERO CAROUSEL BANNER
    ========================================= */
@@ -191,21 +191,30 @@ use App\Helpers\View;
             /* Adjust background if you use a dark theme */
         }
 
-        .new-arrhead {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            font-weight: bold;
-        }
+    .new-arrivals {
+    width: 100%;
+    padding: 40px 5%;
+    box-sizing: border-box;
+}
 
-        .new {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 25px;
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+
+      .new {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: 25px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+
+    .new .watch-card {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
 
         @media (max-width: 768px) {
 
@@ -870,7 +879,7 @@ use App\Helpers\View;
 
         .price {
             position: absolute;
-            right: 15px;
+            right: 55px;
             bottom: 20px;
         }
 
@@ -936,12 +945,13 @@ use App\Helpers\View;
 
         .slider-track img {
             position: absolute;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            padding: 30px;
+            box-sizing: border-box;
+            object-fit: cover;
+            object-position: center center;
+            padding: 0;
             opacity: 0;
             transition: opacity 0.4s ease-in-out;
         }
@@ -1062,9 +1072,53 @@ use App\Helpers\View;
             text-decoration: underline;
         }
 
-        .view-all {
-            text-decoration: none;
-        }
+/* VIEW ALL BUTTON */
+.view-all {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 35px auto 10px;
+    text-decoration: none;
+}
+
+.view-all .arrive-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 160px;
+    padding: 13px 32px;
+    background: #f68b1e;
+    color: #ffffff;
+    border: 2px solid #f68b1e;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.view-all .arrive-btn:hover {
+    background: #003b2f;
+    border-color: #003b2f;
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 59, 47, 0.2);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .view-all {
+        margin-top: 25px;
+    }
+
+    .view-all .arrive-btn {
+        min-width: 145px;
+        padding: 11px 26px;
+        font-size: 14px;
+    }
+}
     </style>
 
 

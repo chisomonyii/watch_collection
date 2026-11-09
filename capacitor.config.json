@@ -1,0 +1,11 @@
+
+{
+  "appId": "com.zeith.app",
+  "appName": "ZEITH",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "http://localhost/Zeith/",
+    "cleartext": true
+  }
+}
